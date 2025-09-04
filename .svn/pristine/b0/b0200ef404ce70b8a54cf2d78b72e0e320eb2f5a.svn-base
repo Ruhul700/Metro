@@ -1,0 +1,7 @@
+﻿namespace Metro_Rail_DAL.DAL.Accounts.Transaction
+{
+    public class T13006DAL:CommonDAL
+    {
+
+    }
+}

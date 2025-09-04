@@ -1,0 +1,85 @@
+﻿app.controller("T19020Controller", ["$scope", "Service", "Data", "$window", "$filter",
+    function ($scope, Service, Data, $window, $filter) { //$location,
+        $scope.obj = {};
+        $scope.obj = Data;
+        $scope.obj.T19020 = {};
+        $scope.obj.T19020.T_YEAR = new Date().getFullYear();
+        $scope.currentMonth = new Date().getMonth() + 1;
+
+        //loadGridData();
+        loadItemData();
+        loadItemGradeData();
+        function loadGridData(param) {
+            debugger;
+            loader(true)
+            var load = Service.loadDataSingleParm('/T19020/LoadGridData', param);
+            load.then(function (returnData) {
+                $scope.obj.griDataList = JSON.parse(returnData);
+                console.log($scope.obj.griDataList);
+                loader(false)
+            });
+        }
+        function loadItemData() {
+            loader(true)
+            var load = Service.loadDataWithoutParm('/T19020/GetMonthList');
+            load.then(function (returnData) {
+                $scope.obj.MonthList = JSON.parse(returnData);
+                loader(false)
+            });
+        }
+        function loadItemGradeData() {
+            loader(true)
+            var load = Service.loadDataWithoutParm('/T19020/GetGradeList');
+            load.then(function (returnData) {
+                $scope.obj.GradeList = JSON.parse(returnData);
+                loader(false)
+            });
+        }
+        $scope.onMonthChange = function (data) {
+            $scope.obj.T19020.T_SALARY_MONTH = $scope.obj.ddlItem.T_MONTH_CODE;
+        };
+
+        $scope.onGradeChange = function () {
+            $scope.obj.T19020.T_SALARY_GRADE = $scope.obj.ddlItemGrade.T_GRADE_CODE;
+            $scope.obj.T19020.T_SALARY_MONTH = $scope.obj.ddlItem;
+            loadGridData($scope.obj.T19020);
+
+        };
+        $scope.toggleAll = function (selectAll) {
+            angular.forEach($scope.obj.griDataList, function (item) {
+                item.T_SELECT_FLAG = selectAll ? '1' : '';
+            });
+        };
+        $scope.Save_Click = function () {
+
+            var currentDay = new Date().getDate();
+
+            if (currentDay < 20) {
+                smsAlert("You Cannot generate salary before 20th day of the current month.");
+            } else {
+                //smsAlert("OK");
+                var NewList = $scope.obj.griDataList.filter(x => x.T_SELECT_FLAG == '1');
+                loader(true)
+                var save = Service.saveData_Model_List('/T19020/SaveData', $scope.obj.T19020, NewList);
+                save.then(function (returnData) {
+                    smsAlert(returnData);
+                    loadGridData();
+                    clear();
+                    loader(false)
+                });
+                
+            }
+
+           
+        }
+        $scope.Clear_Click = function () {
+            clear();
+        }
+        $scope.Print_Click = function () {
+            alert('Print');
+        }
+        function clear() {
+            $scope.obj.T19020 = {};
+        }
+    }
+]);

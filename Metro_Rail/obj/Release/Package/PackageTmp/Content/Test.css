@@ -1,0 +1,9 @@
+﻿.table_1 tr, td {
+    border: 2px solid black;
+    width: 100px;
+}
+
+#table_1 tr, td {
+    border: 2px solid green;
+    width: 100px;
+}

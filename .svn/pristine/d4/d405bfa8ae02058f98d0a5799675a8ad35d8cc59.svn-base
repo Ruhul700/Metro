@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using Metro_Rail_DAL.Shared.Payroll.Transaction;
+
+namespace Metro_Rail_DAL.DAL.Payroll.Transaction
+{
+    public class T19021DAL : CommonDAL
+    {
+        
+        public DataTable LoadGridData(T19021Input param)
+        {          
+            DataTable dt = new DataTable();
+            dt = Query($@"SELECT T20.T_MONTH_CODE,T_MONTH_NAME MONTH_NAME, T20.T_YEAR,sum(T21.T_SALARY_GROSS) T_SALARY_GROSS,sum(T21.T_SALARY_PAYMENT)T_SALARY_PAYMENT,sum(T21.T_SALARY_DEDUCTION)T_SALARY_DEDUCTION, sum(T21.T_SALARY_PAYABLE )T_SALARY_PAYABLE FROM dbo.T19020 T20 JOIN dbo.T19021 T21 ON T20.T_SALARY_CODE = T21.T_SALARY_CODE JOIN T11011 ON T11011.T_MONTH_CODE = T20.T_MONTH_CODE WHERE T20.T_BASE_CODE !='103' AND CAST(T20.T_MONTH_CODE AS INT) BETWEEN {param.FROM_DATE_MONTH} AND {param.TO_MONTH} GROUP BY T20.T_MONTH_CODE,T_MONTH_NAME,T20.T_YEAR ORDER BY CAST(T20.T_MONTH_CODE AS INT)");
+            return dt;
+        }
+        public DataTable SalaryDetailsMonthly(T19021Input param)
+        {
+            DataTable dt = new DataTable();
+            dt = Query($@"SELECT T20.T_MONTH_CODE,(SELECT T_MONTH_NAME FROM DBO.T11011 WHERE T11011.T_MONTH_CODE = T20.T_MONTH_CODE) MONTH_NAME,T20.T_YEAR,T21.T_EMP_CODE, (select t111.T_EMP_NAME from dbo.T11111 t111 where t111.T_EMP_CODE = t21.T_EMP_CODE) EMP_NAME, T21.T_SALARY_GROSS,T21.T_SALARY_PAYMENT,T21.T_SALARY_DEDUCTION,T21.T_SALARY_PAYABLE FROM dbo.T19020 T20 JOIN dbo.T19021 T21 ON T20.T_SALARY_CODE = T21.T_SALARY_CODE WHERE T20.T_BASE_CODE !='103' AND CAST(T20.T_MONTH_CODE AS INT) BETWEEN {param.FROM_DATE_MONTH} AND {param.TO_MONTH}");
+            return dt;
+        }
+    }
+}

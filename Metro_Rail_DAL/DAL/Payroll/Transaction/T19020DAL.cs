@@ -1,0 +1,78 @@
+﻿
+using Metro_Rail_DAL.Shared.Payroll.Transaction;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace Metro_Rail_DAL.DAL.Payroll.Transaction
+{
+    public class T19020DAL:CommonDAL
+    {
+        public DataTable LoadSalaryData(T19020Data param)
+        {
+            DataTable dt = new DataTable();
+            //dt = Query($"select t111.T_EMP_CODE,t111.T_EMP_NAME,(SELECT T_DESIGNATION_NAME FROM dbo.T11103 where T11103.T_DESIGNATION_CODE = t111.T_DESIGNATION_CODE) DESIGNATION_NAME,t010.T_SALARY_SET_CODE,t010.T_TOTAL_PAYMENT,t010.T_TOTAL_DEDUCTION,t010.T_SALARY_PAYABLE from dbo.T11111 t111 join dbo.T19010 t010 on t111.T_EMP_CODE = t010.T_EMP_CODE where t111.T_GRADE_CODE='{param}'");
+            dt = Query($"SELECT t111.T_EMP_CODE, t111.T_EMP_NAME, t111.T_GRADE_CODE, (SELECT T_DESIGNATION_NAME FROM dbo.T11103 where T11103.T_DESIGNATION_CODE = t111.T_DESIGNATION_CODE) DESIGNATION_NAME, t010.T_SALARY_SET_CODE,t010.T_TOTAL_PAYMENT,t010.T_TOTAL_DEDUCTION,t010.T_SALARY_PAYABLE FROM dbo.T11111 t111 join dbo.T19010 t010 on t111.T_EMP_CODE = t010.T_EMP_CODE WHERE t111.T_GRADE_CODE = '{param.T_SALARY_GRADE}' AND NOT EXISTS ( SELECT 1 FROM dbo.T19020 m JOIN dbo.T19021 d ON m.T_SALARY_CODE = d.T_SALARY_CODE WHERE d.T_EMP_CODE = t111.T_EMP_CODE AND m.T_MONTH_CODE = '{param.T_SALARY_MONTH}' AND m.T_YEAR = '{param.T_YEAR}' )");
+            return dt;
+        }
+
+        public DataTable GetMonthList()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("SELECT T_MONTH_CODE,T_MONTH_NAME FROM T11011");
+            return dt;
+        }
+
+        public DataTable GetGradeList()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("select T_GRADE_CODE,T_GRADE_NAME from T19008");
+            return dt;
+        }
+
+
+        public string SaveData(T19020Data t19020, List<T19020ListData> list, string EntryUser)
+        {
+            var sms = "";
+            SqlTransaction objTrans = null;
+            using (SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlCon"].ConnectionString))
+            {
+                try
+                {
+                    objConn.Open();
+                    objTrans = objConn.BeginTransaction();
+                    var MaxSalaryId = Query_2($"SELECT CASE WHEN COUNT(*)>0 THEN  MAX(T_SALARY_ID)+1 ELSE 1 END T_SALARY_ID FROM T19020", objConn, objTrans).Rows[0]["T_SALARY_ID"].ToString();
+                    var MaxSalaryCode = Query_2($"SELECT CASE WHEN COUNT(*)>0 THEN  MAX(cast(T_SALARY_CODE as int) )+1 ELSE 1 END T_SALARY_CODE FROM T19020", objConn, objTrans).Rows[0]["T_SALARY_CODE"].ToString();
+                    var sa = Command($@" INSERT INTO T19020 (T_SALARY_ID,T_BASE_CODE,T_SALARY_CODE, T_MONTH_CODE,T_YEAR, T_ENTRY_USER, T_ENTRY_DATE) VALUES ('{MaxSalaryId}','101','{MaxSalaryCode}', '{t19020.T_SALARY_MONTH}','{DateTime.Now.Year.ToString()}', '{EntryUser}', CAST(GETDATE() AS DATE) )");
+                    if (!sa) throw new Exception("T19020 insert failed");
+
+                    foreach (var item in list)
+                    {
+                        var gross = string.IsNullOrEmpty(item.T_TOTAL_PAYMENT?.ToString()) ? "0" : item.T_TOTAL_PAYMENT.ToString();
+                        var payment = string.IsNullOrEmpty(item.T_TOTAL_PAYMENT?.ToString()) ? "0" : item.T_TOTAL_PAYMENT.ToString();
+                        var deduction = string.IsNullOrEmpty(item.T_TOTAL_DEDUCTION?.ToString()) ? "0" : item.T_TOTAL_DEDUCTION.ToString();
+                        var payable = string.IsNullOrEmpty(item.T_SALARY_PAYABLE?.ToString()) ? "0" : item.T_SALARY_PAYABLE.ToString();
+
+                        int MaxSalaryDetailId = Convert.ToInt32(Query_2("SELECT ISNULL(MAX(T_SALARY_DTL_ID), 0)+1 FROM T19021", objConn, objTrans).Rows[0][0]);
+
+                        var save02 = $@"INSERT INTO dbo.T19021(T_SALARY_DTL_ID, T_SALARY_CODE, T_EMP_CODE, T_SALARY_GROSS, T_SALARY_PAYMENT,T_SALARY_DEDUCTION,T_SALARY_PAYABLE, T_ENTRY_USER, T_ENTRY_DATE)
+                            VALUES ({MaxSalaryDetailId}, '{MaxSalaryCode}', '{item.T_EMP_CODE}',{gross}, {payment}, {deduction}, {payable},'{EntryUser}', CAST(GETDATE() AS DATE))";
+                        command_2(save02, objConn, objTrans);
+                    }
+                    objTrans.Commit();
+                    sms = "Save Successfully-1";
+                }
+                catch (Exception ex)
+                {
+                    var kk = ex.Message;
+                    sms = "Do not Save-0";
+                    objTrans.Rollback();
+                }
+
+            }
+            return sms;
+        }
+    }
+}

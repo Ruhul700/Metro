@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "T19036";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Apps/Payroll/Transaction/T19036Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+<style>
+    .status-applied {
+        color: #0d6efd; /* Bootstrap primary blue */
+        font-weight: bold;
+    }
+
+    .status-accepted {
+        color: #198754; /* Bootstrap success green */
+        font-weight: bold;
+    }
+
+    .status-cancelled {
+        color: red; /* Bootstrap danger red */
+        font-weight: bold;
+    }
+
+    .status-rejected {
+        color: palevioletred; /* Bootstrap secondary gray */
+        font-weight: bold;
+    }
+</style>
+<div ng-controller="T19036Controller">
+    @*header*@
+    <div class="header">
+        <span href="#default" class="logo">Leave Authorization</span>
+        <div class="header-right">
+            <a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            <a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>
+        </div>
+    </div>
+    @*===========*@
+    <div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+        <hr style="margin-top: 5px !important; margin-bottom: 5px !important; border-top: 2px solid #076c93b0; " />       
+            @*1st table start*@                        
+                <table id="tblGrid" class="tTable center" style=" width: 80%;">
+                    <thead>
+                        <tr style="color: black;background: #afadad" class="summary-table-header">
+                            <th style="width: 5%;">SL</th>
+                            @*<th style="width: 5%;">Code</th>*@
+                            <th style="width: 10%;">Emp Code</th>
+                            <th style="width: 10%;">Emp name</th>
+                            <th style="width: 5%;">Leave Code</th>
+                            <th style="width: 10%;">With Pay</th>
+                            @*<th style="width: 10%;">Without Pay</th>*@
+                            <th style="width: 15%;">From Date</th>
+                            <th style="width: 15%;">To Date</th>
+                            <th style="width: 10%;">Total Days</th>
+                            <th style="width: 10%;">Status</th>
+                            <th>Verify</th>
+                            <th>Reject</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="Z in obj.griDataList|filter:Search|itemsPerPage:10" $index pagination-id="details" ng-class="{'selected':$index == selectedRow}">
+                            <td style="width: 5%;">{{ $index + 1 }}</td>
+                            @*<td style="width: 5%;">{{Z.T_APLCTN_CODE}}</td>*@
+                            <td style="width: 10%; text-align: left;">{{Z.T_EMP_CODE}}</td>
+                            <td style="width: 10%; text-align: left;">{{Z.T_EMP_NAME}}</td>
+                            <td style="width: 10%; text-align: left;">{{Z.T_LEAVE_NAME}}</td>
+                            <td style="width: 10%; text-align: left;">{{Z.T_WIDTH_PAY}}</td>
+                            @*<td style="width: 10%; text-align: left;">{{Z.T_WIDTHOUT_PAY}}</td>*@
+                            <td style="width: 15%; text-align: left;">{{Z.FROM_DATE_STRING}}</td>
+                            <td style="width: 15%; text-align: left;">{{Z.TO_DATE_STRING}}</td>
+                            <td style="width: 10%; text-align: center;">{{Z.T_TOTAL_DATE}}</td>
+                            <td style="width: 10%; text-align: center;" ng-class="{'status-applied': Z.T_STATUS == 'Applied','status-accepted': Z.T_STATUS == 'Accepted','status-cancelled': Z.T_STATUS == 'Cancelled','status-rejected': Z.T_STATUS == 'Rejected'}">{{Z.T_STATUS}}</td>
+                            <td>                                
+                                <input type="checkbox" ng-model="Z.T_VERIFY_FLAG" ng-disabled="Z.T_REJECT_FLAG === '1'"  ng-if="Z.T_STATUS == 'Applied'" ng-true-value="'1'" ng-false-value="''" />
+                            </td>
+                            <td>                                
+                                <input type="checkbox" ng-model="Z.T_REJECT_FLAG" ng-disabled="Z.T_VERIFY_FLAG === '1'" ng-if="Z.T_STATUS == 'Applied'" ng-true-value="'1'" ng-false-value="''" />
+                            </td>
+                        </tr>
+                    </tbody>                    
+                </table>
+                <dir-pagination-controls pagination-id="details" max-size="5"
+                                         direction-links="true"
+                                         boundary-links="true">
+                </dir-pagination-controls>
+          
+            @*1st table end*@
+       
+    </div>
+
+   
+</div>
+

@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "R11111";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Apps/Payroll/Report/R11111Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+<div class="" ng-controller="R11111Controller">
+    @*header*@
+    <div class="header">
+        <span href="#default" class="logo">Salary Report</span>
+        <div class="header-right">
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+        </div>
+    </div>
+    @*===========*@
+    <div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+        <div style="width: 90%;margin:auto">
+            <table class="inputTable center" style=" width: 100%;">
+                <tr><td style="text-align: -webkit-right;"> <input type="text" style="width:200px" ng-model="Search" placeholder="Search....." class="form-control" /></td></tr>
+            </table>
+            <table id="tblGrid" class="tTable center" style=" width: 100%;">
+                <thead>
+                    <tr style="color: black;background: #afadad" class="summary-table-header">
+                        <th style="width: 10%;">Code</th>
+                        <th style="width: 20%;">Name</th>
+                        <th style="width: 10%;">Mobile</th>
+                        <th style="width: 10%;">Gender</th>
+                        <th style="width: 10%;">Religion</th>
+                        <th style="width: 10%;">Designation</th>
+                        <th style="width: 20%;">Address</th>
+                        <th style="width: 10%;">Entry Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="Z in obj.griDataList" ng-class="{'selected':$index == selectedRow}" ng-click="selectedtRow($index,Z)" style="cursor:pointer">
+                        <td style="width: 10%;">{{Z.T_EMP_CODE}}</td>
+                        <td style="width: 20%; text-align: left; padding-left: 10px;">{{Z.T_EMP_NAME}}</td>
+                        <td style="width: 10%; text-align: left; padding-left: 10px;">{{Z.T_EMP_MOBILE}}</td>
+                        <td style="width: 10%; text-align: left; padding-left: 10px;">{{Z.T_GENDER_NAME}}</td>
+                        <td style="width: 10%; text-align: left; padding-left: 10px;">{{Z.T_RELIGION_NAME}}</td>
+                        <td style="width: 10%; text-align: left; padding-left: 10px;">{{Z.T_DESIGNATION_NAME}}</td>
+                        <td style="width: 20%; text-align: left; padding-left: 10px;">{{Z.T_EMP_ADDRESS}}</td>
+                        <td style="width: 10%; ">
+                            <input type="checkbox" style=" width: 20%;" ng-model="Z.Single_FLG" ng-true-value="'1'" ng-false-value="'0'" />
+                            @*<input type="checkbox" style=" width: 20%;" ng-click="CheckSingle_Click($index,Z.Single_FLG)" ng-model="Z.Single_FLG" ng-true-value="'1'" ng-false-value="'0'" />*@
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>    
+        </div>
+    </div>
+</div>
+
+

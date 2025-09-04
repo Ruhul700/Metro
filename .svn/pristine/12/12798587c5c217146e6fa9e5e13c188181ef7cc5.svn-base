@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "T19020";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Apps/Payroll/Transaction/T19020Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+<div ng-controller="T19020Controller">
+    @*header*@
+    <div class="header">
+        <span href="#default" class="logo">Salary Generate</span>
+        <div class="header-right">
+            <a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            <a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>
+        </div>
+    </div>
+    @*===========*@
+    <div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+        <table class="inputTable center" style=" width: 50%;">
+            <tr>               
+                <td style=" width: 10%;">
+                    <label id="lblMonth" class="textlevel">Month</label>
+                </td>
+                <td style="width: 30%; text-align: left; ">
+                    <select id="ddlItem" class="form-control" placeholder="Select one" tabindex="1"
+                            ng-model="obj.ddlItem"
+                            ng-options="V.T_MONTH_NAME for V in obj.MonthList track by V.T_MONTH_CODE"
+                            ng-change="onMonthChange()">
+                        <option value="">Select One</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <hr style="margin-top: 5px !important; margin-bottom: 5px !important; border-top: 2px solid #076c93b0; " />
+      
+            @*<table class="inputTable center" style=" width: 70%;">
+                <tr><td style="text-align: -webkit-right;"> <input type="text" style="width:200px" ng-model="Search" placeholder="Search....." class="form-control" /></td></tr>
+            </table>*@
+            <table id="tblGrid" class="tTable center" style=" width: 70%;">
+                <thead>
+                    <tr style="color: black;background: #afadad" class="summary-table-header">
+                        <th style="width:20%">Employee Id</th>
+                        <th style="width:50%;">Employee Name</th>
+                        <th style="width: 10%">Total Grouse</th>
+                        <th style="width:10%; ">Total Deduction</th>
+                        <th style="width:10%; ">Total Payable</th>                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="Z in obj.griDataList" style="cursor:pointer">
+                        <td style="width:20%">{{Z.T_EMP_CODE}}</td>
+                        <td style="width: 50%; text-align: left; padding-left: 10px">{{Z.T_EMP_NAME}}</td>
+                        <td style="width: 10%; text-align: right; padding-right: 10px">{{Z.T_TOTAL_PAYMENT}}</td>
+                        <td style="width: 10%; text-align: right; padding-right: 10px">{{Z.T_TOTAL_DEDUCTION}}</td>
+                        <td style="width: 10%; text-align: right; padding-right: 10px">{{Z.T_SALARY_PAYABLE}}</td>
+                    </tr>
+                </tbody>
+            </table>      
+        </div>    
+</div>
+

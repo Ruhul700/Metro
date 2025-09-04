@@ -1,0 +1,28 @@
+﻿using System;
+using System.Data;
+using Metro_Rail_DAL.Shared.Payroll.Transaction;
+
+namespace Metro_Rail_DAL.DAL.Payroll.Transaction
+{
+    public class T19021DAL : CommonDAL
+    {
+        public DataTable GetMonthList()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("SELECT T_MONTH_CODE,T_MONTH_NAME FROM T11011");
+            return dt;
+        }
+        public DataTable LoadGridData(T19021Input param)
+        {          
+            DataTable dt = new DataTable();
+            dt = Query($@"select t20.T_SALARY_CODE, t20.T_MONTH_CODE,t20.T_VERIFY_FLAG,(select dbo.T11011.T_MONTH_NAME from dbo.T11011 where T11011.T_MONTH_CODE = t20.T_MONTH_CODE) MONTH_NAME,t20.T_YEAR, t21.T_EMP_CODE, (select t11.T_EMP_NAME from dbo.T11111 t11 where t11.T_EMP_CODE = t21.T_EMP_CODE) EMP_NAME, t21.T_SALARY_PAYMENT, t21.T_SALARY_DEDUCTION, t21.T_SALARY_PAYABLE from dbo.T19020 t20 join dbo.T19021 t21 on t20.T_SALARY_CODE = t21.T_SALARY_CODE where t20.T_YEAR = '{DateTime.Now.Year.ToString()}' AND CAST(t20.T_MONTH_CODE AS INT) BETWEEN {param.T_SALARY_MONTH_FROM} AND {param.T_SALARY_MONTH_TO}");
+            return dt;
+        }
+        //public DataTable SalaryDetailsMonthly(T19021Input param)
+        //{
+        //    DataTable dt = new DataTable();
+        //    dt = Query($@"SELECT T20.T_MONTH_CODE,(SELECT T_MONTH_NAME FROM DBO.T11011 WHERE T11011.T_MONTH_CODE = T20.T_MONTH_CODE) MONTH_NAME,T20.T_YEAR,T21.T_EMP_CODE, (select t111.T_EMP_NAME from dbo.T11111 t111 where t111.T_EMP_CODE = t21.T_EMP_CODE) EMP_NAME, T21.T_SALARY_GROSS,T21.T_SALARY_PAYMENT,T21.T_SALARY_DEDUCTION,T21.T_SALARY_PAYABLE FROM dbo.T19020 T20 JOIN dbo.T19021 T21 ON T20.T_SALARY_CODE = T21.T_SALARY_CODE WHERE T20.T_BASE_CODE !='103' AND CAST(T20.T_MONTH_CODE AS INT) BETWEEN {param.FROM_DATE_MONTH} AND {param.TO_MONTH}");
+        //    return dt;
+        //}
+    }
+}

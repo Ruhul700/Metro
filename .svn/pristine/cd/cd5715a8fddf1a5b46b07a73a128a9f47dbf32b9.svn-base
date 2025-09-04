@@ -1,0 +1,313 @@
+﻿
+@{
+    ViewBag.Title = "T19010";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Apps/Payroll/Setup/T19010Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+
+<div ng-controller="T19010Controller">
+    @*header*@
+    <div class="header">
+        <span href="#default" class="logo text-warning">Employee Master Information</span>
+        <div class="header-right">
+            <a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            <a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>
+        </div>
+    </div>
+    @*===========*@
+    <div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+        <div class="row">
+            <div class="col-lg-6">
+                @*<h3>form</h3>*@
+                <div style="width: 100%; border: 1px solid gray; margin-bottom: 10px; padding: 10px;">
+                    <table>
+                        <tr>
+                            <td>
+                                <label class="textlevel">Emp No</label>
+                            </td>
+                            <td><input type="text" ng-model="obj.T19010.T_EMP_CODE" class="form-control custom-bg-primary" ng-dblclick="ClientName()"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="textlevel">Name</label>
+                            </td>
+                            <td colspan="3"><input type="text" ng-model="obj.T19010.T_EMP_NAME" style="width:100% !important" class="form-control custom-bg-primary"></td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="textlevel">Desgination</label>
+                            </td>
+                            @*<td colspan="3"><input type="text" ng-model="obj.T19010.T_EMP_DESIGNATION" class="form-control custom-bg-primary"></td>*@
+                            <td colspan="3" style="width: 20%; text-align: left; ">
+                                <select id="ddlItem" class="form-control" placeholder="Select one" tabindex="1"
+                                        ng-model="obj.ddlItemDesignation"
+                                        ng-options="V.T_DESIGNATION_NAME for V in obj.DesignationList track by V.T_DESIGNATION_CODE">
+                                    <option value="">Select One</option>
+                                </select>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="textlevel">Joining Date</label>
+                            </td>
+                            <td><input type="date" ng-model="obj.T19010.T_JOINING_DATE" class="form-control custom-bg-primary"></td>
+                            <td>
+                                <label class="textlevel">J Date of Project</label>
+                            </td>
+                            <td><input type="date" ng-model="obj.T19010.T_PRO_JOING_DATE" class="form-control custom-bg-primary"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="textlevel">Grade</label>
+                            </td>
+                            @*<td><input type="text" ng-model="obj.T19010.T_GRADE" class="form-control custom-bg-primary"></td>*@
+                            <td style="width: 20%; text-align: left; ">
+                                <select id="ddlItem" class="form-control" placeholder="Select one" tabindex="1"
+                                        ng-model="obj.ddlItem"
+                                        ng-options="V.T_GRADE_NAME for V in obj.ItemList track by V.T_GRADE_CODE"
+                                        ng-change="onGradeChange()">
+                                    <option value="">Select One</option>
+                                </select>
+                            </td>
+                            <td>
+                                <label class="textlevel">Sal Increment Date</label>
+                            </td>
+                            <td><input type="date" ng-model="obj.T19010.T_SAL_INC_DATE" class="form-control custom-bg-primary"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="textlevel">Pay Scale</label>
+                            </td>
+                            <td colspan="3"><input type="text" ng-model="obj.T19010.T_PAY_SCALE" class="form-control custom-bg-primary" readonly></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="textlevel">National ID</label>
+                            </td>
+                            <td colspan="3"><input type="text" ng-model="obj.T19010.T_NID" class="form-control custom-bg-primary"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="textlevel">TIN</label>
+                            </td>
+                            <td colspan="3"><input type="text" ng-model="obj.T19010.T_TIN_NO" class="form-control custom-bg-primary"></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">
+                                <label class="textlevel">Address</label>
+                            </td>
+                            <td colspan="3" rowspan="4"><textarea class="form-control custom-bg-primary" ng-model="obj.T19010.T_EMP_ADDRESS" rows="3" placeholder="Enter full address">Setu Bhaban, Banani, Dhaka-1212</textarea></td>
+                        </tr>
+                        <tr>
+                            <!-- These rows are empty because Address spans them -->
+                        </tr>
+                        <tr>
+                            <!-- These rows are empty because Address spans them -->
+                        </tr>
+                        <tr>
+                            <!-- These rows are empty because Address spans them -->
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div style="width:100%;border:1px solid gray;margin-bottom:10px;padding:10px;">
+                    <table>
+                        <tr>
+                            <td>
+                                <label class="textlevel">Bank</label>
+                            </td>
+                            <td><input class="form-control" type="text" ng-model="obj.T19010.T_BANK_CODE"></td>
+                            <td colspan="2"><input class="form-control" ng-model="obj.T19010.T_BANK_NAME" type="text" value="JANATA BANK LIMITED, BANANI BRANCH, D"></td>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <label class="textlevel">Bank A/C #</label>
+                            </td>
+                            <td><input class="form-control" type="text" ng-model="obj.T19010.T_ACCOUNT_NO"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="width: 100%; border: 1px solid gray; margin-bottom: 10px; padding: 10px; ">
+                    <table>
+                        <tr>
+                            <td>
+                                <label class="textlevel">Emp. Type (D/P/S/O)</label>
+                            </td>
+                            <td><input class="form-control" type="text" ng-model="obj.T19010.T_EMP_TYPE"></td>
+                            <td>
+                                <label class="textlevel">PF (Y/N)</label>
+                            </td>
+                            <td><input class="form-control" type="text" ng-model="obj.T19010.T_PF"></td>
+                            <td>
+                                <label class="textlevel">Salary (Y/N)</label>
+                            </td>
+                            <td><input class="form-control" type="text" ng-model="obj.T19010.T_SALARY"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="textlevel">H. Rent (Y/N)</label>
+                            </td>
+                            <td><input class="form-control" type="text" ng-model="obj.T19010.T_HOUSE_RENT"></td>
+                            <td>
+                                <label class="textlevel">Overtime (Y/N)</label>
+                            </td>
+                            <td><input class="form-control" type="text" ng-model="obj.T19010.T_OVERTIME"></td>
+                            <td>
+                                <label class="textlevel">Bonus (Y/N)</label>
+                            </td>
+                            <td><input class="form-control" type="text" ng-model="obj.T19010.T_BONUS"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div style="width: 100%; border: 1px solid gray; margin-bottom: 10px; padding: 10px;">
+                    <table>
+                        <tr>
+                            <td>
+                                <label style="width:100% !important;margin-right:10px;padding-right:5px;" class="textlevel">Edit By:</label>
+                            </td>
+                            <td><input class="form-control" type="text" ng-model="obj.T19010.T_EDIT_BY"></td>
+                            <td>
+                                <label style="width:100% !important;margin-right:10px;padding-right:5px;" class="textlevel">Post By:</label>
+                            </td>
+                            <td><input class="form-control" type="text" ng-model="obj.T19010.T_POST_BY"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            @*left side*@
+
+            @*Right side start*@
+            <div class="col-lg-6">
+                @*<h3>List</h3>*@
+                <div class="col-lg-6">
+                    <div style="max-height:665px;border:1px solid gray; overflow-y:auto;">
+                        <h3>Pay Allowance</h3>
+                        <table id="tblGrid" class="tTable" style=" width: 100%;">
+                            <thead>
+                                <tr style="color: black;background: #afadad" class="summary-table-header">
+                                    <th style="width: 10%;">Id</th>
+                                    <th style="width: 20%;">Name</th>
+                                    <th style="width: 10%;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="Z in obj.griPaymentDataList|filter:Search" $index pagination-id="Paymentdetails" ng-class="{'selected':$index == selectedRow}" style="cursor:pointer">
+                                    @*<td style="width: 5%;">{{ $index + 1 }}</td>*@
+                                    <td style="width: 10%;">{{Z.T_SALARY_INFO_ID}}</td>
+                                    <td style="width: 20%; text-align: left;">{{Z.T_SALARY_INFO_NAME}}</td>
+                                    <td style="width: 10%; text-align: left;">
+                                        @*<input type="text" ng-model="Z.T_AMOUNT" class="form-control" style="width: 90%;" />*@
+                                        <input type="number" ng-model="Z.T_AMOUNT" ng-change="updatePaymentTotal()" class="form-control" style="width: 90%;" />
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr style="background-color: #e1e1e1; font-weight: bold;">
+                                    <td colspan="2" style="text-align: right;">Total:</td>
+                                    <td>{{ obj.T19010.T_PAYMENT_TOTAL }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        @*<dir-pagination-controls pagination-id="Paymentdetails" max-size="5"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>*@
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div style="max-height: 665px; border: 1px solid gray; overflow-y: auto;">
+                        <h3>Deduction Allowance</h3>
+                        <table id="tblGrid" class="tTable" style=" width: 100%;">
+                            <thead>
+                                <tr style="color: black;background: #afadad" class="summary-table-header">
+                                    @*<th style="width: 10%;">SL</th>*@
+                                    <th style="width: 10%;">Id</th>
+                                    <th style="width: 20%;">Description</th>
+                                    <th style="width: 10%;">Amount</th>
+                                    @*<th style="width: 10%;">Amount</th>*@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr  ng-repeat="D in obj.griDeductionDataList|filter:Search" $index pagination-id="Deductiondetails" ng-class="{'selected':$index == selectedDeductionRow}" style="cursor:pointer">
+                                    @*<td style="width: 5%;">{{ $index + 1 }}</td>*@
+                                    <td style="width: 10%;">{{D.T_DEDUCTION_ID}}</td>
+                                    <td style="width: 20%; text-align: left;">{{D.T_DEDUCTION_NAME}}</td>
+                                    <td style="width: 10%; text-align: left;">
+                                        @*<input type="text" ng-model="D.T_DEDUCTION_AMOUNT" class="form-control" style="width: 90%;" />*@
+                                        <input type="number" ng-model="D.T_DEDUCTION_AMOUNT" ng-change="updateDeductionTotal()" class="form-control" style="width: 90%;" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr style="background-color: #e1e1e1; font-weight: bold;">
+                                    <td colspan="2" style="text-align: right;">Total:</td>
+                                    <td>{{ obj.T19010.T_DEDUCTION_TOTAL }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        @*<dir-pagination-controls pagination-id="Deductiondetails" max-size="5"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    @*Client modal start*@
+    <div id="Client" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-head">
+                <span class="closemodal" ng-click="closeModal('Client')">&times;</span>
+                <h5>Client List</h5>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td style="text-align: -webkit-right;">
+                            <input type="text" style="width:200px" ng-model="Search" placeholder="Search....." class="form-control" />
+                        </td>
+                    </tr>
+                </table>
+                <table id="tblPopup" class="popupTable">
+                    <tr>
+                        <th style="width:10%">Code</th>
+                        <th style="width:15%">Name</th>
+                        <th style="width:20%">Designation</th>
+                    </tr>
+                    <tbody id="tboodPopup">
+                        <tr dir-paginate="X in obj.ClientList|filter:Search|itemsPerPage:15" $index pagination-id="dataList" ng-class="{'selected':$index == MemoNoRow}" ng-click="setClientRow($index,X)" style="cursor:pointer">
+                            <td style="width:10%">{{X.T_EMP_CODE}}</td>
+                            <td style="width:15%">{{X.T_EMP_NAME}}</td>
+                            <td style="width:15%;text-align:left">{{X.T_DESIGNATION_NAME}}</td>
+                            @*<td style="width:15%;text-align:left">{{X.T_GENDER_NAME}}</td>*@
+
+                        </tr>
+                    </tbody>
+                </table>
+                <dir-pagination-controls pagination-id="dataList" max-size="5"
+                                         direction-links="true"
+                                         boundary-links="true">
+                </dir-pagination-controls>
+            </div>
+        </div>
+    </div>
+    @*Client modal end*@
+</div>
+

@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "R12020";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Apps/Budget/Report/R12020Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+<div class="" ng-controller="R12020Controller">
+    @*header*@
+    <div class="header">
+        <span href="#default" class="logo">Account Head</span>
+        <div class="header-right">          
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>            
+        </div>
+    </div>
+    @*===========*@
+<div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+    <table class="inputTable center" style=" width: 98%;">
+        <tr>
+            <td style=" width: 10%;">
+                <label id="lblProject" class="textlevel">Budget Period</label>
+            </td>
+            <td style="width: 15%; text-align: left; ">
+                <select style=" width: 98%;" id="ddlProject" class="form-control" placeholder="Select one" tabindex="5"
+                        ng-model="obj.ddlProject"
+                        ng-change="changeProject(obj.ddlProject)"
+                        ng-options=" V.T_PROJECT_NAME for V in obj.ProjectList track by V.T_PROJECT_CODE">
+                    <option value="">Select One</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <hr style="margin-top: 5px !important; margin-bottom: 5px !important; border-top: 2px solid #076c93b0; " />
+    <div style="width: 95%;">
+        <table id="tblGrid" class="tTable center" style=" width: 50%;">
+            <thead>
+                <tr style="color: black;background: #afadad" class="summary-table-header">
+                    <th style="width: 10%;"></th>
+                    <th style="width: 90%; font-size: 18px; text-align: left; padding-left: 10px;">Report Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width: 10%;">
+                        <input type="checkbox" style=" width: 20%;" ng-click="CheckSingle_Click('Budget')" ng-model="obj.Budget_FLG" ng-true-value="'1'" ng-false-value="'0'" />
+                    </td>
+                    <td style="width: 90%; text-align: left; padding-left: 10px;">Budget Report</td>
+                </tr>
+                <tr>
+                    <td style="width: 10%;">
+                        <input type="checkbox" style=" width: 20%;" ng-click="CheckSingle_Click('Fund')" ng-model="obj.Fund_FLG" ng-true-value="'1'" ng-false-value="'0'" />
+                    </td>
+                    <td style="width: 90%; text-align: left; padding-left: 10px;">Budget Wit Fund</td>
+                </tr>
+                <tr>
+                    <td style="width: 10%;">
+                        <input type="checkbox" style=" width: 20%;" ng-click="CheckSingle_Click('Expense')" ng-model="obj.Expense_FLG" ng-true-value="'1'" ng-false-value="'0'" />
+                    </td>
+                    <td style="width: 90%; text-align: left; padding-left: 10px;">Budget Wit Expense</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+

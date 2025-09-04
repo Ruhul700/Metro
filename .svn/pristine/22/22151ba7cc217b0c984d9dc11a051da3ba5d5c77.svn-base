@@ -1,0 +1,58 @@
+﻿
+app.controller("T13006Controller", ["$scope", "Service", "Data", "$window", "$filter",
+    function ($scope, Service, Data, $window, $filter) { //$location,
+        $scope.obj = {};
+        $scope.obj = Data;
+        $scope.obj.T13006 = {};
+        $scope.Param = {};
+        $scope.obj.VERIFY_ALL = '0';
+        $scope.obj.T13002.FROM_DATE = new Date();
+        $scope.obj.T13002.TO_DATE = new Date();
+        var fromDate = $filter('date')($scope.obj.T13002.FROM_DATE, 'dd-MM-yyyy');
+        var toDate = $filter('date')($scope.obj.T13002.TO_DATE, 'dd-MM-yyyy');
+        getVoucherList('0', fromDate, toDate);
+        getCenter();
+        function getVoucherList(center, fromDate, toDate) {
+            $scope.Param.CENTER = center;
+            $scope.Param.FROM_DATE = fromDate;
+            $scope.Param.TO_DATE = toDate;
+            loader(true);
+            var allvoucher = Service.loadDataListParm('/T13006/GetVoucherList', $scope.Param);
+            allvoucher.then(function (redata) {
+                $scope.obj.VoucherList = JSON.parse(redata);
+                $scope.obj.TotalVoucher = $scope.obj.VoucherList.length;
+                loader(false);
+            });
+        }
+       
+        $scope.Save_Click = function () {
+            //loader(true)
+            //var fromDate = $filter('date')($scope.obj.T13002.FROM_DATE, 'dd-MM-yyyy');
+            //var toDate = $filter('date')($scope.obj.T13002.TO_DATE, 'dd-MM-yyyy');
+            //var center = $scope.obj.ddlCenter == null ? '0' : $scope.obj.ddlCenter.CENTER_CODE;           
+            //if ($scope.obj.VERIFY_ALL == '0') {
+            //    $scope.Newlist = $scope.obj.VoucherList.filter(x => x.VERIFY_FLG == '1');
+            //    var verify = Service.saveData('/T13002/VerifyedData', $scope.Newlist);
+            //    verify.then(function (success) {
+            //        smsAlert(success)
+            //        getVoucherList(center, fromDate, toDate);
+            //        loader(false)
+            //    })
+            //} else {
+            //    var verify = Service.saveData('/T13002/VerifyedData', $scope.obj.VoucherList);
+            //    verify.then(function (success) {
+            //        smsAlert(success)
+            //        getVoucherList(center, fromDate, toDate);
+            //        loader(false)
+            //    })
+            //}
+        }
+        $scope.Clear_Click = function () {
+            alert('Clear');
+        }
+        $scope.Print_Click = function () {
+            alert('Print');
+        }
+
+    }
+]);

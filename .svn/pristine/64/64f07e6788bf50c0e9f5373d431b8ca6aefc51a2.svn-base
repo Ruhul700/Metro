@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewBag.Title = "T12020";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Apps/Budget/Transaction/T12020Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+<link href="~/Content/selectize.default.css" rel="stylesheet" />
+<link href="~/Content/select.css" rel="stylesheet" />
+<style>
+    .select2 > .select2-choice.ui-select-match {
+        /* Because of the inclusion of Bootstrap */
+        height: 29px;
+    }
+    .selectize-control > .selectize-dropdown {
+        top: 36px;
+    }
+</style>
+<div class="" ng-controller="T12020Controller">
+    @*header*@
+    <div ng-show="loading" style="position: absolute; padding-left: 48%; margin-top: 60px; z-index: 1"><img src="~/Images/working1.gif" style="height: 50px;"></div>
+    <div class="header">
+        <span href="#default" class="logo">Create Budget</span>
+        <div class="header-right">
+            <a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            <a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>
+        </div>
+    </div>
+    @*===========*@
+    <div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+        <table class="inputTable center" style=" width: 90%;">
+            <tr>
+                <td style=" width: 10%;">
+                    <label id="lblCode" class="textlevel">Budget Code</label>
+                </td>
+                <td style="width: 10%; text-align: left; ">
+                    <input id="txtCode" type="text" ng-model="obj.T12020.T_BUDGET_CODE" class="form-control" readonly />
+                </td>
+                <td style=" width: 10%;">
+                    <label id="lblProject" class="textlevel">Project Name</label>
+                </td>
+                <td style="width: 20%; text-align: left; ">
+                    <select style=" width: 98%;" id="ddlProject" class="form-control" placeholder="Select one" tabindex="5"
+                            ng-model="obj.ddlProject"
+                            ng-change="changeProject(obj.ddlProject)"
+                            ng-options=" V.T_PROJECT_NAME for V in obj.ProjectList track by V.T_PROJECT_CODE">
+                        <option value="">Select One</option>
+                    </select>                   
+                </td>              
+
+                <td style=" width: 10%;">
+                    <label id="lblName" class="textlevel">Type</label>
+                </td>
+                <td style="width: 10%; text-align: left; ">
+                    <input id="txtName" type="text" ng-model="obj.T12020.ACCOUNT_TYPE_NAME" class="form-control" readonly />
+                </td>
+
+            </tr>
+            <tr>
+                <td style=" width: 10%;">
+                    <label id="lblHeadCode" class="textlevel">Head Code</label>
+                </td>
+                <td style="width: 10%; text-align: left; ">
+                    <input id="txtHeadCode" type="text" ng-model="obj.T12020.ACCOUNT_ECONO_CODE" class="form-control" readonly />
+                </td>
+                <td style=" width: 10%;">
+                    <label id="lblHeader" class="textlevel">Header Name</label>
+                </td>
+                <td style="width: 20%; text-align: left; ">
+                    <ui-select id="ddlHeader" ng-model="obj.ddlHeader" ng-change="changeHeader(obj.ddlHeader)" theme="selectize" ng-disabled="disabled" style="width: 100%;text-align:left;height:35px">
+                        <ui-select-match placeholder="Select or search ">{{$select.selected.ACCOUNT_HEADER_NAME}}</ui-select-match>
+                        <ui-select-choices repeat="AC in obj.headerDataList | filter: $select.search">
+                            <span ng-bind-html="AC.ACCOUNT_HEADER_NAME | highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </td>
+               
+                
+            </tr>
+            @*<tr>
+                <td style=" width: 10%;">
+                    <label id="lblAmount" class="textlevel">ADP GOB</label>
+                </td>
+                <td style="width: 10%; text-align: left; ">
+                    <input id="txtAmount" type="number" ng-model="obj.T12020.T_ADP_GOB" class="form-control" ng-keyup="onAdp_Click()"/>
+                </td>
+                <td style=" width: 10%;">
+                    <label id="lblAmount" class="textlevel"> Project help</label>
+                </td>
+                <td style="width: 10%; text-align: left; ">
+                    <input id="txtAmount" type="number" ng-model="obj.T12020.T_ADP_PRO_HELP" class="form-control" ng-keyup="onAdp_Click()"/>
+                </td>
+                <td style=" width: 10%;">
+                    <label id="lblAmount" class="textlevel">Total Amount</label>
+                </td>
+                <td style="width: 10%; text-align: left; ">
+                    <input id="txtAmount" type="number" ng-model="obj.T12020.T_TOTAL_ADP_AMOUNT" class="form-control" readonly/>
+                </td>
+            </tr>*@
+            @*<tr>
+                <td style=" width: 10%;">
+                    <label id="lblAmount" class="textlevel">RADP GOB</label>
+                </td>
+                <td style="width: 10%; text-align: left; ">
+                    <input id="txtAmount" type="number" ng-model="obj.T12020.T_RADP_GOB" class="form-control" ng-keyup="onRadp_Click()"/>
+                </td>
+                <td style=" width: 10%;">
+                    <label id="lblAmount" class="textlevel">Project help</label>
+                </td>
+                <td style="width: 10%; text-align: left; ">
+                    <input id="txtAmount" type="number" ng-model="obj.T12020.T_RADP_PRO_HELP" class="form-control" ng-keyup="onRadp_Click()"/>
+                </td>
+                <td style=" width: 10%;">
+                    <label id="lblAmount" class="textlevel">Total Amount</label>
+                </td>
+                <td style="width: 10%; text-align: left; ">
+                    <input id="txtAmount" type="number" ng-model="obj.T12020.T_TOTAL_RADP_AMOUNT" class="form-control" readonly/>
+                </td>
+            </tr>*@
+        </table>
+        <hr style="margin-top: 5px !important; margin-bottom: 5px !important; border-top: 2px solid #076c93b0; " />
+        <div style="width: 95%;">
+            <table class="inputTable center" style=" width: 100%;">
+                <tr><td style="text-align: -webkit-right;"> <input type="text" style="width:200px" ng-model="Search" placeholder="Search....." class="form-control" /></td></tr>
+            </table>
+            <table id="tblGrid" class="tTable center" style=" width: 100%;">
+                <thead>
+                    <tr style="color: black;background: #afadad" class="summary-table-header">
+                        <th style="width: 5%;"> Code</th>
+                        <th style="width: 15%;">Project Name</th>
+                        <th style="width: 10%;">Head Name</th>
+                        @*<th style="width: 10%;">Period</th>*@
+                        <th style="width: 10%;">Stard Date</th>
+                        <th style="width: 10%;">End Date</th>
+                        <th style="width: 10%;">ADP </th>
+                        <th style="width: 10%;">RADP </th>
+                        <th style="width: 10%;">RAPRE </th>
+                        <th style="width: 10%;">Pro Help </th>
+                        <th style="width: 10%;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="Z in obj.griDataList|filter:Search|itemsPerPage:10" $index pagination-id="dataList" ng-class="{'selected':$index == selectedRow}" ng-dblclick="selectGridRow($index,Z)" style="cursor:pointer">
+                        <td style="width: 5%;">{{Z.T_BUDGET_CODE}}</td>
+                        <td style="width: 15%; text-align: left; padding-left: 10px;">{{Z.T_PROJECT_NAME}}</td>
+                        <td style="width: 10%; text-align: left; padding-left: 10px;">{{Z.ACCOUNT_HEADER_NAME}}</td>
+                        @*<td style="width: 10%; text-align: left; padding-left: 10px;">{{Z.T_PERIOD_NAME}}</td>*@
+                        <td style="width: 10%; ">{{Z.T_PERIOD_START_DATE}}</td>
+                        <td style="width: 10%; ">{{Z.T_PERIOD_END_DATE}}</td>
+                        <td style="width: 10%; ">
+                            <input type="text" ng-model="Z.T_ADP_GOB" class="form-control" />
+                        </td>
+                        <td style="width: 10%; ">
+                            <input type="text" ng-model="Z.T_RADP_GOB" class="form-control" />
+                        </td>
+                        <td style="width: 10%; ">
+                            <input type="text" ng-model="Z.T_RADP_GOB" class="form-control" />
+                        </td>
+                        <td style="width: 10%; ">
+                            <input type="text" ng-model="Z.T_ADP_PRO_HELP" class="form-control" />
+                        </td>
+                        <td style="width: 10%; ">
+                            {{Z.T_TOTAL_RADP_AMOUNT}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <dir-pagination-controls pagination-id="details" max-size="5"
+                                     direction-links="true"
+                                     boundary-links="true">
+            </dir-pagination-controls>
+
+        </div>
+    </div>
+
+</div>
+
+

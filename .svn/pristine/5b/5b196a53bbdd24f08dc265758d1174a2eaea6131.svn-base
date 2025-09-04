@@ -1,0 +1,64 @@
+﻿app.controller("T19021Controller", ["$scope", "Service", "Data", "$window", "$filter",
+    function ($scope, Service, Data, $window, $filter) {
+        $scope.obj = {};
+        $scope.obj = Data;
+        $scope.obj.T19021 = {};
+        $scope.obj.T19021.T_FROM_DATE = new Date();
+        $scope.obj.T19021.T_TO_DATE = new Date();
+        function loadGridDataList() {
+
+            var selectedDate = new Date($scope.obj.T19021.T_FROM_DATE);
+            selectedDate.setDate(1);
+            var fromDate = new Date($scope.obj.T19021.T_FROM_DATE);
+            $scope.obj.T19021.FROM_DATE_MONTH = fromDate.getMonth() + 1;
+            $scope.obj.T19021.T_FROM_DATE = selectedDate;
+            //---------------------------
+            var selectedDateTo = new Date($scope.obj.T19021.T_TO_DATE);
+            selectedDateTo.setDate(1);
+            var toDate = new Date($scope.obj.T19021.T_TO_DATE);
+            $scope.obj.T19021.TO_MONTH = toDate.getMonth() + 1;
+            $scope.obj.T19021.T_TO_DATE = selectedDateTo;
+
+            loader(true)
+            var load = Service.loadDataSingleParm('/T19021/LoadGridData', $scope.obj.T19021);
+            load.then(function (returnData) {
+                $scope.obj.griDataList = JSON.parse(returnData);
+                console.log($scope.obj.griDataList);
+                loader(false)
+            });
+        }   
+
+        $scope.setFirstDayOfMonthFromDate = function () {
+            if ($scope.obj.T19021.T_FROM_DATE !== undefined && $scope.obj.T19021.T_FROM_DATE !== null) {
+                //var selectedDate = new Date($scope.obj.T19021.T_FROM_DATE);
+                //selectedDate.setDate(1);
+                //var fromDate = new Date($scope.obj.T19021.T_FROM_DATE);
+                //$scope.obj.T19021.FROM_DATE_MONTH = fromDate.getMonth() + 1;
+                //$scope.obj.T19021.T_FROM_DATE = selectedDate;
+                loadGridDataList();
+               
+            } else {
+               return smsAlert("Invalid Date");
+            }            
+        };
+
+        $scope.setFirstDayOfMonthToDate = function () {
+            if ($scope.obj.T19021.T_TO_DATE !== undefined && $scope.obj.T19021.T_TO_DATE !== null) {
+                //var selectedDateTo = new Date($scope.obj.T19021.T_TO_DATE);
+                //selectedDateTo.setDate(1);
+                //var toDate = new Date($scope.obj.T19021.T_TO_DATE);
+                //$scope.obj.T19021.TO_MONTH = toDate.getMonth() + 1;
+                //$scope.obj.T19021.T_TO_DATE = selectedDateTo;
+                loadGridDataList();
+            } else {
+                smsAlert("Invalid Date");
+            }
+        };        
+        $scope.Clear_Click = function () {
+            clear();
+        }       
+        function clear() {
+            $scope.obj.T19021 = {};
+        }
+    }
+]);

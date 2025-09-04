@@ -1,0 +1,38 @@
+﻿
+
+namespace Metro_Rail_DAL.Shared.Payroll.Transaction
+{
+    public class T19020Data
+    {
+        public int T_SALARY_ID { get; set; }
+        public string T_SALARY_CODE { get; set; }
+        //public string T_SALARY_MONTH { get; set; }
+        public string T_ENTRY_USER { get; set; }
+        public string T_ENTRY_DATE { get; set; }
+        public string T_UPDATE_USER { get; set; }
+        public string T_UPDATE_DATE { get; set; }
+        public string T_YEAR { get; set; }
+        public string T_SALARY_MONTH { get; set; }
+        public string T_SALARY_GRADE { get; set; }
+
+    }
+
+    public class T19020ListData
+    {
+        public int T_SALARY_DTL_ID { get; set; }
+        public string T_EMP_CODE { get; set; }
+        public string T_SALARY_CODE { get; set; }
+        public string T_SALARY_DEDUCTION { get; set; }
+        public string T_SALARY_GROSS { get; set; }
+        public string T_TOTAL_PAYMENT { get; set; }
+        public string T_TOTAL_DEDUCTION { get; set; }
+        public string T_SALARY_PAYABLE { get; set; }
+        public string T_SALARY_PAYMENT { get; set; }
+        public string TOTAL_SALARY { get; set; }
+        public string T_SALARY_GROUSE { get; set; }
+        public string T_ENTRY_DATE { get; set; }
+        public string T_ENTRY_USER { get; set; }
+        public string T_UPDATE_DATE { get; set; }
+        public string T_UPDATE_USER { get; set; }
+    }
+}

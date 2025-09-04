@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "T19025";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Apps/Payroll/Transaction/T19025Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+
+<div ng-controller="T19025Controller">
+    @*header*@
+    <div class="header">
+        <span href="#default" class="logo">Bonus</span>
+        <div class="header-right">
+            <a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            <a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>
+        </div>
+    </div>
+    @*===========*@
+    <div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+        <table class="inputTable center" style=" width: 50%;">
+            <tr>
+                <td style=" width: 10%;">
+                    <label id="lblMonth" class="textlevel">Bonus</label>
+                </td>
+                <td style="width: 30%; text-align: left; ">
+                    <select id="ddlItem" class="form-control" placeholder="Select one" tabindex="1"
+                            ng-model="obj.ddlBonus"
+                            ng-options="V.T_SALARY_INFO_NAME for V in obj.BonusList track by V.T_SALARY_INFO_CODE"
+                            ng-change="onBonusChange()">
+                        <option value="">Select One</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <hr style="margin-top: 5px !important; margin-bottom: 5px !important; border-top: 2px solid #076c93b0; " />
+
+        <div style="display: flex; justify-content: center; width: 100%;">
+            @*1st table start*@
+            <div style="width: 50%; padding: 10px;">
+                <table id="tblGrid" class="tTable" style=" width: 100%;">
+                    <thead>
+                        <tr style="color: black;background: #afadad" class="summary-table-header">
+                            <th style="width: 5%;">SL</th>
+                            @*<th style="width: 5%;">Code</th>*@
+                            <th style="width: 5%;">Emp Code</th>
+                            <th style="width: 10%;">Emp name</th>
+                            <th style="width: 5%;">Total Gross</th>
+                            <th style="width: 10%;">Bonus</th>
+                            <th style="width: 10%;">Payable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="Z in obj.griDataList|filter:Search|itemsPerPage:10" $index pagination-id="details" ng-class="{'selected':$index == selectedRow}" ng-click="setRowData($index,Z)" style="cursor:pointer">
+                            <td style="width: 5%;">{{ $index + 1 }}</td>
+                            <td style="width: 5%; text-align: left;">{{Z.T_EMP_CODE}}</td>
+                            <td style="width: 5%; text-align: left;">{{Z.T_EMP_NAME}}</td>
+                            <td style="width: 5%; text-align: left;">{{Z.T_TOTAL_PAYMENT}}</td>
+                            <td style="width: 5%; text-align: left;">{{Z.T_SALARY_SET_TOTAL}}</td>
+                            <td style="width: 5%; text-align: left;">{{Z.T_SALARY_PAYABLE}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <dir-pagination-controls pagination-id="details" max-size="5"
+                                         direction-links="true"
+                                         boundary-links="true">
+                </dir-pagination-controls>
+            </div>
+            @*1st table end*@
+        </div>
+    </div>
+</div>
+

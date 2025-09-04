@@ -1,0 +1,153 @@
+﻿using Metro_Rail_DAL.Shared.Payroll.Setup;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+
+namespace Metro_Rail_DAL.DAL.Payroll.Setup
+{
+    public class T19010DAL:CommonDAL
+    {        
+        public DataTable LoadPaymentData()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("SELECT T_SALARY_INFO_ID,T_SALARY_INFO_CODE,T_SALARY_INFO_NAME,T_SALARY_INFO_RATIO, CAST(0 AS INT) AS AMOUNT FROM T19005 ORDER BY T_SALARY_INFO_ID");
+            return dt;
+        }
+        public DataTable LoadDeductionData()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("SELECT T_DEDUCTION_CODE,T_DEDUCTION_NAME from T19007 ORDER BY 1");
+            return dt;
+        }
+        public DataTable GetEmpList()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("SELECT T_EMP_CODE,T_EMP_NAME, T11103.T_DESIGNATION_NAME,T11101.T_GENDER_CODE,T11101.T_GENDER_NAME FROM T11111 JOIN T11103 ON T11111.T_DESIGNATION_CODE = T11103.T_DESIGNATION_CODE JOIN T11101 ON T11111.T_GENDER_CODE = T11101.T_GENDER_CODE");            
+            return dt;
+        }
+        public DataTable LoadEmployeeAllData(T19010Data empData)
+        {
+            DataTable dt = new DataTable();
+            dt = Query($@"SELECT T11111.T_EMP_CODE, T11111.T_EMP_NAME, T11103.T_DESIGNATION_NAME, T11101.T_GENDER_CODE, T11101.T_GENDER_NAME, T19010.T_SALARY_SET_ID,T19010.T_SALARY_SET_CODE,T19010.T_TOTAL_PAYMENT,T19010.T_TOTAL_DEDUCTION,T19010.T_SALARY_PAYABLE,T19011.T_SALARY_SET_DETL_ID, T19011.T_SALARY_INFO_CODE,T19011.T_SALARY_SET_TOTAL, T19005.T_SALARY_INFO_NAME,T19007.T_DEDUCTION_NAME FROM T11111 left JOIN T11103 ON T11111.T_DESIGNATION_CODE = T11103.T_DESIGNATION_CODE left JOIN T11101 ON T11111.T_GENDER_CODE = T11101.T_GENDER_CODE left JOIN T19010 on T11111.T_EMP_CODE = T19010.T_EMP_CODE left join T19011 on t19010.T_SALARY_SET_CODE = T19011.T_SALARY_SET_CODE left join T19005 on T19011.T_SALARY_INFO_CODE = T19005.T_SALARY_INFO_CODE left join T19007 on T19011.T_SALARY_INFO_CODE = T19007.T_DEDUCTION_CODE where T11111.T_EMP_CODE = '{empData.T_EMP_CODE}'");
+            //
+            return dt;
+        }
+        public string SaveData(T19010Data t19010, List<T19010PaymentListData> list,List<T19010DeductionListData> list2, string EntryUser)
+        {
+            string sms = "";
+            var date = DateTime.Now.ToString("dd-MM-yyyy");
+            SqlTransaction objTrans = null;
+            int count_1 = 0;
+            int count_2 = 0;
+            DataTable dt = new DataTable();
+           
+            using (SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlCon"].ConnectionString)) {
+                try
+                {
+                    
+                    objConn.Open();
+                    objTrans = objConn.BeginTransaction();
+                    if (t19010.T_SALARY_SET_CODE != null) 
+                    {
+                        var save10 = $"UPDATE T19010 SET T_TOTAL_PAYMENT='{t19010.T_PAYMENT_TOTAL}',T_TOTAL_DEDUCTION='{t19010.T_DEDUCTION_TOTAL}',T_SALARY_PAYABLE ='{t19010.T_PAYABLE_TOTAL}'WHERE T_SALARY_SET_CODE ='{t19010.T_SALARY_SET_CODE}'";
+                        command_2(save10, objConn, objTrans);
+                        foreach (var item in list)
+                        {
+                            var ck = Query_2($"SELECT COUNT(*) T_COUNT FROM T19011 WHERE T_SALARY_SET_CODE='{t19010.T_SALARY_SET_CODE}' AND T_SALARY_INFO_CODE ='{item.T_SALARY_INFO_CODE}'", objConn, objTrans).Rows[0]["T_COUNT"].ToString();
+                            if (Convert.ToInt32(ck)>0)
+                            {
+                                var save11 = $@"UPDATE T19011 SET T_SALARY_SET_TOTAL='{item.T_AMOUNT}',T_UPDATE_USER='{EntryUser}',T_UPDATE_DATE='{date}' WHERE T_SALARY_SET_CODE ='{t19010.T_SALARY_SET_CODE}' and T_SALARY_INFO_CODE = '{item.T_SALARY_INFO_CODE}'";
+                                command_2(save11, objConn, objTrans);
+                                count_1++;
+                            }
+                            else
+                            {
+                                var maxCode = Query_2($"select (CASE WHEN (Select count(*) from T19010)>0 THEN (select MAX( cast( T_SALARY_SET_CODE as int)+1)T_SALARY_SET_CODE from T19010 ) ELSE '101' END) T_SALARY_SET_CODE", objConn, objTrans).Rows[0]["T_SALARY_SET_CODE"].ToString();
+                                var save11 = $@"INSERT INTO T19011(T_SALARY_SET_CODE, T_SALARY_INFO_CODE,T_PAYMENT_FLAG,T_SALARY_SET_TOTAL,T_ENTRY_USER, T_ENTRY_DATE) VALUES ('{maxCode}', '{item.T_SALARY_INFO_CODE}','1','{item.T_AMOUNT}', '{EntryUser}', '{date}')";
+                                command_2(save11, objConn, objTrans);
+                                count_1++;
+                            }                           
+                        }
+                        foreach (var item2 in list2)
+                        {
+                            var ck = Query_2($"SELECT COUNT(*) T_COUNT FROM T19011 WHERE T_SALARY_SET_CODE='{t19010.T_SALARY_SET_CODE}' AND T_SALARY_INFO_CODE ='{item2.T_DEDUCTION_CODE}'", objConn, objTrans).Rows[0]["T_COUNT"].ToString();
+                            if (Convert.ToInt32(ck) > 0)
+                            {
+                                decimal deductionAmount = Convert.ToDecimal(item2.T_DEDUCTION_AMOUNT);
+                                var T19011_upd = $@"UPDATE T19011 SET T_SALARY_SET_TOTAL='{item2.T_DEDUCTION_AMOUNT}',T_UPDATE_USER='{EntryUser}',T_UPDATE_DATE='{date}' WHERE T_SALARY_SET_CODE ='{t19010.T_SALARY_SET_CODE}' and T_SALARY_INFO_CODE = '{item2.T_DEDUCTION_CODE}'";
+                                command_2(T19011_upd, objConn, objTrans);
+                                count_2++;
+                            }
+                            else
+                            {
+                                var maxCode = Query_2($"select (CASE WHEN (Select count(*) from T19010)>0 THEN (select MAX( cast( T_SALARY_SET_CODE as int)+1)T_SALARY_SET_CODE from T19010 ) ELSE '101' END) T_SALARY_SET_CODE", objConn, objTrans).Rows[0]["T_SALARY_SET_CODE"].ToString();
+                                decimal deductionAmount = decimal.Parse(item2.T_DEDUCTION_AMOUNT);
+                                var T19011_upd = $@"INSERT INTO T19011 (T_SALARY_SET_CODE, T_SALARY_INFO_CODE, T_DEDUCTION_FLAG, T_SALARY_SET_TOTAL, T_ENTRY_USER, T_ENTRY_DATE) values ('{maxCode}','{item2.T_DEDUCTION_CODE}','1','{deductionAmount}','{EntryUser}','{date}')";
+                                command_2(T19011_upd, objConn, objTrans);
+                                count_2++;
+                            }
+                           
+                        }
+                        if (list.Count() == count_1 && list2.Count() == count_2)
+                        {
+                            objTrans.Commit();
+                            sms = "Update Successfully-1";
+                        }
+                        else
+                        {
+                            sms = "Do not Save-0";
+                            objTrans.Rollback();
+                        }
+                    }
+                    else
+                    {
+                        decimal totalPaymentAmount = decimal.Parse(t19010.T_PAYMENT_TOTAL);
+                        decimal totalDeductionAmount = decimal.Parse(t19010.T_DEDUCTION_TOTAL);
+                        decimal totalPayableAmount = decimal.Parse(t19010.T_PAYABLE_TOTAL);
+                        var maxCode = Query($"select (CASE WHEN (Select count(*) from T19010)>0 THEN (select MAX( cast( T_SALARY_SET_CODE as int)+1)T_SALARY_SET_CODE from T19010 ) ELSE '101' END) T_SALARY_SET_CODE").Rows[0]["T_SALARY_SET_CODE"].ToString();
+                        var save10 = $@" INSERT INTO T19010 (T_SALARY_SET_CODE, T_TOTAL_PAYMENT,T_TOTAL_DEDUCTION,T_SALARY_PAYABLE,T_EMP_CODE,T_ENTRY_USER,T_ENTRY_DATE) VALUES ('{maxCode}','{totalPaymentAmount}','{totalDeductionAmount}','{totalPayableAmount}','{t19010.T_EMP_CODE}', '{EntryUser}', CAST(GETDATE() AS DATE) )";
+                        command_2(save10, objConn, objTrans);
+                        foreach (var item in list)
+                        {
+                            var save11 =$@"INSERT INTO T19011(T_SALARY_SET_CODE, T_SALARY_INFO_CODE,T_PAYMENT_FLAG,T_SALARY_SET_TOTAL,T_ENTRY_USER, T_ENTRY_DATE) VALUES ('{maxCode}', '{item.T_SALARY_INFO_CODE}','1','{item.T_AMOUNT}', '{EntryUser}', '{date}')";
+                            command_2(save11, objConn, objTrans);
+                            count_1++;
+                        }
+                        foreach (var item2 in list2)
+                        {
+                            decimal deductionAmount = decimal.Parse(item2.T_DEDUCTION_AMOUNT);
+                            var T19011_upd = $@"INSERT INTO T19011 (T_SALARY_SET_CODE, T_SALARY_INFO_CODE, T_DEDUCTION_FLAG, T_SALARY_SET_TOTAL, T_ENTRY_USER, T_ENTRY_DATE) values ('{maxCode}','{item2.T_DEDUCTION_CODE}','1','{deductionAmount}','{EntryUser}','{date}')";
+                            command_2(T19011_upd, objConn, objTrans);
+                            count_2++;
+                        }
+                        if (list.Count() == count_1 && list2.Count() == count_2)
+                        {
+                            objTrans.Commit();
+                            sms = "Save Successfully-1";
+                        }
+                        else
+                        {
+                            sms = "Do not Save-0";
+                            objTrans.Rollback();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var kk = ex.Message;
+                    sms = "Do not Save-0";
+                    objTrans.Rollback();
+                }
+                finally
+                {
+                    objConn.Close();
+                }
+            }            
+
+                return sms;
+        }
+    }
+}

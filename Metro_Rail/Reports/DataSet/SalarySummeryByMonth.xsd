@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="SalarySummeryByMonth" targetNamespace="http://tempuri.org/SalarySummeryByMonth.xsd" xmlns:mstns="http://tempuri.org/SalarySummeryByMonth.xsd" xmlns="http://tempuri.org/SalarySummeryByMonth.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="SalarySummeryByMonth" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="SalarySummeryByMonth" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="SalarySummeryByMonth">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="dtSalarySummeryByMonth" msprop:Generator_RowEvHandlerName="dtSalarySummeryByMonthRowChangeEventHandler" msprop:Generator_RowDeletedName="dtSalarySummeryByMonthRowDeleted" msprop:Generator_RowDeletingName="dtSalarySummeryByMonthRowDeleting" msprop:Generator_RowEvArgName="dtSalarySummeryByMonthRowChangeEvent" msprop:Generator_TablePropName="dtSalarySummeryByMonth" msprop:Generator_RowChangedName="dtSalarySummeryByMonthRowChanged" msprop:Generator_UserTableName="dtSalarySummeryByMonth" msprop:Generator_RowChangingName="dtSalarySummeryByMonthRowChanging" msprop:Generator_RowClassName="dtSalarySummeryByMonthRow" msprop:Generator_TableClassName="dtSalarySummeryByMonthDataTable" msprop:Generator_TableVarName="tabledtSalarySummeryByMonth">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="T_SALARY_CODE" msprop:Generator_ColumnPropNameInTable="T_SALARY_CODEColumn" msprop:Generator_ColumnPropNameInRow="T_SALARY_CODE" msprop:Generator_UserColumnName="T_SALARY_CODE" msprop:Generator_ColumnVarNameInTable="columnT_SALARY_CODE" type="xs:string" minOccurs="0" />
+              <xs:element name="T_MONTH_CODE" msprop:Generator_ColumnPropNameInTable="T_MONTH_CODEColumn" msprop:Generator_ColumnPropNameInRow="T_MONTH_CODE" msprop:Generator_UserColumnName="T_MONTH_CODE" msprop:Generator_ColumnVarNameInTable="columnT_MONTH_CODE" type="xs:string" minOccurs="0" />
+              <xs:element name="T_VERIFY_FLAG" msprop:Generator_ColumnPropNameInTable="T_VERIFY_FLAGColumn" msprop:Generator_ColumnPropNameInRow="T_VERIFY_FLAG" msprop:Generator_UserColumnName="T_VERIFY_FLAG" msprop:Generator_ColumnVarNameInTable="columnT_VERIFY_FLAG" type="xs:string" minOccurs="0" />
+              <xs:element name="MONTH_NAME" msprop:Generator_ColumnPropNameInTable="MONTH_NAMEColumn" msprop:Generator_ColumnPropNameInRow="MONTH_NAME" msprop:Generator_UserColumnName="MONTH_NAME" msprop:Generator_ColumnVarNameInTable="columnMONTH_NAME" type="xs:string" minOccurs="0" />
+              <xs:element name="T_YEAR" msprop:Generator_ColumnPropNameInTable="T_YEARColumn" msprop:Generator_ColumnPropNameInRow="T_YEAR" msprop:Generator_UserColumnName="T_YEAR" msprop:Generator_ColumnVarNameInTable="columnT_YEAR" type="xs:string" minOccurs="0" />
+              <xs:element name="T_EMP_CODE" msprop:Generator_ColumnPropNameInTable="T_EMP_CODEColumn" msprop:Generator_ColumnPropNameInRow="T_EMP_CODE" msprop:Generator_UserColumnName="T_EMP_CODE" msprop:Generator_ColumnVarNameInTable="columnT_EMP_CODE" type="xs:string" minOccurs="0" />
+              <xs:element name="EMP_NAME" msprop:Generator_ColumnPropNameInTable="EMP_NAMEColumn" msprop:Generator_ColumnPropNameInRow="EMP_NAME" msprop:Generator_UserColumnName="EMP_NAME" msprop:Generator_ColumnVarNameInTable="columnEMP_NAME" type="xs:string" minOccurs="0" />
+              <xs:element name="T_SALARY_PAYMENT" msprop:Generator_ColumnPropNameInTable="T_SALARY_PAYMENTColumn" msprop:Generator_ColumnPropNameInRow="T_SALARY_PAYMENT" msprop:Generator_UserColumnName="T_SALARY_PAYMENT" msprop:Generator_ColumnVarNameInTable="columnT_SALARY_PAYMENT" type="xs:decimal" minOccurs="0" />
+              <xs:element name="T_SALARY_DEDUCTION" msprop:Generator_ColumnPropNameInTable="T_SALARY_DEDUCTIONColumn" msprop:Generator_ColumnPropNameInRow="T_SALARY_DEDUCTION" msprop:Generator_UserColumnName="T_SALARY_DEDUCTION" msprop:Generator_ColumnVarNameInTable="columnT_SALARY_DEDUCTION" type="xs:decimal" minOccurs="0" />
+              <xs:element name="T_SALARY_PAYABLE" msprop:Generator_ColumnPropNameInTable="T_SALARY_PAYABLEColumn" msprop:Generator_ColumnPropNameInRow="T_SALARY_PAYABLE" msprop:Generator_UserColumnName="T_SALARY_PAYABLE" msprop:Generator_ColumnVarNameInTable="columnT_SALARY_PAYABLE" type="xs:decimal" minOccurs="0" />
+              <xs:element name="GRADE_NAME" msprop:Generator_ColumnPropNameInRow="GRADE_NAME" msprop:Generator_ColumnPropNameInTable="GRADE_NAMEColumn" msprop:Generator_ColumnVarNameInTable="columnGRADE_NAME" msprop:Generator_UserColumnName="GRADE_NAME" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

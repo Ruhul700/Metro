@@ -1,0 +1,600 @@
+﻿
+@{
+    ViewBag.Title = "T11111EM";
+}
+
+<script src="~/Apps/Payroll/Setup/T11111Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+@*<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">*@
+<style>
+    .selected {
+        background-color: #80c8e4ba;
+        /* color: white;*/
+        font-weight: bold;
+    }
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+    fieldset {
+        border: solid 1px #80808040;
+        padding-top: 0px;
+        padding-right: 12px;
+        padding-bottom: 0px;
+        padding-left: 12px;
+    }
+
+    legend {
+        float: none;
+        width: inherit;
+        /*border-bottom: none !important;*/
+       /* width:100% !important;*/
+    }
+</style>
+<div class="" ng-app="Textile" ng-controller="T11111Controller">
+    @*header*@
+    <div ng-show="loading" style="position: absolute;padding-left: 48%; margin-top:60px"><img src="~/Images/working1.gif" style="height: 50px;"></div>
+    <div class="header">
+        <span href="#default" class="logo">Employee Setup</span>
+        <div class="header-right">
+            <a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            <a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>
+        </div>
+    </div>
+    @*===========*@
+<div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+    <div class="tab">
+        <button class="tablinks" onclick="openCity(event, 'Basic')">Basic Information</button>
+        <button class="tablinks" onclick="openCity(event, 'Family')">Family Information</button>
+        <button class="tablinks" onclick="openCity(event, 'Education')">Education</button>
+        <button class="tablinks" onclick="openCity(event, 'Training')">Training</button>
+        <button class="tablinks" onclick="openCity(event, 'Picture')">Picture</button>
+        <button class="tablinks" onclick="openCity(event, 'Profile')">Profile View</button>
+    </div>
+    <div id="Basic" class="tabcontent">
+        <div class="">
+            <fieldset class="border rounded-3 p-3">
+                <legend style="border-bottom:none;">Personal Infromation</legend>
+                <table class="inputTable center" style=" width: 90%;">
+                    <tr>
+                        <td style=" width: 10%;">
+                            <label class="textlevel">Employee ID</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <input type="text" ng-model="obj.T11111.T_EMP_CODE" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style=" width: 10%;">
+                            <label id="lblName" class="textlevel"> Name</label>
+                        </td>
+                        <td style="width: 20%; text-align: left; ">
+                            <input type="text" id="txtName" ng-model="obj.T11111.T_EMP_NAME" class="form-control" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <label id="lblMobile" class="textlevel"> Mobile</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <input type="text" id="txtMobile" ng-model="obj.T11111.T_EMP_MOBILE" class="form-control" maxlength="11" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <label id="lblGender" class="textlevel">Gender</label>
+                        </td>
+                        <td style="width: 20%; text-align: left; ">
+                            <select id="ddlGender" class="form-control" placeholder="Select one"
+                                    ng-model="obj.ddlGender"
+                                    ng-options=" G.T_GENDER_NAME for G in obj.genderDataList track by G.T_GENDER_CODE">
+                                <option value="">Select One</option>
+                            </select>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style=" width: 10%;">
+                            <label id="lblName" class="textlevel">Father's' Name</label>
+                        </td>
+                        <td style="width: 20%; text-align: left; ">
+                            <input type="text" id="txtName" ng-model="obj.T11111.T_EMP_NAME" class="form-control" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <label id="lblMobile" class="textlevel"> Mother's Name</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <input type="text" id="txtMobile" ng-model="obj.T11111.T_EMP_MOBILE" class="form-control" maxlength="11" />
+                        </td>
+
+                        <td style=" width: 10%;">
+                            <label id="lblReligion" class="textlevel">Religion</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <select id="ddlReligion" class="form-control" placeholder="Select one"
+                                    ng-model="obj.ddlReligion"
+                                    ng-options=" R.T_RELIGION_NAME for R in obj.religionDataList track by R.T_RELIGION_CODE">
+                                <option value="">Select One</option>
+                            </select>
+                        </td>
+                        @*<td style=" width: 10%;">
+                                <label id="lblDesig" class="textlevel"> Designation</label>
+                            </td>
+                            <td style="width: 20%; text-align: left; ">
+                                <select id="ddlDesig" class="form-control" placeholder="Select one"
+                                        ng-model="obj.ddlDesig"
+                                        ng-options=" D.T_DESIGNATION_NAME for D in obj.designationDataList track by D.T_DESIGNATION_CODE">
+                                    <option value="">Select One</option>
+                                </select>
+                            </td>
+                            <td style=" width: 10%;">
+                                <label id="lblAddress" class="textlevel"> Address</label>
+                            </td>
+                            <td colspan="3" style="width: 40%; text-align: left; ">
+                                <input type="text" style="min-width:100%;max-width:100%" id="txtAddress" ng-model="obj.T11111.T_EMP_ADDRESS" class="form-control" />
+                            </td>*@
+                    </tr>
+                    <tr>
+                        <td style=" width: 10%;">
+                            <label id="lblAddress" class="textlevel">Present Address</label>
+                        </td>
+                        <td colspan="3" style="width: 40%; text-align: left; ">
+                            <input type="text" style="min-width:100%;max-width:100%" id="txtAddress" ng-model="obj.T11111.T_EMP_ADDRESS" class="form-control" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <label id="lblAddress" class="textlevel"> NID No</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <input type="text" style="min-width:100%;max-width:100%" id="txtAddress" ng-model="obj.T11111.T_EMP_ADDRESS" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style=" width: 10%;">
+                            <label id="lblAddress" class="textlevel"> Permanent Address</label>
+                        </td>
+                        <td colspan="3" style="width: 40%; text-align: left; ">
+                            <input type="text" style="min-width:100%;max-width:100%" id="txtAddress" ng-model="obj.T11111.T_EMP_ADDRESS" class="form-control" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <label id="lblAddress" class="textlevel"> Date of Birth</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <input type="text" style="min-width:100%;max-width:100%" id="txtAddress" ng-model="obj.T11111.T_EMP_ADDRESS" class="form-control" />
+                        </td>
+                    </tr>
+
+                </table>
+            </fieldset>
+        </div>
+        <div class="">
+            <fieldset class="border rounded-3 p-3">
+                <legend style="border-bottom:none;">Job Infromation</legend>
+                <table class="inputTable center" style=" width: 90%;">
+                    <tr>
+                        <td style=" width: 10%;">
+                            <label class="textlevel">Joining Date</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <input type="text" ng-model="obj.T11111.T_EMP_CODE" class="form-control" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <label class="textlevel">PRL Date</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <input type="text" ng-model="obj.T11111.T_EMP_CODE" class="form-control" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <label class="textlevel">Date Of Confirmation</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <input type="text" ng-model="obj.T11111.T_EMP_CODE" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style=" width: 10%;">
+                            <label id="lblName" class="textlevel"> Cadre</label>
+                        </td>
+                        <td style="width: 20%; text-align: left; ">
+                            <input type="text" id="txtName" ng-model="obj.T11111.T_EMP_NAME" class="form-control" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <label id="lblMobile" class="textlevel"> Email</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <input type="text" id="txtMobile" ng-model="obj.T11111.T_EMP_MOBILE" class="form-control" maxlength="11" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <label id="lblGender" class="textlevel">Phone No</label>
+                        </td>
+                        <td style="width: 20%; text-align: left; ">
+                            <input type="text" id="txtMobile" ng-model="obj.T11111.T_EMP_MOBILE" class="form-control" maxlength="11" />
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style=" width: 10%;">
+                            <label id="lblName" class="textlevel">Designation</label>
+                        </td>
+                        <td style="width: 20%; text-align: left; ">
+                            <select id="ddlDesig" class="form-control" placeholder="Select one"
+                                    ng-model="obj.ddlDesig"
+                                    ng-options=" D.T_DESIGNATION_NAME for D in obj.designationDataList track by D.T_DESIGNATION_CODE">
+                                <option value="">Select One</option>
+                            </select>
+                        </td>
+                        <td style=" width: 10%;">
+                            <label id="lblMobile" class="textlevel">Department</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <select id="ddlDesig" class="form-control" placeholder="Select one"
+                                    ng-model="obj.ddlDesig"
+                                    ng-options=" D.T_DESIGNATION_NAME for D in obj.designationDataList track by D.T_DESIGNATION_CODE">
+                                <option value="">Select One</option>
+                            </select>
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <td style=" width: 10%;">
+                            <label id="lblAddress" class="textlevel">Job Address</label>
+                        </td>
+                        <td colspan="5" style="width: 40%; text-align: left; ">
+                            <input type="text" style="min-width:100%;max-width:100%" id="txtAddress" ng-model="obj.T11111.T_EMP_ADDRESS" class="form-control" />
+                        </td>
+
+                    </tr>
+
+                    @*<tr>
+                            <td style=" width: 10%;">
+                                <label class="textlevel"> Account No</label>
+                            </td>
+                            <td style="width: 10%; text-align: left; ">
+                                <input type="text" style="min-width:100%;max-width:100%" id="txtAddress" ng-model="obj.T11111.T_ACCOUNT_NO" class="form-control" />
+                            </td>
+                            <td style=" width: 10%;">
+                                <label class="textlevel"> Bank Name</label>
+                            </td>
+                            <td style="width: 10%; text-align: left; ">
+                                <input type="text" style="min-width:100%;max-width:100%" id="txtAddress" ng-model="obj.T11111.T_BANK_NAME" class="form-control" />
+                            </td>
+                            <td style=" width: 10%;">
+                                <label class="textlevel"> Routing No</label>
+                            </td>
+                            <td style="width: 10%; text-align: left; ">
+                                <input type="text" style="min-width:100%;max-width:100%" id="txtAddress" ng-model="obj.T11111.T_ROUTING_NO" class="form-control" />
+                            </td>
+                        </tr>*@
+                </table>
+            </fieldset>
+        </div>
+        <div class="">
+            <fieldset class="border rounded-3 p-3">
+                <legend style="border-bottom:none;">Emergency Contact</legend>
+                <table class="inputTable center" style=" width: 90%;">
+                    <tr>
+                        <td style=" width: 10%;">
+                            <label class="textlevel">Name</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <input type="text" ng-model="obj.T11111.T_EMP_CODE" class="form-control" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <label class="textlevel">Relation</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <input type="text" ng-model="obj.T11111.T_EMP_CODE" class="form-control" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <label class="textlevel">Phone</label>
+                        </td>
+                        <td style="width: 10%; text-align: left; ">
+                            <input type="text" ng-model="obj.T11111.T_EMP_CODE" class="form-control" />
+                        </td>
+                    </tr>
+
+                </table>
+            </fieldset>
+        </div>
+    </div>
+
+    <div id="Education" class="tabcontent">
+        <fieldset class="border rounded-3 p-3">
+            <legend style="border-bottom:none;">Academic</legend>
+            <table class="inputTable center" style="width: 96%">
+                <tr>
+                    <td style=" width: 30%;">
+                        <label id="lblProCode" style="text-align:center" class="textlevel">Institution Name</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        <label style="text-align:center" class="textlevel">Group/Subject</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        <label style="text-align:center" class="textlevel">Passing Year</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        <label style="text-align:center" class="textlevel">Result</label>
+                    </td>
+                    <td style=" width: 20%;">
+                        <label style="text-align:center" class="textlevel">Distinction</label>
+                    </td>
+
+                    <td style=" width: 5%;"></td>
+                </tr>
+                <tr>
+                    <td style=" width: 30%;">
+                        <input style=" width: 98%;" id="txtProCode" type="text" ng-model="obj.T_PRODUCT_CODE" class="form-control" />
+                    </td>
+                    <td style=" width: 15%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_PACK_WEIGHT" class="form-control" />
+
+                    </td>
+                    <td style=" width: 15%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_PACK_WEIGHT" class="form-control" />
+
+                    </td>
+                    <td style=" width: 15%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_RUSELT" class="form-control" />
+                    </td>
+                    <td style=" width: 20%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_DISTINCTION" class="form-control" />
+                    </td>
+                    <td style=" width: 5%;">
+                        <input type="button" style="background: white; border: 1px solid #337ab7; color: black; font-weight: bold; " ng-click="Add_Click()" value="Add" tabindex="8">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <fieldset class="border rounded-3 p-3">
+            <legend style="border-bottom:none;">Professional</legend>
+            <table class="inputTable center" style="width: 96%">
+                <tr>
+                    <td style=" width: 30%;">
+                        <label id="lblProCode" style="text-align:center" class="textlevel">Institution Name</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        <label style="text-align:center" class="textlevel">Group/Subject</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        <label style="text-align:center" class="textlevel">Passing Year</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        <label style="text-align:center" class="textlevel">Result</label>
+                    </td>
+                    <td style=" width: 20%;">
+                        <label style="text-align:center" class="textlevel">Distinction</label>
+                    </td>
+
+                    <td style=" width: 5%;"></td>
+                </tr>
+                <tr>
+                    <td style=" width: 30%;">
+                        <input style=" width: 98%;" id="txtProCode" type="text" ng-model="obj.T_PRODUCT_CODE" class="form-control" />
+                    </td>
+                    <td style=" width: 15%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_PACK_WEIGHT" class="form-control" />
+
+                    </td>
+                    <td style=" width: 15%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_PACK_WEIGHT" class="form-control" />
+
+                    </td>
+                    <td style=" width: 15%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_RUSELT" class="form-control" />
+                    </td>
+                    <td style=" width: 20%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_DISTINCTION" class="form-control" />
+                    </td>
+                    <td style=" width: 5%;">
+                        <input type="button" style="background: white; border: 1px solid #337ab7; color: black; font-weight: bold; " ng-click="Add_Click()" value="Add" tabindex="8">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+
+    <div id="Training" class="tabcontent">
+        <fieldset class="border rounded-3 p-3">
+            <legend style="border-bottom:none;">Training</legend>
+            <table class="inputTable center" style="width: 96%">
+                <tr>
+                    <td style=" width: 30%;">
+                        <label id="lblProCode" style="text-align:center" class="textlevel">Course Title</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        <label style="text-align:center" class="textlevel">Training Type</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        <label style="text-align:center" class="textlevel">From Date</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        <label style="text-align:center" class="textlevel">To Date</label>
+                    </td>
+                    <td style=" width: 10%;">
+                        <label style="text-align:center" class="textlevel">Position</label>
+                    </td>
+                    <td style=" width: 10%;">
+                        <label style="text-align:center" class="textlevel">Institution</label>
+                    </td>
+                    <td style=" width: 5%;"></td>
+                </tr>
+                <tr>
+                    <td style=" width: 30%;">
+                        <input style=" width: 98%;" id="txtProCode" type="text" ng-model="obj.T_PRODUCT_CODE" class="form-control" />
+                    </td>
+                    <td style=" width: 15%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_PACK_WEIGHT" class="form-control" />
+
+                    </td>
+                    <td style=" width: 15%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_PACK_WEIGHT" class="form-control" />
+
+                    </td>
+                    <td style=" width: 15%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_RUSELT" class="form-control" />
+                    </td>
+                    <td style=" width: 10%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_DISTINCTION" class="form-control" />
+                    </td>
+                    <td style=" width: 10%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_DISTINCTION" class="form-control" />
+                    </td>
+                    <td style=" width: 5%;">
+                        <input type="button" style="background: white; border: 1px solid #337ab7; color: black; font-weight: bold; " ng-click="Add_Click()" value="Add" tabindex="8">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+
+    <div id="Family" class="tabcontent">
+        <fieldset class="border rounded-3 p-3">
+            <legend style="border-bottom:none;">Family Information</legend>
+            <table class="inputTable center" style="width: 96%">
+                <tr>
+                    <td style=" width: 10%;">
+                        <label id="lblProCode" style="text-align:center" class="textlevel">Spouse Name</label>
+                    </td>
+                    <td style=" width: 20%;">
+                        <input type="text" ng-model="obj.T11111.T_EMP_CODE" class="form-control" />
+                    </td>
+                    <td style=" width: 10%;">
+                        <label style="text-align:center" class="textlevel">Nationality</label>
+                    </td>
+                    <td style=" width: 10%;">
+                        <input type="text" ng-model="obj.T11111.T_EMP_CODE" class="form-control" />
+                    </td>
+                    <td style=" width: 10%;">
+                        <label style="text-align:center" class="textlevel"> National ID</label>
+                    </td>
+                    <td style=" width: 10%;">
+                        <input type="text" ng-model="obj.T11111.T_EMP_CODE" class="form-control" />
+                    </td>
+                    <td style=" width: 10%;">
+                        <label style="text-align:center" class="textlevel">Contact No</label>
+                    </td>
+                    <td style=" width: 10%;">
+                        <input type="text" ng-model="obj.T11111.T_EMP_CODE" class="form-control" />
+                    </td>
+
+                </tr>
+            </table>
+        </fieldset>
+        <fieldset class="border rounded-3 p-3">
+            <legend style="border-bottom:none;">Children Information</legend>
+            <table class="inputTable center" style="width: 96%">
+                <tr>
+                    <td style=" width: 30%;">
+                        <label id="lblProCode" style="text-align:center" class="textlevel">Name</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        <label style="text-align:center" class="textlevel">Gender</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        <label style="text-align:center" class="textlevel">Birth Date</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        <label style="text-align:center" class="textlevel">School</label>
+                    </td>
+                    <td style=" width: 10%;">
+                        <label style="text-align:center" class="textlevel">Class</label>
+                    </td>
+                    <td style=" width: 10%;">
+                        <label style="text-align:center" class="textlevel">Certificate</label>
+                    </td>
+                    <td style=" width: 5%;"></td>
+                </tr>
+                <tr>
+                    <td style=" width: 30%;">
+                        <input style=" width: 98%;" id="txtProCode" type="text" ng-model="obj.T_PRODUCT_CODE" class="form-control" />
+                    </td>
+                    <td style=" width: 15%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_PACK_WEIGHT" class="form-control" />
+
+                    </td>
+                    <td style=" width: 15%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_PACK_WEIGHT" class="form-control" />
+
+                    </td>
+                    <td style=" width: 15%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_RUSELT" class="form-control" />
+                    </td>
+                    <td style=" width: 10%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_DISTINCTION" class="form-control" />
+                    </td>
+                    <td style=" width: 10%;">
+                        <input style=" width: 98%;" type="text" ng-model="obj.T_DISTINCTION" class="form-control" />
+                    </td>
+                    <td style=" width: 5%;">
+                        <input type="button" style="background: white; border: 1px solid #337ab7; color: black; font-weight: bold; " ng-click="Add_Click()" value="Add" tabindex="8">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+    <div id="Picture" class="tabcontent">
+        <fieldset class="border rounded-3 p-3">
+            <legend style="border-bottom:none;">Picture</legend>
+            <table class="inputTable center" style="width: 96%">
+                <tr>
+                    <td style=" width: 30%;">
+                        <label id="lblProCode" style="text-align:center" class="textlevel">Picture</label>
+                    </td>
+                    <td style=" width: 15%;">
+                        
+                    </td>
+                  
+                </tr>
+                
+            </table>
+        </fieldset>
+    </div>
+
+</div>
+    <script>
+        function openCity(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</div>
+

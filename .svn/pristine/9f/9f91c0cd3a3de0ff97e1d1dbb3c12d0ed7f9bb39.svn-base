@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="T11111_SalaryStatment" targetNamespace="http://tempuri.org/T11111_SalaryStatment.xsd" xmlns:mstns="http://tempuri.org/T11111_SalaryStatment.xsd" xmlns="http://tempuri.org/T11111_SalaryStatment.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="T11111_SalaryStatment" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="T11111_SalaryStatment" msprop:Generator_UserDSName="T11111_SalaryStatment">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="T11111_SalaryStatment" msprop:Generator_TableClassName="T11111_SalaryStatmentDataTable" msprop:Generator_TableVarName="tableT11111_SalaryStatment" msprop:Generator_TablePropName="_T11111_SalaryStatment" msprop:Generator_RowDeletingName="T11111_SalaryStatmentRowDeleting" msprop:Generator_RowChangingName="T11111_SalaryStatmentRowChanging" msprop:Generator_RowEvHandlerName="T11111_SalaryStatmentRowChangeEventHandler" msprop:Generator_RowDeletedName="T11111_SalaryStatmentRowDeleted" msprop:Generator_UserTableName="T11111_SalaryStatment" msprop:Generator_RowChangedName="T11111_SalaryStatmentRowChanged" msprop:Generator_RowEvArgName="T11111_SalaryStatmentRowChangeEvent" msprop:Generator_RowClassName="T11111_SalaryStatmentRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="T_SALARY_SET_CODE" msprop:Generator_ColumnVarNameInTable="columnT_SALARY_SET_CODE" msprop:Generator_ColumnPropNameInRow="T_SALARY_SET_CODE" msprop:Generator_ColumnPropNameInTable="T_SALARY_SET_CODEColumn" msprop:Generator_UserColumnName="T_SALARY_SET_CODE" type="xs:string" minOccurs="0" />
+              <xs:element name="T_TOTAL_PAYMENT" msprop:Generator_ColumnVarNameInTable="columnT_TOTAL_PAYMENT" msprop:Generator_ColumnPropNameInRow="T_TOTAL_PAYMENT" msprop:Generator_ColumnPropNameInTable="T_TOTAL_PAYMENTColumn" msprop:Generator_UserColumnName="T_TOTAL_PAYMENT" type="xs:string" minOccurs="0" />
+              <xs:element name="T_TOTAL_DEDUCTION" msprop:Generator_ColumnVarNameInTable="columnT_TOTAL_DEDUCTION" msprop:Generator_ColumnPropNameInRow="T_TOTAL_DEDUCTION" msprop:Generator_ColumnPropNameInTable="T_TOTAL_DEDUCTIONColumn" msprop:Generator_UserColumnName="T_TOTAL_DEDUCTION" type="xs:string" minOccurs="0" />
+              <xs:element name="T_SALARY_PAYABLE" msprop:Generator_ColumnVarNameInTable="columnT_SALARY_PAYABLE" msprop:Generator_ColumnPropNameInRow="T_SALARY_PAYABLE" msprop:Generator_ColumnPropNameInTable="T_SALARY_PAYABLEColumn" msprop:Generator_UserColumnName="T_SALARY_PAYABLE" type="xs:string" minOccurs="0" />
+              <xs:element name="T_EMP_CODE" msprop:Generator_ColumnVarNameInTable="columnT_EMP_CODE" msprop:Generator_ColumnPropNameInRow="T_EMP_CODE" msprop:Generator_ColumnPropNameInTable="T_EMP_CODEColumn" msprop:Generator_UserColumnName="T_EMP_CODE" type="xs:string" minOccurs="0" />
+              <xs:element name="T_SALARY_INFO_CODE" msprop:Generator_ColumnVarNameInTable="columnT_SALARY_INFO_CODE" msprop:Generator_ColumnPropNameInRow="T_SALARY_INFO_CODE" msprop:Generator_ColumnPropNameInTable="T_SALARY_INFO_CODEColumn" msprop:Generator_UserColumnName="T_SALARY_INFO_CODE" type="xs:string" minOccurs="0" />
+              <xs:element name="T_SALARY_SET_TOTAL" msprop:Generator_ColumnVarNameInTable="columnT_SALARY_SET_TOTAL" msprop:Generator_ColumnPropNameInRow="T_SALARY_SET_TOTAL" msprop:Generator_ColumnPropNameInTable="T_SALARY_SET_TOTALColumn" msprop:Generator_UserColumnName="T_SALARY_SET_TOTAL" type="xs:string" minOccurs="0" />
+              <xs:element name="T_SALARY_STATUS" msprop:Generator_ColumnVarNameInTable="columnT_SALARY_STATUS" msprop:Generator_ColumnPropNameInRow="T_SALARY_STATUS" msprop:Generator_ColumnPropNameInTable="T_SALARY_STATUSColumn" msprop:Generator_UserColumnName="T_SALARY_STATUS" type="xs:string" minOccurs="0" />
+              <xs:element name="T_SALARY_INFO_NAME" msprop:Generator_ColumnVarNameInTable="columnT_SALARY_INFO_NAME" msprop:Generator_ColumnPropNameInRow="T_SALARY_INFO_NAME" msprop:Generator_ColumnPropNameInTable="T_SALARY_INFO_NAMEColumn" msprop:Generator_UserColumnName="T_SALARY_INFO_NAME" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

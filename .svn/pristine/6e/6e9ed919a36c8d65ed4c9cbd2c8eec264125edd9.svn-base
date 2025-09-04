@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "T19020";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Apps/Payroll/Transaction/T19020Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+<div ng-controller="T19020Controller">
+    @*header*@
+    <div class="header">
+        <span href="#default" class="logo">Salary Generate</span>
+        <div class="header-right">
+            <a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            <a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>
+        </div>
+    </div>
+    @*===========*@
+<div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+    <table class="inputTable center" style=" width: 50%;">
+        <tr>
+            <td style=" width: 10%;">
+                <label id="lblMonth" class="textlevel">Month</label>
+            </td>
+            <td style="width: 30%; text-align: left; ">
+                @*<select id="ddlItemMonth" class="form-control" placeholder="Select one" tabindex="1"
+                        ng-model="obj.ddlItem"
+                        ng-options="V.T_MONTH_NAME for V in obj.MonthList track by V.T_MONTH_CODE"
+                        ng-change="onMonthChange()">
+                    <option value="">Select One</option>
+                </select>*@
+
+                <select id="ddlItemMonth" class="form-control" ng-model="obj.ddlItem" ng-change="onMonthChange()">
+                    <option value="">Select One</option>
+                    <option ng-repeat="V in obj.MonthList"
+                            ng-value="V.T_MONTH_CODE"
+                            ng-disabled="V.T_MONTH_CODE > currentMonth">
+                        {{V.T_MONTH_NAME}}
+                    </option>
+                </select>
+
+            </td>
+            <td>
+                <label id="lblYear" class="textlevel">Year</label>
+            </td>
+            <td>
+                <input id="txtYear" class="form-control" type="text" ng-model="obj.T19020.T_YEAR" readonly />
+            </td>
+
+
+            <td style=" width: 10%;">
+                <label id="lblGrade" class="textlevel">Grade</label>
+            </td>
+            <td style="width: 20%; text-align: left; ">
+                <select id="ddlItemGrade" class="form-control" placeholder="Select one" tabindex="1"
+                        ng-model="obj.ddlItemGrade"
+                        ng-options="V.T_GRADE_NAME for V in obj.GradeList track by V.T_GRADE_CODE"
+                        ng-change="onGradeChange()">
+                    <option value="">Select One</option>
+                </select>
+            </td>
+
+        </tr>
+    </table>
+    <hr style="margin-top: 5px !important; margin-bottom: 5px !important; border-top: 2px solid #076c93b0; " />
+    <div style="width: 100%;">
+        <table class="inputTable center" style=" width: 100%;">
+            <tr><td style="text-align: -webkit-right;"> <input type="text" style="width:200px" ng-model="Search" placeholder="Search....." class="form-control" /></td></tr>
+        </table>
+        <table id="tblGrid" class="tTable" style=" width: 100%;">
+            <thead>
+                <tr style="color: black;background: #afadad" class="summary-table-header">
+                    <th>Employee Id</th>
+                    <th>Employee Name</th>
+                    <th>Designation</th>
+                    <th>Total Payment</th>
+                    <th>Total Deduction</th>
+                    <th>Salary Payable</th>
+                    <th>
+                        <span>All</span>
+                        <input type="checkbox" ng-model="selectAll" ng-click="toggleAll(selectAll)" />
+                    </th>
+                    @*<th ng-repeat="col in dynamicColumns">{{ col }}</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                <tr dir-paginate="Z in obj.griDataList|filter:Search|itemsPerPage:10" $index pagination-id="details" ng-class="{'selected':$index == selectedRow}" style="cursor:pointer">
+                    <td>{{Z.T_EMP_CODE}}</td>
+                    <td>{{Z.T_EMP_NAME}}</td>
+                    <td>{{Z.DESIGNATION_NAME}}</td>
+                    <td>{{Z.T_TOTAL_PAYMENT}}</td>
+                    <td>{{Z.T_TOTAL_DEDUCTION}}</td>
+                    <td>{{Z.T_SALARY_PAYABLE}}</td>
+                    <td>
+                        <input type="checkbox" ng-model="Z.T_SELECT_FLAG" ng-true-value="'1'" ng-false-value="''" />
+                    </td>
+                    @*<td ng-repeat="col in dynamicColumns">{{ Z[col] }}</td>*@
+                </tr>
+            </tbody>
+        </table>
+        <dir-pagination-controls pagination-id="details" max-size="5"
+                                 direction-links="true"
+                                 boundary-links="true">
+        </dir-pagination-controls>
+
+    </div>
+</div>
+</div>
+

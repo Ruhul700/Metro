@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "T19023";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Apps/Payroll/Transaction/T19023Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+
+<div ng-controller="T19023Controller">
+    @*header*@
+    <div class="header">
+        <span href="#default" class="logo">Employee Tax Details</span>
+        <div class="header-right">
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>      
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+        </div>
+    </div>
+    @*===========*@
+    <div style="margin-left: 0px; margin-top: 10px" class="row col-lg-12 col-md-12 col-sm-12">       
+        <hr style="margin-top: 5px !important; margin-bottom: 5px !important; border-top: 2px solid #076c93b0; " />
+               
+                <table id="tblGrid" class="tTable center" style=" width: 60%;">
+                    <thead>
+                        <tr style="color: black;background: #afadad" class="summary-table-header">
+                            <th style="width: 5%;">SL</th>                            
+                            <th style="width: 10%;">Emp Code</th>
+                            <th style="width: 20%;">Emp Name</th>
+                            <th style="width: 5%;">Tax Amount </th>                            
+                            <th style="width: 10%;">Print </th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="Z in obj.griDataList|filter:Search|itemsPerPage:10" $index pagination-id="details" ng-class="{'selected':$index == selectedRow}">
+                            <td style="width: 5%;">{{ $index + 1 }}</td>
+                            <td style="width: 10%; text-align: left;">{{Z.T_EMP_CODE}}</td>
+                            <td style="width: 20%; text-align: left;">{{Z.EMP_NAME}}</td>
+                            <td style="width: 10%; text-align: left;">{{Z.TAX_AMOUNT}}</td>
+                            <td style="width: 10%; text-align: left; padding-left: 10px;">
+                                <a><span title="Print" ng-click="Print_Click(Z)" class="glyphicon glyphicon-print"></span></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <dir-pagination-controls pagination-id="details" max-size="5"
+                                         direction-links="true"
+                                         boundary-links="true">
+                </dir-pagination-controls>           
+    </div>
+</div>
+

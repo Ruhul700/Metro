@@ -1,0 +1,70 @@
+﻿       app.controller("T13010Controller", ["$scope", "Service", "Data", "$window", "$filter",
+            function ($scope, Service, Data, $window, $filter) { //$location,
+                $scope.obj = {};
+                $scope.obj = Data;
+                $scope.obj.T13010 = {};               
+                loadGridData();
+               
+                function loadGridData() {
+                    loader(true)
+                    var load = Service.loadDataWithoutParm('/T13010/LoadData');
+                    load.then(function (returnData) {
+                        $scope.obj.griDataList = JSON.parse(returnData);
+                        loader(false)
+                    });
+                }
+                $scope.Save_Click = function () {
+                    if (isEmpty('txtSupName', 'lblSupName')) { return; };
+                    if (isEmpty('txtMobile', 'lblMobile')) { return; };
+                    if (isEmpty('txtType', 'lblType')) { return; };
+                    if (isEmpty('txtVatNo', 'lblVatNo')) { return; };
+                    if (isEmpty('txtTln', 'lblTln')) { return; };
+                    if (isEmpty('txtNidNo', 'lblNidNo')) { return; };
+                    if (isEmpty('txtAcntName', 'lblAcntName')) { return; };
+                    if (isEmpty('txtNidNo', 'lblNidNo')) { return; };
+                    if (!checkMobileNumber($scope.obj.T11111.T_EMP_MOBILE)) { showSMS('Mobile is not valide', 'warning'); return; }
+
+                    loader(true)
+                   // $scope.obj.T11111.T_GENDER_CODE = $scope.obj.ddlGender.T_GENDER_CODE;
+                   // $scope.obj.T11111.T_RELIGION_CODE = $scope.obj.ddlReligion.T_RELIGION_CODE;
+                   // $scope.obj.T11111.T_DESIGNATION_CODE = $scope.obj.ddlDesig.T_DESIGNATION_CODE;
+                    var save = Service.saveData('/T13010/SaveData', $scope.obj.T13010);
+                    save.then(function (returnData) {
+                        smsAlert(returnData);
+                        loadGridData();
+                        clear();
+                        loader(false)
+                    });
+                }
+                $scope.selectedtRow = function (ind, data) {
+                    $scope.selectedRow = ind;
+                    $scope.obj.T13010.T_SUPPLIER_ID = data.T_SUPPLIER_ID;
+                    $scope.obj.T13010.T_SUPPLIER_CODE = data.T_SUPPLIER_CODE;
+                    $scope.obj.T13010.T_SUPPLIER_NAME = data.T_SUPPLIER_NAME;
+                    $scope.obj.T13010.T_MOBILE_NO = data.T_MOBILE_NO;
+                    $scope.obj.T13010.T_TIN_NO = data.T_TIN_NO;
+                    $scope.obj.T13010.T_VAT_NO = data.T_VAT_NO;
+                    $scope.obj.T13010.T_NID_NO = data.T_NID_NO;
+                    $scope.obj.T13010.T_ACCOUNT_NAME = data.T_ACCOUNT_NAME;
+                    $scope.obj.T13010.T_ACCOUNT_NO = data.T_ACCOUNT_NO;
+                    $scope.obj.T13010.T_BANK_NAME = data.T_BANK_NAME;
+                    $scope.obj.T13010.T_BRANCH = data.T_BRANCH;                   
+                    $scope.obj.T13010.T_SUPPLIER_TYPE = data.T_SUPPLIER_TYPE;                    
+                }
+                $scope.Clear_Click = function () {
+                    clear();
+                }
+                $scope.Print_Click = function () {
+                    alert('Print');
+                }
+                function clear() {
+                    $scope.obj.T13010 = {};
+                }
+
+                //function loader(p) {
+                //    $scope.loading = p === undefined ? false : p;
+                //    return $scope.loading;
+                //};
+
+            }
+        ])

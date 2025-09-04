@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "T12010M";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Apps/Accounts/Setup/T12010MController.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+<style>
+    .selected {
+        background-color: #80c8e4ba;
+        /* color: white;*/
+        font-weight: bold;
+    }
+</style>
+
+<div class="" ng-controller="T12010MController">
+    @*header*@
+    <div class="header">
+        <span href="#default" class="logo">Account Head</span>
+        <div class="header-right">
+            <a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            <a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>
+        </div>
+    </div>
+    @*===========*@
+    <div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+        <table class="inputTable center" style=" width: 98%;">
+            <tr>
+                <td style=" width: 10%;">
+                    <label id="lblEconoCode" class="textlevel"> Econo Code</label>
+                </td>
+                <td style="width: 15%; text-align: left; ">
+                    <input id="txtEconoCode" type="text" ng-model="obj.T12010M.ACCOUNT_ECONO_MAIN_CODE" class="form-control" />
+                </td>
+                <td style=" width: 10%;">
+                    <label id="lblName" class="textlevel"> Bang Name</label>
+                </td>
+                <td style="width: 15%; text-align: left; ">
+                    <input id="txtName" type="text" ng-model="obj.T12010M.ACCOUNT_HEADER_MAIN_NAME" class="form-control" />
+                </td>
+                <td style=" width: 10%;">
+                    <label id="lblName" class="textlevel"> Eng Name</label>
+                </td>
+                <td style="width: 15%; text-align: left; ">
+                    <input id="txtName" type="text" ng-model="obj.T12010M.ACCOUNT_HEADER_MAIN_NAME_ENG" class="form-control" />
+                </td>
+                <td style=" width: 10%;">
+                    <label id="lblType" class="textlevel">Bangla Name</label>
+                </td>
+                <td style="width: 15%; text-align: left; ">
+                    <select id="ddlType" class="form-control" placeholder="Select one"
+                            ng-model="obj.ddlAccountType"
+                            ng-options="V.ACCOUNT_TYPE_NAME for V in obj.AccountTypeList track by V.ACCOUNT_TYPE_CODE">
+                        <option value="">Select One</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <hr style="margin-top: 5px !important; margin-bottom: 5px !important; border-top: 2px solid #076c93b0; " />
+        <div style="width: 50%; margin:auto">
+            <table class="inputTable " style=" width: 100%;">
+                <tr><td style="text-align: -webkit-right;"> <input type="text" style="width:200px" ng-model="Search" placeholder="Search....." class="form-control" /></td></tr>
+            </table>
+
+            <table id="tblGrid" class="tTable" style=" width: 100%;">
+                <thead>
+                    <tr style="color: black;background: #afadad" class="summary-table-header">
+                        <th style="width: 10%;">Header Code</th>
+                        <th style="width: 20%;">Bang Name</th>
+                        <th style="width: 20%;">Eng Name</th>
+                        <th style="width: 20%;">Type Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="Z in obj.griDataList|filter:Search|itemsPerPage:10" $index pagination-id="dataList" ng-class="{'selected':$index == selectedRow}" ng-click="setProductRow($index,Z)" style="cursor:pointer">
+                        <td style="width: 10%;">{{Z.ACCOUNT_ECONO_MAIN_CODE}}</td>
+                        <td style="width: 20%; text-align: left; padding-left: 10px;">{{Z.ACCOUNT_HEADER_MAIN_NAME}}</td>
+                        <td style="width: 20%; text-align: left; padding-left: 10px;">{{Z.ACCOUNT_HEADER_MAIN_NAME_ENG}}</td>
+                        <td style="width: 20%; text-align: left; padding-left: 10px;">{{Z.ACCOUNT_TYPE_NAME}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <dir-pagination-controls pagination-id="dataList" max-size="5"
+                                     direction-links="true"
+                                     boundary-links="true">
+            </dir-pagination-controls>
+        </div>
+    </div>
+
+</div>
+
+
+

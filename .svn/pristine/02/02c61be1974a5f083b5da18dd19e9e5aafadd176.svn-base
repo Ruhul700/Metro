@@ -1,0 +1,436 @@
+﻿using Metro_Rail_DAL.Common;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace Metro_Rail.Controllers.Common
+{
+    public class TransactionController : Controller
+    {
+        // GET: Transaction
+        T10000DAL repository = new T10000DAL();
+        public ActionResult T11020()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T11020", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T11021()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T11021", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T11022()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T11022", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }       
+        public ActionResult T11023()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T11023", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T19030()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T19030", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T19020()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T19020", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T19021()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T19021", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T19022()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T19022", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T19023()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T19023", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T19025()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T19025", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T19027()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T19027", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T19035()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T19035", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T19036()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T19036", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+
+        //============Accounts=================
+        public ActionResult T13001()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T13001", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T13002()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T13002", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T13003()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T13003", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T13004()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T13004", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        //================Budget===============
+        public ActionResult T12020()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T12020", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+        public ActionResult T12023()
+        {
+            if (!string.IsNullOrEmpty(Session["T_ROLE"] as string))
+            {
+                var role = Session["T_ROLE"].ToString();
+                var data = repository.Parmision("T12023", role);
+                if (data.Rows.Count > 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session.Clear();
+                    return RedirectToAction("Login", "Login");
+                }
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Login");
+            }
+        }
+    }
+}

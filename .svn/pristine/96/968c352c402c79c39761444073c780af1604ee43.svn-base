@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "T19002";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Apps/Payroll/Setup/T19002Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+<link href="~/Content/Test.css" rel="stylesheet" />
+<style>
+    #table_Input,tr,td{
+        border:none !important;
+    }
+</style>
+<div ng-controller="T19002Controller">
+    @*header*@
+    <div class="header">
+        <span href="#default" class="logo">Product Category/Type</span>
+        <div class="header-right">
+            <a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            <a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>
+        </div>
+    </div>
+    @*===========*@
+<div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+ <div style="margin:50px;">
+     <table id="table_Input">
+         <tr>
+             <td style=" width: 10%;">
+                 <label class="textlevel">Code</label>
+             </td>
+             <td style="width: 20%; text-align: left; ">
+                 <input type="text" ng-model="obj.T19002.Code" class="form-control" />
+             </td>
+             <td style=" width: 10%;">
+                 <label class="textlevel">Code</label>
+             </td>
+             <td style="width: 20%; text-align: left; ">
+                 <input type="text" ng-model="obj.T19002.T_TYPE_Name" class="form-control" />
+             </td>
+             <td style=" width: 10%;">
+                 <label class="textlevel">Code</label>
+             </td>
+             <td style="width: 20%; text-align: left; ">
+                 <input type="text" ng-model="obj.T19002.T_Mobile" class="form-control" />
+             </td>
+             <td style=" width: 10%;">
+                 <label class="textlevel">Code</label>
+             </td>
+             <td style="width: 20%; text-align: left; ">
+                 <input type="text" ng-model="obj.T19002.T_Address" class="form-control" />
+             </td>
+         </tr>
+     </table>
+ </div>
+    
+    
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        <table class="table_1">
+            <tr style="background:gray">
+                <td>Code</td>
+                <td>Name</td>
+                <td>Mobile</td>
+                <td>Address</td>
+            </tr>
+            <tr ng-repeat="A in obj.laodList" ng-click="onRowClick($index, A)">
+                <td>{{A.Code}}</td>
+                <td>{{A.Name}}</td>
+                <td>{{A.Mobile}}</td>
+                <td>{{A.Address}}</td>
+            </tr>           
+        </table>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        <table id="table_2">
+            <tr style="background:green">
+                <td>Code</td>
+                <td>Name</td>
+                <td>Mobile</td>
+                <td>Address</td>
+            </tr>
+            <tr>
+                <td>101</td>
+                <td>Rayyan</td>
+                <td>01254789</td>
+                <td>Bogura</td>
+            </tr>
+            <tr>
+                <td>102</td>
+                <td>Taheem</td>
+                <td>01254789</td>
+                <td>Bogura</td>
+            <tr>
+                <td>103</td>
+                <td>Rusda</td>
+                <td>01254789</td>
+                <td>Bogura</td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        <table id="table_1">
+            <tr style="background:gray">
+                <td>Code</td>
+                <td>Name</td>
+                <td>Mobile</td>
+                <td>Address</td>
+            </tr>
+            <tr>
+                <td>101</td>
+                <td>Rayyan</td>
+                <td>01254789</td>
+                <td>Bogura</td>
+            </tr>
+            <tr>
+                <td>102</td>
+                <td>Taheem</td>
+                <td>01254789</td>
+                <td>Bogura</td>
+            <tr>
+                <td>103</td>
+                <td>Rusda</td>
+                <td>01254789</td>
+                <td>Bogura</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</div>

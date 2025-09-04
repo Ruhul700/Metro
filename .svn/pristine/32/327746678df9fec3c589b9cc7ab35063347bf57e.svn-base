@@ -1,0 +1,9 @@
+﻿
+namespace Metro_Rail_DAL.Shared.Payroll.Transaction
+{    
+    public class T19021Input
+    {
+        public int FROM_DATE_MONTH { get; set; }
+        public int TO_MONTH { get; set; }
+    }
+}

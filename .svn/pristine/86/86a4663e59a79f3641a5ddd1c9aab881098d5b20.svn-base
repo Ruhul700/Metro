@@ -1,0 +1,72 @@
+﻿using Metro_Rail_DAL.Shared.Payroll.Setup;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Metro_Rail_DAL.DAL.Payroll.Setup
+{
+  public  class T11111DAL:CommonDAL
+    {
+        public DataTable LoadData()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("select T_EMP_ID,T_EMP_CODE,T_EMP_NAME,T_EMP_MOBILE,T_EMP_ADDRESS, t11.T_GENDER_CODE, t01.T_GENDER_NAME, t11.T_RELIGION_CODE, t02.T_RELIGION_NAME, t11.T_DESIGNATION_CODE,t11.T_ACCOUNT_NO, t11.T_BANK_NAME,t11.T_ROUTING_NO, t03.T_DESIGNATION_NAME, t11.T_ENTRY_DATE from T11111 t11 JOIN T11101 t01 ON t11.T_GENDER_CODE = t01.T_GENDER_CODE JOIN T11102 t02 ON t11.T_RELIGION_CODE= t02.T_RELIGION_CODE JOIN T11103 t03 ON t11.T_DESIGNATION_CODE =t03.T_DESIGNATION_CODE ORDER BY T_EMP_ID DESC");
+            return dt;
+        }
+        public DataTable GenderData()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("select T_GENDER_CODE, T_GENDER_NAME  from T11101 ");
+            return dt;
+        }
+        public DataTable ReligionData()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("select T_RELIGION_CODE, T_RELIGION_NAME  from T11102 ");
+            return dt;
+
+        }
+        public DataTable DesignationData()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("select T_DESIGNATION_CODE, T_DESIGNATION_NAME  from T11103 ");
+            return dt;
+        }
+        public string SaveData(T11111Data t11111)
+        {
+            string sms = "";
+            var date = DateTime.Now.ToString("dd-MM-yyyy");
+            if (t11111.T_EMP_ID == 0)
+            {
+                var maxCode = Query($"select MAX( cast( T_EMP_CODE as int)+1)T_EMP_CODE from T11111").Rows[0]["T_EMP_CODE"].ToString();
+                var sa = Command($"INSERT INTO T11111 (T_EMP_CODE,T_EMP_NAME,T_EMP_MOBILE,T_EMP_ADDRESS,T_GENDER_CODE, T_RELIGION_CODE,T_DESIGNATION_CODE,T_ACCOUNT_NO, T_BANK_NAME,T_ROUTING_NO,T_ENTRY_DATE) VALUES('{maxCode}','{t11111.T_EMP_NAME}','{t11111.T_EMP_MOBILE}','{t11111.T_EMP_ADDRESS}','{t11111.T_GENDER_CODE}','{t11111.T_RELIGION_CODE}','{t11111.T_DESIGNATION_CODE}','{t11111.T_ACCOUNT_NO}', '{t11111.T_BANK_NAME}','{t11111.T_ROUTING_NO}','{date}')");
+                if (sa == true)
+                {
+                    sms = "Save Successfully-1";
+                }
+                else
+                {
+                    sms = "Do not Save-0";
+                }
+            }
+            else
+            {
+                var sa = Command($"UPDATE T11111 SET T_EMP_NAME='{t11111.T_EMP_NAME}',T_EMP_MOBILE='{t11111.T_EMP_MOBILE}',T_EMP_ADDRESS='{t11111.T_EMP_ADDRESS}',T_GENDER_CODE='{t11111.T_GENDER_CODE}', T_RELIGION_CODE='{t11111.T_RELIGION_CODE}',T_DESIGNATION_CODE='{t11111.T_DESIGNATION_CODE}',T_ACCOUNT_NO='{t11111.T_ACCOUNT_NO}', T_BANK_NAME='{t11111.T_BANK_NAME}',T_ROUTING_NO='{t11111.T_ROUTING_NO}',T_UPDATE_DATE ='{date}' WHERE T_EMP_ID ='{t11111.T_EMP_ID}'");
+                if (sa == true)
+                {
+                    sms = "Update Successfully-1";
+                }
+                else
+                {
+                    sms = "Do not Update-0";
+                }
+            }
+
+            return sms;
+        }
+
+    }
+}

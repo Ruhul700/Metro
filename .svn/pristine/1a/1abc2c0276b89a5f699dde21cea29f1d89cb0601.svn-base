@@ -1,0 +1,7 @@
+﻿namespace Metro_Rail_DAL.Shared.Accounts.Transaction
+{
+    public class T13006Data
+    {
+
+    }
+}

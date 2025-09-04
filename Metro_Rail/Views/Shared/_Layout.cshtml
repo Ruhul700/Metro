@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/Header.css" rel="stylesheet" />
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/angular.min.js"></script>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/dirPagination.js"></script>
+<script src="~/Scripts/angular-sanitize.js"></script>
+<script src="~/Scripts/select.js"></script>
+<script src="~/Scripts/smsalert.js"></script>
+<script src="~/Scripts/Module/fileUploader.js"></script>
+<script src="~/Scripts/angular-base64-upload.js"></script>
+<script src="~/Scripts/sweetalert2.all.min.js"></script>
+<script src="~/Scripts/sweetalert2@9.js"></script>
+<script src="~/Apps/app.js"></script>
+<script src="~/Scripts/fileUploader.js"></script>
+<script src="~/Apps/CommonController/MenuController.js"></script>
+<script src="~/Apps/CommonService/MenuService.js"></script>
+@*<script src="~/Apps/CommonController/MenuController.js"></script>
+<script src="~/Apps/CommonService/MenuService.js"></script>*@
+<link href="~/Content/Custom.css" rel="stylesheet" />
+<link href="~/Content/modal.css" rel="stylesheet" />
+<script src="~/Scripts/canvasjs.min.js"></script>
+<style>
+    .headerColor {
+        background-color: #337ab7;
+        /* background-color: #076c93b0;*/
+    }
+
+    .sidenav {
+        height: 100%;
+        width: 188px;
+        position: fixed;
+        z-index: 1;
+        /*top: 0;*/
+        left: 0;
+        background-color: #337ab7;
+        /*   background-color: #076c93b0;*/
+        overflow-x: hidden;
+        transition: 0.5s;
+        /* padding-top: 60px;*/
+    }
+
+        .sidenav a {
+            padding: 0px 0px 0px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #ffffff;
+            display: block;
+            transition: 0.3s;
+        }
+
+            .sidenav a:hover {
+                color: #f1f1f1;
+            }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+    @@media screen and (max-height: 450px) {
+        .sidenav {
+            padding-top: 15px;
+        }
+
+            .sidenav a {
+                font-size: 18px;
+            }
+    }
+
+    .footerlogout {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        margin-left: 15px;
+        color: white;
+        text-align: center;
+    }
+    .ddlIcon_Right {
+        float: right;
+        font-size: 15px;
+        margin-right: 10px;
+    }
+    .ddlIcon_Left {      
+        font-size: 15px;
+        margin-right: 5px;
+    }
+</style>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body ng-app="Metrorail">
+    <div id="Loader" class="modal_Loader"><div class="modal-content_Loader"><div class="loder"><img src="~/Images/working1.gif" style="height: 50px;"></div> </div> </div>
+    @*<div ng-show="loading" class="loder"><img src="~/Images/working1.gif" style="height: 50px;"></div>*@
+<div ng-app="Metrorail" ng-controller="MenuController" class="ng-cloak">
+    <div class="navbar headerColor navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @*@Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <img style="width: 50px; height: 45px; border-radius: 5px; margin-right: 10px;" src="~/Images/Metro_Logo.png" />
+                    </li>
+                    <li><span id="sale" style="color: white; font-size: 30px; font-family: initial;" href="*">Dhaka Mass Transit Company Limited</span></li>
+                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("About", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="mySidenav" class="sidenav">
+        <div class="panel-group" id="accordion" style="margin-top: 20px;">
+            <div class="panel panel-default" style="border:none;margin-bottom:10px">
+                @*class="panel-heading"*@
+                <div style="background-color: #337ab7; color: white">
+                    <h4 class="panel-title">
+                        <a href="~/Home/H00001"> <span class="glyphicon glyphicon-home ddlIcon_Left"></span>Home</a>
+                    </h4>
+                </div>
+                <div style="background-color: #337ab7; color: white">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" style="font-size:20px" data-parent="#accordion" href="#collapse1"><span class="glyphicon glyphicon-cog ddlIcon_Left"></span> Setup  <span class="glyphicon glyphicon-menu-down ddlIcon_Right"></span> </a>
+                    </h4>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse">                   
+                    <div ng-repeat="S in obj.setupList" class="panel-body" style="background-color: #4c88bb; cursor: pointer; padding: 1px !important">                       
+                        <a style="margin-left:15px" ng-click="PageRedirect_Clic(S.T_LINK)">{{S.T_LINK_NAME}}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default" style="border: none;margin-top:10px; margin-bottom: 10px">
+                <div style="background-color: #337ab7; color: white">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" style="font-size:20px" data-parent="#accordion" href="#collapse2"><span class="glyphicon glyphicon-hdd ddlIcon_Left"></span>Transaction <span class="glyphicon glyphicon-menu-down ddlIcon_Right"></span></a>
+                    </h4>
+                </div>
+                <div id="collapse2" class="panel-collapse collapse">
+                    <div ng-repeat="T in obj.transList" class="panel-body" style="background-color: #4c88bb; cursor: pointer; padding: 1px !important">
+                        <a style="margin-left:15px" ng-click="PageRedirect_Clic(T.T_LINK)">{{T.T_LINK_NAME}}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default" style="border: none; margin-top: 10px; margin-bottom: 10px">
+                <div style="background-color: #337ab7; color: white">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" style="font-size:20px" data-parent="#accordion" href="#collapse3"><span class="glyphicon glyphicon-file ddlIcon_Left"></span>Report <span class="glyphicon glyphicon-menu-down ddlIcon_Right"></span></a>
+                    </h4>
+                </div>
+                <div id="collapse3" class="panel-collapse collapse">
+                    <div ng-repeat="R in obj.reportList" class="panel-body" style="background-color: #4c88bb; cursor: pointer; padding: 1px !important">
+                        <a style="margin-left:15px" ng-click="PageRedirect_Clic(R.T_LINK)">{{R.T_LINK_NAME}}</a>
+                    </div>
+                </div>
+            </div>
+            <span class="footerlogout " title="Logout" style="font-size:25px;cursor:pointer;margin-top:12px" ng-click="Logout_Click()">Logout</span>
+        </div>
+    </div>
+</div>
+    
+    <div ng-cloak class="ng-cloak" style="margin-left:189px">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

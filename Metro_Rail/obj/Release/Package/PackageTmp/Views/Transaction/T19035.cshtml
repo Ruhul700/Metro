@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewBag.Title = "T19035";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Apps/Payroll/Transaction/T19035Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+<style>
+    .status-applied {
+        color: #0d6efd; /* Bootstrap primary blue */
+        font-weight: bold;
+    }
+
+    .status-accepted {
+        color: #198754; /* Bootstrap success green */
+        font-weight: bold;
+    }
+
+    .status-cancelled {
+        color: #dc3545; /* Bootstrap danger red */
+        font-weight: bold;
+    }
+
+    .status-rejected {
+        color: #6c757d; /* Bootstrap secondary gray */
+        font-weight: bold;
+    }
+</style>
+<div ng-controller="T19035Controller">
+    @*header*@
+    <div class="header">
+        <span href="#default" class="logo">Leave Application</span>
+        <div class="header-right">
+            <a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            <a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>
+        </div>
+    </div>
+    @*===========*@
+    <div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+        <table class="inputTable center" style=" width: 50%;">
+            <tr>
+                <td>
+                    <label class="textlevel">Code</label>
+                </td>
+                <td>
+                    <input type="text" id="txtCode" style="width:50%;" maxlength="6" ng-model="obj.T19035.T_APLCTN_CODE" class="form-control" readonly />
+                </td>
+                <td>
+                    <label id="lblEmpCode" class="textlevel">Emp Code</label>
+                </td>
+                <td>
+                    <input id="txtEmpCode" type="text" style="width:80px;" ng-model="obj.T19035.T_EMP_CODE" class="form-control" ng-dblclick="ClientName()" readonly />
+                </td>
+                <td>
+                    <label id="lblEmpName" class="txtEmpName">Emp Name</label>
+                </td>
+                <td>
+                    <input id="txtEmpCode" type="text" style="width:100%;" ng-model="obj.T19035.T_EMP_NAME" class="form-control" readonly />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label id="lblLeaveType" class="textlevel">Leave Type</label>
+                </td>
+                <td>
+                    <select id="ddlItem" class="form-control" ng-model="obj.ddlItem"  placeholder="Select one" tabindex="1"
+                            ng-options="V.T_LEAVE_NAME for V in obj.LeaveTypeList track by V.T_LEAVE_CODE">
+                        <option value="">Select One</option>
+                    </select>
+                </td>
+                <td>
+                    <label id="lblWithPay" class="textlevel">With Pay</label>
+                </td>
+                <td>
+                    <input type="checkbox" ng-model="obj.T19035.T_WIDTH_PAY" ng-true-value="'1'" ng-false-value="''" />
+                </td>
+                <td>
+                    <label id="lblWithoutPay" class="textlevel">Without Pay</label>
+                </td>
+                <td>
+                    <input type="checkbox" ng-model="obj.T19035.T_WIDTHOUT_PAY" ng-true-value="'1'" ng-false-value="''"/>
+                </td>
+
+            </tr>
+           
+            <tr>
+                <td style="width: 10%;">
+                    <label id="lblFromDate" class="textlevel"> From</label>
+                </td>
+                <td style="width: 20%; text-align: left; ">
+                    <input id="txtFromDate"  type="date" ng-model="obj.T19035.T_FROM_DATE" class="form-control" ng-change="calculateLeaveDays()" />
+                </td>
+                <td style=" width: 10%;">
+                    <label id="lblToDate" class="textlevel">To</label>
+                </td>
+                <td style="width: 20%; text-align: left; ">
+                    <input id="txtWithPayTo"  type="date" ng-model="obj.T19035.T_TO_DATE" class="form-control" ng-change="calculateLeaveDays()"  />
+                </td>
+                <td style=" width: 10%;">
+                    <label id="lblDays" class="textlevel">Days</label>
+                </td>
+                <td style="width: 10%; text-align: left; ">
+                    <input id="txtTotalDays" type="text" ng-model="obj.T19035.T_TOTAL_DATE" class="form-control" />
+                </td>              
+            </tr>
+            
+        </table>
+        <hr style="margin-top: 5px !important; margin-bottom: 5px !important; border-top: 2px solid #076c93b0; " />
+
+            @*1st table start*@
+              <table id="tblGrid" class="tTable center" style=" width: 80%;">
+                    <thead>
+                        <tr style="color: black;background: #afadad" class="summary-table-header">
+                            <th style="width: 5%;">SL</th>
+                            @*<th style="width: 5%;">Code</th>*@
+                            <th style="width: 5%;"> Code</th>
+                            <th style="width: 15%;">Emp name</th>
+                            <th style="width: 10%;">Leave Code</th>
+                            <th style="width: 10%;">With Pay</th>
+                            @*<th style="width: 10%;">Without Pay</th>*@
+                            <th style="width: 10%;">From Date</th>
+                            <th style="width: 10%;">To Date</th>
+                            <th style="width: 10%;">Total Days</th>
+                            <th style="width: 10%;">Status</th>
+                            <th>Cancel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="Z in obj.griDataList|filter:Search|itemsPerPage:10" $index pagination-id="details" ng-class="{'selected':$index == selectedRow}" ng-click="setRowData($index,Z)" style="cursor:pointer">
+                            <td style="width: 5%;">{{ $index + 1 }}</td>
+                            @*<td style="width: 5%;">{{Z.T_APLCTN_CODE}}</td>*@
+                            <td style="width: 5%; text-align: left;">{{Z.T_EMP_CODE}}</td>
+                            <td style="width: 15%; text-align: left;">{{Z.T_EMP_NAME}}</td>
+                            <td style="width: 10%; text-align: left;">{{Z.T_LEAVE_NAME}}</td>
+                            <td style="width: 10%; text-align: left;">{{Z.T_WIDTH_PAY}}</td>
+                            @*<td style="width: 10%; text-align: left;">{{Z.T_WIDTHOUT_PAY}}</td>*@
+                            <td style="width: 10%; text-align: left;">{{Z.FROM_DATE_STRING}}</td>
+                            <td style="width: 10%; text-align: left;">{{Z.TO_DATE_STRING}}</td>
+                            <td style="width: 10%; text-align: center;">{{Z.T_TOTAL_DATE}}</td>
+                            <td style="width: 10%; text-align: center;" ng-class="{'status-applied': Z.T_STATUS == 'Applied','status-accepted': Z.T_STATUS == 'Accepted','status-cancelled': Z.T_STATUS == 'Cancelled','status-rejected': Z.T_STATUS == 'Rejected'}">{{Z.T_STATUS}}</td>
+                            <td style="width: 10%;">
+                                <input type="button" ng-click="confirmCancel(Z)" ng-if="Z.T_STATUS == 'Applied'" class="btn btn-danger" value="Cancel" />
+                            </td>
+                        </tr>
+                    </tbody>                    
+                </table>
+                <dir-pagination-controls pagination-id="details" max-size="5"
+                                         direction-links="true"
+                                         boundary-links="true">
+                </dir-pagination-controls>
+            
+            @*1st table end*@
+      
+    </div>
+
+    @*Client modal start*@
+    <div id="Client" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-head">
+                <span class="closemodal" ng-click="closeModal('Client')">&times;</span>
+                <h5>Employee List</h5>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td style="text-align: -webkit-right;">
+                            <input type="text" style="width:200px" ng-model="Search" placeholder="Search....." class="form-control" />
+                        </td>
+                    </tr>
+                </table>
+                <table id="tblPopup" class="popupTable">
+                    <tr>
+                        <th style="width:10%">Code</th>
+                        <th style="width:90%">Name</th>
+                    </tr>
+                    <tbody id="tboodPopup">
+                        <tr dir-paginate="X in obj.ClientList|filter:Search|itemsPerPage:15" $index pagination-id="dataList" ng-class="{'selected':$index == MemoNoRow}" ng-click="setEmpRow($index,X)" style="cursor:pointer">
+                            <td style="width:10%">{{X.T_EMP_CODE}}</td>
+                            <td style="width:90%;text-align:left;padding-left:5px;">{{X.T_EMP_NAME}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <dir-pagination-controls pagination-id="dataList" max-size="5"
+                                         direction-links="true"
+                                         boundary-links="true">
+                </dir-pagination-controls>
+            </div>
+        </div>
+    </div>
+    @*Client modal end*@
+</div>
+

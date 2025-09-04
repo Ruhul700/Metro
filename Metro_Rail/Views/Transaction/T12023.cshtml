@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "T12023";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Apps/Budget/Transaction/T12023Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+<link href="~/Content/selectize.default.css" rel="stylesheet" />
+<link href="~/Content/select.css" rel="stylesheet" />
+<style>
+    .select2 > .select2-choice.ui-select-match {
+        /* Because of the inclusion of Bootstrap */
+        height: 29px;
+    }
+
+    .selectize-control > .selectize-dropdown {
+        top: 36px;
+    }
+</style>
+<div class="" ng-controller="T12023Controller">
+    @*header*@
+    <div ng-show="loading" style="position: absolute; padding-left: 48%; margin-top: 60px; z-index: 1"><img src="~/Images/working1.gif" style="height: 50px;"></div>
+    <div class="header">
+        <span href="#default" class="logo">Budget Fund</span>
+        <div class="header-right">
+            <a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            <a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>
+        </div>
+    </div>
+    @*===========*@
+<div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+    <table class="inputTable center" style=" width: 90%;">
+        <tr>
+            <td style=" width: 10%;">
+                <label id="lblProject" class="textlevel">Project Name</label>
+            </td>
+            <td style="width: 20%; text-align: left; ">
+                <select style=" width: 98%;" id="ddlProject" class="form-control" placeholder="Select one" tabindex="5"
+                        ng-model="obj.ddlProject"
+                        ng-change="changeProject(obj.ddlProject)"
+                        ng-options=" V.T_PROJECT_NAME for V in obj.ProjectList track by V.T_PROJECT_CODE">
+                    <option value="">Select One</option>
+                </select>                
+            </td>
+        </tr>
+       
+    </table>
+    <hr style="margin-top: 5px !important; margin-bottom: 5px !important; border-top: 2px solid #076c93b0; " />
+    <div style="width: 95%;">
+        <table class="inputTable center" style=" width: 100%;">
+            <tr><td style="text-align: -webkit-right;"> <input type="text" style="width:200px" ng-model="Search" placeholder="Search....." class="form-control" /></td></tr>
+        </table>
+        <table id="tblGrid" class="tTable center" style=" width: 100%;">
+            <thead>
+                <tr style="color: black;background: #afadad" class="summary-table-header">
+                    <th style="width: 10%;"> Code</th>                    
+                    <th style="width: 25%;">Budget Head</th>                   
+                    <th style="width: 10%;">ADP Total</th>
+                    <th style="width: 10%;">RADP Total</th>
+                    <th style="width: 10%;">Totol Fund</th> 
+                    <th style="width: 25%;">Fund Head</th> 
+                    <th style="width: 10%;">Fund Amount  </th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="Z in obj.griDataList" $index  ng-class="{'selected':$index == selectedRow}" ng-click="selectGridRow($index,Z)" style="cursor:pointer">
+                    <td style="width: 10%;">{{Z.ACCOUNT_ECONO_CODE}}</td>                   
+                    <td style="width: 25%; text-align: left; padding-left: 10px;">{{Z.ACCOUNT_HEADER_NAME}}</td>                    
+                    <td style="width: 10%; ">{{Z.T_TOTAL_ADP_AMOUNT}}</td>
+                    <td style="width: 10%; ">{{Z.T_TOTAL_RADP_AMOUNT}}</td>
+                    <td style="width: 10%; ">{{Z.TOTAL_COLLECTION}}</td>
+                    <td style="width: 25%; ">
+                        <select id="{{$index}}ddlActHead" class="form-control" style="max-width:100%" tabindex="{{$index+8}}"
+                                ng-model="Z.ddlActHead"
+                                ng-change="HeadChange($index,Z.ddlActHead)"
+                                ng-options=" Ac.ACCOUNT_HEADER_NAME for Ac in obj.headerDataList track by Ac.ACCOUNT_HEADER_CODE">
+                            <option value="">Select one</option>
+                        </select>
+                    </td>
+                    <td style="width: 10%; ">
+                        <input id="txtAmount" type="number" ng-model="Z.T_FUND_COLLECT" class="form-control" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+
+    </div>
+</div>
+</div>
+
+

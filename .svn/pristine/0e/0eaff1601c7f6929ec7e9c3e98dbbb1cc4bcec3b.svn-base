@@ -1,0 +1,131 @@
+﻿app.controller("T19010Controller", ["$scope", "Service", "Data", "$window", "$filter",
+    function ($scope, Service, Data, $window, $filter) { //$location,
+        $scope.obj = {};
+        $scope.obj = Data;
+        $scope.obj.T19010 = {};        
+        loadPaymentGridData();
+        loadDeductionGridData();
+        $scope.InsertData = {};        
+        getClient();
+
+        function loadPaymentGridData() {
+            loader(true)
+            var load = Service.loadDataWithoutParm('/T19010/LoadPaymentData');
+            load.then(function (returnData) {
+                $scope.obj.griPaymentDataList = JSON.parse(returnData);
+                loader(false)
+            });
+        }
+        function loadDeductionGridData() {
+            loader(true)
+            var load = Service.loadDataWithoutParm('/T19010/LoadDeductionData');
+            load.then(function (returnData) {
+                $scope.obj.griDeductionDataList = JSON.parse(returnData);
+                loader(false)
+            });
+        }       
+        $scope.getPaymentTotal = function () {
+            let total = 0;
+            angular.forEach($scope.obj.griPaymentDataList, function (item) {
+                let amount = parseFloat(item.T_AMOUNT);
+                if (!isNaN(amount)) {
+                    total += amount;
+                }
+            });
+            $scope.obj.T19010.T_PAYMENT_TOTAL = total;
+            return total;
+        };
+        $scope.getTotalDeductionAmount = function () {
+            let total = 0;
+            angular.forEach($scope.obj.griDeductionDataList, function (item) {
+                let amount = parseFloat(item.T_DEDUCTION_AMOUNT);
+                if (!isNaN(amount)) {
+                    total += amount;
+                }
+            });
+            $scope.obj.T19010.T_DEDUCTION_TOTAL = total;
+            return total;
+        };
+        $scope.getPayableAmount = function () {
+            var total = $scope.getPaymentTotal() - $scope.getTotalDeductionAmount();
+            $scope.obj.T19010.T_PAYABLE_TOTAL = total;
+            return total;
+        };
+        function getClient() {
+            var client = Service.loadDataWithoutParm('/T19010/GetEmpList');
+            client.then(function (redata) {
+                $scope.obj.ClientList = JSON.parse(redata);
+            });
+        }        
+        $scope.ClientName = function () {
+            document.getElementById('Client').style.display = "block";
+        }
+        $scope.closeModal = function (id) {
+            document.getElementById(id).style.display = "none";
+        }
+        $scope.setClientRow = function (ind, data) {
+           
+            document.getElementById('Client').style.display = "none";
+            $scope.obj.T19010.T_EMP_CODE = data.T_EMP_CODE;
+            $scope.obj.T19010.T_EMP_NAME = data.T_EMP_NAME;
+            $scope.obj.T19010.T_EMP_DESIGNATION = data.T_DESIGNATION_NAME;
+            $scope.obj.T19010.T_GENDER_NAME = data.T_GENDER_NAME;
+            
+            loader(true)
+            var load = Service.loadDataSingleParm('/T19010/LoadEmployeeAllData', $scope.obj.T19010);
+            load.then(function (returnData) {
+                $scope.obj.employeeAllData = JSON.parse(returnData);
+                loader(false)
+                $scope.obj.T19010.T_SALARY_SET_CODE = $scope.obj.employeeAllData[0].T_SALARY_SET_CODE;
+
+
+                angular.forEach($scope.obj.griPaymentDataList, function (payItem) {
+                    var matched = $scope.obj.employeeAllData.find(function (empItem) {
+                        return empItem.T_SALARY_INFO_CODE === payItem.T_SALARY_INFO_CODE;
+                    });
+                    if (matched) {
+                        payItem.T_AMOUNT = matched.T_SALARY_SET_TOTAL;
+                    } else {
+                        payItem.T_AMOUNT = '';
+                    }
+                });
+                angular.forEach($scope.obj.griDeductionDataList, function (deductItem) {
+                    var matched = $scope.obj.employeeAllData.find(function (empItem) {
+                        return empItem.T_SALARY_INFO_CODE === deductItem.T_DEDUCTION_CODE;
+                    });
+                    if (matched) {
+                        deductItem.T_DEDUCTION_AMOUNT = matched.T_SALARY_SET_TOTAL;
+                    } else {
+                        deductItem.T_DEDUCTION_AMOUNT = '';
+                    }
+                });                
+            });
+        }        
+        $scope.Save_Click = function () {
+            if (isEmpty('txtName', 'lblName')) { return; }
+            $scope.InsertData.T19010 = $scope.obj.T19010;
+            $scope.InsertData.PaymentList = $scope.obj.griPaymentDataList;
+            $scope.InsertData.DeductionList = $scope.obj.griDeductionDataList;
+
+            loader(true)            
+            var save = Service.saveData('/T19010/SaveData', $scope.InsertData);
+            save.then(function (returnData) {
+                smsAlert(returnData);                
+                clear();
+                loader(false)
+            });
+        }
+        $scope.Clear_Click = function () {
+            clear();
+        }
+        $scope.Print_Click = function () {
+            alert('Print');
+        }
+        function clear() {
+            $scope.obj.T19010 = {};
+            loadPaymentGridData();
+            loadDeductionGridData();
+        }
+
+    }
+]);

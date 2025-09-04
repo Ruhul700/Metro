@@ -1,0 +1,133 @@
+﻿using Metro_Rail_DAL.Shared.Payroll.Setup;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+
+namespace Metro_Rail_DAL.DAL.Payroll.Setup
+{
+    public class T19010DAL:CommonDAL
+    {
+        public DataTable GetItem()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("select T_GRADE_CODE,T_GRADE_NAME,T_PAY_SCALE from T19008");
+            return dt;
+        }
+        public DataTable GetDesignationItem()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("select T_DESIGNATION_ID,T_DESIGNATION_CODE,T_DESIGNATION_NAME from dbo.T11103");
+            return dt;
+        }
+        public DataTable LoadPaymentData()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("SELECT T_SALARY_INFO_ID,T_SALARY_INFO_CODE,T_SALARY_INFO_NAME,CAST(0 AS INT) AS AMOUNT FROM T19005 ORDER BY T_SALARY_INFO_ID");
+            return dt;
+        }
+
+        public DataTable LoadDeductionData()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("SELECT T_DEDUCTION_ID,T_DEDUCTION_CODE,T_DEDUCTION_NAME from dbo.T19007 ORDER BY 1");
+            return dt;
+        }
+        public DataTable GetEmpList()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("select T11111.T_EMP_CODE, T11111.T_EMP_NAME,T11111.T_EMP_ADDRESS,T11111.T_NID,T11111.T_ACCOUNT_NO, T11111.T_BANK_CODE, T11111.T_BANK_NAME, T11111.T_ROUTING_NO, T11111.T_TIN_NO, T11111.T_JOINING_DATE, T11111.T_PRO_JOING_DATE, T11111.T_GRADE_CODE, T11111.T_EMP_TYPE, T11111.T_PF, T11111.T_SALARY,t19008.T_GRADE_NAME, T11111.T_HOUSE_RENT, T11111.T_OVERTIME, T11111.T_BONUS,T11111.T_DESIGNATION_CODE, t11103.T_DESIGNATION_NAME from t11111 left join t11103 on t11111.t_designation_code = t11103.t_designation_code left join T19008 on T11111.T_GRADE_CODE = T19008.T_GRADE_CODE");
+            return dt;
+        }
+
+        public string SaveData(T19010Data t19010, List<T19010PaymentListData> list, List<T19010DeductionListData> list2, string EntryUser)
+        {
+
+            var sms = "";
+            SqlTransaction objTrans = null;
+            using (SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlCon"].ConnectionString))
+            {
+                try
+                {
+                    objConn.Open();
+                    objTrans = objConn.BeginTransaction();
+                    var recordExist = Query_2($"select count(*) RECORD from dbo.T11111 where T_EMP_CODE = '{t19010.T_EMP_CODE}'", objConn, objTrans).Rows[0]["RECORD"].ToString();
+
+
+                    if (Convert.ToInt32(recordExist) > 0)
+                    {
+                        //update
+                        var sa = Command($"UPDATE T11111 SET T_GRADE_CODE='{t19010.T_GRADE_CODE}',T_EMP_TYPE='{t19010.T_EMP_TYPE}',T_EMP_ADDRESS ='{t19010.T_EMP_ADDRESS}',T_UPDATE_USER='{EntryUser}',T_UPDATE_DATE = '{DateTime.Now.ToString("dd-MM-yyyy")}'WHERE T_EMP_CODE ='{t19010.T_EMP_CODE}'");
+                        if (!sa) throw new Exception("Employee Information update failed");
+                        objTrans.Commit();
+                        sms = "Update Successfully-1";
+                    }
+                    else
+                    {
+                        string todayDate = DateTime.Now.ToString("dd-MM-yyyy");
+                        //insert
+                        var maxEmpCode = Query_2($"SELECT CASE WHEN COUNT(*)>0 THEN  MAX(T_EMP_CODE)+1 ELSE 1 END T_EMP_CODE FROM T11111", objConn, objTrans).Rows[0]["T_EMP_CODE"].ToString();
+
+                        var sa = Command($@"insert into T11111 (T_EMP_CODE, T_EMP_NAME, T_EMP_ADDRESS, T_NID, T_DESIGNATION_CODE, T_ACTIVE_FLAG, T_ACCOUNT_NO, T_BANK_CODE, T_BANK_NAME, T_ROUTING_NO, T_TIN_NO, T_JOINING_DATE, T_PRO_JOING_DATE, T_GRADE_CODE, T_EMP_TYPE, T_PF, T_SALARY, T_HOUSE_RENT, T_OVERTIME, T_BONUS, T_ENTRY_USER, T_ENTRY_DATE) values ('{maxEmpCode}','{t19010.T_EMP_NAME}','{t19010.T_EMP_ADDRESS}','{t19010.T_NID}','{t19010.T_DESIGNATION_CODE}','1','{t19010.T_ACCOUNT_NO}','{t19010.T_BANK_CODE}','{t19010.T_BANK_NAME}','{t19010.T_ROUTING_NO}','{t19010.T_TIN_NO}','{t19010.T_JOINING_DATE}','{t19010.T_PRO_JOING_DATE}','{t19010.T_GRADE_CODE}','{t19010.T_EMP_TYPE}','{t19010.T_PF}','{t19010.T_SALARY}','{t19010.T_HOUSE_RENT}','{t19010.T_OVERTIME}','{t19010.T_BONUS}','{EntryUser}','{todayDate}')");
+                        if (!sa) throw new Exception("Employee Information insert failed");
+
+                        var maxSalarySetCode = Query_2($"SELECT CASE WHEN COUNT(*)>0 THEN  MAX(T_SALARY_SET_CODE)+1 ELSE 1 END T_SALARY_SET_CODE FROM T19010", objConn, objTrans).Rows[0]["T_SALARY_SET_CODE"].ToString();
+
+                        var saT19010 = Command($@"insert into dbo.T19010 (T_SALARY_SET_CODE, T_TOTAL_PAYMENT, T_TOTAL_DEDUCTION, T_SALARY_PAYABLE, T_EMP_CODE, T_ENTRY_USER, T_ENTRY_DATE) values ('{maxSalarySetCode}',{t19010.T_PAYMENT_TOTAL},{t19010.T_DEDUCTION_TOTAL},{t19010.T_PAYMENT_TOTAL - t19010.T_DEDUCTION_TOTAL},'{maxEmpCode}','{EntryUser}','{todayDate}')");
+                        if (!saT19010) throw new Exception("T19010 insert failed");
+
+                        //detail T19011 insert
+                        foreach (var item in list)
+                        {
+                            decimal PayAmount = string.IsNullOrWhiteSpace(item.T_AMOUNT) ? 0 : decimal.Parse(item.T_AMOUNT);
+
+                            var da = Command($@"INSERT INTO T19011(T_SALARY_SET_CODE, T_SALARY_INFO_CODE,T_PAYMENT_FLAG,T_SALARY_SET_TOTAL,T_ENTRY_USER, T_ENTRY_DATE) VALUES ('{maxSalarySetCode}', '{item.T_SALARY_INFO_CODE}','1','{PayAmount}', '{EntryUser}', '{todayDate}')");
+
+                            if (!da) throw new Exception("T19011 insert failed for " + maxSalarySetCode);
+                        }
+                        foreach (var item2 in list2)
+                        {
+                            decimal deductionAmount = string.IsNullOrWhiteSpace(item2.T_DEDUCTION_AMOUNT) ? 0 : decimal.Parse(item2.T_DEDUCTION_AMOUNT);
+
+                            //decimal deductionAmount = decimal.Parse(item2.T_DEDUCTION_AMOUNT);
+
+                            var T19011_INS = Command($@"insert into T19011 (T_SALARY_SET_CODE, T_SALARY_INFO_CODE, T_DEDUCTION_FLAG, T_SALARY_SET_TOTAL, T_ENTRY_USER, T_ENTRY_DATE) values ('{maxSalarySetCode}','{item2.T_DEDUCTION_CODE}','1','{deductionAmount}','{EntryUser}','{todayDate}')");
+
+                            if (!T19011_INS) throw new Exception("T19011 insert failed for " + maxSalarySetCode);
+                        }
+                        objTrans.Commit();
+                        sms = "Save Successfully-1";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var kk = ex.Message;
+                    sms = "Do not Save-0";
+                    objTrans.Rollback();
+                }
+            }
+            return sms;
+        }
+        public DataTable T19010_GetEmpInfoWithSalary(string empCode)
+        {
+            DataTable dt = new DataTable();
+            dt = Query($@"select T11111.T_EMP_CODE, T11111.T_EMP_NAME,T11111.T_EMP_ADDRESS,T11111.T_NID,T11111.T_ACCOUNT_NO, T11111.T_BANK_CODE, T11111.T_BANK_NAME, T11111.T_ROUTING_NO, T11111.T_TIN_NO, T11111.T_JOINING_DATE, T11111.T_PRO_JOING_DATE, T11111.T_GRADE_CODE, T11111.T_EMP_TYPE, T11111.T_PF, T11111.T_SALARY,t19008.T_GRADE_NAME, T11111.T_HOUSE_RENT, T11111.T_OVERTIME, T11111.T_BONUS,T11111.T_DESIGNATION_CODE, t11103.T_DESIGNATION_NAME from t11111 left join t11103 on t11111.t_designation_code = t11103.t_designation_code left join T19008 on T11111.T_GRADE_CODE = T19008.T_GRADE_CODE where T_EMP_CODE = '{empCode}'");
+            return dt;
+        }
+        public DataTable T19010_GetSalaryPayment(string empCode)
+        {
+            DataTable dt = new DataTable();
+            dt = Query($@"select distinct t10.T_SALARY_SET_ID,t10.T_SALARY_SET_CODE,t10.T_TOTAL_PAYMENT, t11.T_SALARY_INFO_CODE,t05.T_SALARY_INFO_NAME SALARY_INFO_NAME,t11.T_SALARY_SET_TOTAL from dbo.T19010 t10 join dbo.t19011 t11 on t10.T_SALARY_SET_CODE = t11.T_SALARY_SET_CODE join dbo.T19005 t05 on t05.T_SALARY_INFO_CODE = t11.T_SALARY_INFO_CODE where t10.T_EMP_CODE = '{empCode}' and t11.T_PAYMENT_FLAG is not null");
+            return dt;
+        }
+
+        public DataTable T19010_GetSalaryDeduction(string empCode)
+        {
+            DataTable dt = new DataTable();
+            dt = Query($@"select distinct t10.T_SALARY_SET_ID,t10.T_SALARY_SET_CODE,t10.T_TOTAL_DEDUCTION,t11.T_SALARY_INFO_CODE,t05.T_SALARY_INFO_NAME SALARY_INFO_NAME,t11.T_SALARY_SET_TOTAL from dbo.T19010 t10 join dbo.t19011 t11 on t10.T_SALARY_SET_CODE = t11.T_SALARY_SET_CODE join dbo.T19005 t05 on t05.T_SALARY_INFO_CODE = t11.T_SALARY_INFO_CODE where t10.T_EMP_CODE = '{empCode}' and t11.T_DEDUCTION_FLAG is not null");
+            return dt;
+        }
+    }
+}

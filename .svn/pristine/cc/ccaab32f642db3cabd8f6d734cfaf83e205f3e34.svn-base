@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "R13001";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Apps/Accounts/Report/R13001Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+<div class=""  ng-controller="R13001Controller">
+    @*header*@  
+    <div class="header">
+        <span href="#default" class="logo">Ledger Report</span>
+        <div class="header-right">
+            @*<a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>*@
+            <a><span title="Refresh" ng-click="Refresh_Click()" class="glyphicon glyphicon-refresh"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            @*<a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>*@
+        </div>
+    </div>
+    @*===========*@
+    <div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+        <table class="inputTable center" style=" width: 90%;">
+            <tr>
+                <td style=" width: 10%;">
+                    <label class="textlevel">Center</label>
+                </td>
+                <td style="width: 20%; text-align: left; ">
+                    <select id="ddlCenter" class="form-control" placeholder="Select one"
+                            ng-model="obj.ddlCenter"
+                            ng-change="obj.SelectCenter()"
+                            ng-options="V.CENTER_NAME for V in obj.CenterList track by V.CENTER_CODE">
+                        <option value="">Select One</option>
+                    </select>
+                </td>
+                <td style=" width: 10%;">
+                    <label class="textlevel">From Date</label>
+                </td>
+                <td style="width: 20%; text-align: left; ">
+                    <input type="date" ng-model="obj.R13001.FROM_DATE" ng-change="date_click()" class="form-control" />
+                </td>
+                <td style=" width: 10%;">
+                    <label class="textlevel">To Date</label>
+                </td>
+                <td style="width: 20%; text-align: left; ">
+                    <input type="date" ng-model="obj.R13001.TO_DATE" ng-change="date_click()" class="form-control" />
+                </td>
+                <td style=" width: 10%;"> </td>
+            </tr>
+        </table>
+        <hr style="margin-top: 5px !important; margin-bottom: 5px !important; border-top: 2px solid #076c93b0; " />
+
+        <div style="width: 95%;">
+            <div style=" width: 50%;float:left">
+                <table id="tblGrid" class="tTable" style=" width: 100%;">
+                    <thead>
+                        <tr style="color: black;background: #afadad" class="summary-table-header">
+                            <th style="width: 10%;font-size: 18px;">
+                                <input type="checkbox" style=" width: 20%;" ng-click="CheckAll_Click()" ng-model="obj.CheckAll_FLG" ng-true-value="'1'" ng-false-value="'0'" />
+                            </th>
+                            <th style="width: 90%; font-size: 18px; text-align: left; padding-left: 10px;">Account Header</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="Z in obj.ActHeaderList">
+                            <td style="width: 10%;">
+                                <input type="checkbox" style=" width: 20%;" ng-click="CheckSingle_Click($index,Z.HEADER_FLG)" ng-model="Z.HEADER_FLG" ng-true-value="'1'" ng-false-value="'0'" />
+                            </td>
+                            <td style="width: 90%; text-align: left; padding-left: 10px;">{{Z.ACCOUNT_HEADER_NAME}}</td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div style=" width: 45%;float:left">
+                <table id="tblGrid" class="tTable center" style=" width: 100%;margin-left:10px">
+                    <thead>
+                        <tr style="color: black;text-align: center;background: #afadad" class="summary-table-header">
+                            <th colspan="2" style="width: 100%;font-size: 18px;">Report Parameter</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="width: 50%"> <label class="textlevel">Party Type</label></td>
+                            <td style="width: 50%">
+                                <select id="ddlPartyType" class="form-control" placeholder="Select one"
+                                        ng-model="obj.ddlPartyType"
+                                        ng-change="obj.SelectPartyType()"
+                                        ng-options=" PT.PARTY_TYPE_NAME for PT in obj.PartyTypeList track by PT.PARTY_TYPE_CODE">
+                                    <option value="">Select One</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50% "> <label class="textlevel">Party</label></td>
+                            <td style="width: 50%">
+                                <select id="ddlParty" class="form-control" placeholder="Select one"
+                                        ng-model="obj.ddlParty"
+                                        ng-options=" P.PARTY_NAME for P in obj.PartyList track by P.PARTY_CODE">
+                                    <option value="">Select One</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50% "> <label class="textlevel">Department</label></td>
+                            <td style="width: 50%">
+                                <select id="ddlDepartment" class="form-control" placeholder="Select one"
+                                        ng-model="obj.ddlDepartment"
+                                        ng-options="D.DEPARTMENT_NAME for D in obj.DepartmentList track by D.DEPARTMENT_CODE">
+                                    <option value="">Select One</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50% "> <label class="textlevel">Purpose</label></td>
+                            <td style="width: 50%">
+                                <select id="ddlpurpuse" class="form-control" placeholder="Select one"
+                                        ng-model="obj.ddlpurpuse"
+                                        ng-options="Pu.PURPOSE_NAME for Pu in obj.PurposeList track by Pu.PURPOSE_CODE">
+                                    <option value="">Select One</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%"> <label class="textlevel">Transaction Type</label></td>
+                            <td style="width: 50%">
+                                <select id="ddlTrans" class="form-control" placeholder="Select one"
+                                        ng-model="obj.ddlTrans"
+                                        ng-options=" T.TRANSACTION_TYPE_NAME for T in obj.TransList track by T.TRANSACTION_TYPE_CODE">
+                                    <option value="">Select One</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,12 @@
+﻿namespace Metro_Rail_DAL.Shared.Accounts.Transaction
+{
+    public class T13006Data
+    {
+
+    }
+    public class T13006ParamList
+    {
+        public string T_RADIO_VALUE { get; set; }
+        public string T_SEARCH { get; set; }
+    }
+}

@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Metro_Rail_DAL.DAL.Payroll.Report
+{
+   public class R11111DAL:CommonDAL
+    {
+        public DataTable LoadData()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("select T_EMP_ID,T_EMP_CODE,T_EMP_NAME,T_EMP_MOBILE,T_EMP_ADDRESS, t11.T_GENDER_CODE, t01.T_GENDER_NAME, t11.T_RELIGION_CODE, t02.T_RELIGION_NAME, t11.T_DESIGNATION_CODE, t03.T_DESIGNATION_NAME, t11.T_ENTRY_DATE from T11111 t11 JOIN T11101 t01 ON t11.T_GENDER_CODE = t01.T_GENDER_CODE JOIN T11102 t02 ON t11.T_RELIGION_CODE= t02.T_RELIGION_CODE JOIN T11103 t03 ON t11.T_DESIGNATION_CODE =t03.T_DESIGNATION_CODE ORDER BY T_EMP_ID DESC");
+            return dt;
+        }
+        public DataTable GetSalaryStartment(string code)
+        {
+            DataTable dt = new DataTable();
+            dt = Query($@"select T19010.T_SALARY_SET_CODE, T19010.T_TOTAL_PAYMENT, T19010.T_TOTAL_DEDUCTION, T19010.T_SALARY_PAYABLE, T19010.T_EMP_CODE, T19011.T_SALARY_INFO_CODE, T19011.T_SALARY_SET_TOTAL, (CASE WHEN T_PAYMENT_FLAG='1' THEN T19005.T_SALARY_INFO_NAME WHEN T_DEDUCTION_FLAG='1' THEN T19007.T_DEDUCTION_NAME ELSE '' END )T_SALARY_INFO_NAME, (CASE WHEN T_PAYMENT_FLAG='1' THEN '1. Payment' WHEN T_DEDUCTION_FLAG='1' THEN '2. Deduction' ELSE '' END )T_SALARY_STATUS from T19010 JOIN T19011 ON T19010.T_SALARY_SET_CODE = T19011.T_SALARY_SET_CODE left JOIN T19005 ON T19011.T_SALARY_INFO_CODE=T19005.T_SALARY_INFO_CODE AND T_PAYMENT_FLAG='1' left JOIN T19007 ON T19011.T_SALARY_INFO_CODE=T19007.T_DEDUCTION_CODE AND T_DEDUCTION_FLAG='1' where T19010.T_EMP_CODE='{code}'");
+            return dt;
+        }
+        public DataTable GetSalarySheet(string code)
+        {
+            DataTable dt = new DataTable();
+            dt = Query($@"select 
+T11111.T_EMP_CODE,
+CONCAT (T_EMP_NAME,'  ',T11103.T_DESIGNATION_NAME) EMP_NAME_DESIG,
+T_EMP_MOBILE,
+T_ACCOUNT_NO,
+T_BANK_NAME,
+T_ROUTING_NO,
+T19010.T_SALARY_PAYABLE
+from T11111
+JOIN T19010 ON T11111.T_EMP_CODE = T19010.T_EMP_CODE
+JOIN T11103 ON T11111.T_DESIGNATION_CODE = T11103.T_DESIGNATION_CODE");
+            return dt;
+        }
+    }
+}

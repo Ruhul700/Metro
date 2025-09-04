@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "T12021";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Apps/Budget/Transaction/T12021Controller.js"></script>
+<script src="~/Apps/Service/Service.js"></script>
+<div class="" ng-controller="T12021Controller">
+    @*header*@
+
+    <div class="header">
+        <span href="#default" class="logo">Set Budget</span>
+        <div class="header-right">
+            <a><span title="Save" ng-click="Save_Click()" class="glyphicon glyphicon-floppy-disk"></span></a>
+            <a><span title="Clear" ng-click="Clear_Click()" class="glyphicon glyphicon-erase"></span></a>
+            <a><span title="Print" ng-click="Print_Click()" class="glyphicon glyphicon-print"></span></a>
+            @*<a><span title="Delete" ng-click="Delet_Click()" class="glyphicon glyphicon-trash"></span></a>*@
+        </div>
+    </div>
+    @*===========*@
+    <div style="margin-left:0px; margin-top:10px" class="row col-lg-12 col-md-12 col-sm-12">
+        <div style="width: 95%;">
+            <table class="inputTable center" style=" width: 100%;">
+                <tr><td style="text-align: -webkit-right;"> <input type="text" style="width:200px" ng-model="Search" placeholder="Search....." class="form-control" /></td></tr>
+            </table>
+            <table id="tblGrid" class="tTable center" style=" width: 100%;">
+                <thead>
+                    <tr style="color: black;background: #afadad" class="summary-table-header">
+                        <th style="width: 5%;"> Code</th>
+                        <th style="width: 15%;">Project Name</th>
+                        <th style="width: 10%;">Head Name</th>
+                        @*<th style="width: 10%;">Period</th>*@
+                        <th style="width: 10%;">Stard Date</th>
+                        <th style="width: 10%;">End Date</th>
+                        <th style="width: 10%;">ADP </th>
+                        <th style="width: 10%;">RADP </th>
+                        <th style="width: 10%;">RAPRE </th>
+                        <th style="width: 10%;">Pro Help </th>
+                        <th style="width: 10%;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="Z in obj.griDataList|filter:Search"  ng-class="{'selected':$index == selectedRow}" ng-dblclick="selectGridRow($index,Z)" style="cursor:pointer">
+                        <td style="width: 5%;">{{Z.T_BUDGET_CODE}}</td>
+                        <td style="width: 15%; text-align: left; padding-left: 10px;">{{Z.T_PROJECT_NAME}}</td>
+                        <td style="width: 10%; text-align: left; padding-left: 10px;">{{Z.ACCOUNT_HEADER_NAME}}</td>
+                        @*<td style="width: 10%; text-align: left; padding-left: 10px;">{{Z.T_PERIOD_NAME}}</td>*@
+                        <td style="width: 10%; ">{{Z.T_PERIOD_START_DATE}}</td>
+                        <td style="width: 10%; ">{{Z.T_PERIOD_END_DATE}}</td>
+                        <td style="width: 10%; ">
+                            <input type="text" ng-model="Z.T_ADP_GOB" class="form-control" ng-change="ChangeStatus($index)"/>
+                        </td>
+                        <td style="width: 10%; ">
+                            <input type="text" ng-model="Z.T_RADP_GOB" class="form-control"ng-change="ChangeStatus($index)" ng-disabled="Z.T_ADP_GOB==''"/>
+                        </td>
+                        <td style="width: 10%; ">
+                            <input type="text" ng-model="Z.T_REAPROPN" class="form-control" ng-change="ChangeStatus($index)" ng-disabled="Z.T_RADP_GOB==''"/>
+                        </td>
+                        <td style="width: 10%; ">
+                            <input type="text" ng-model="Z.T_ADP_PRO_HELP" class="form-control" ng-change="ChangeStatus($index)"/>
+                        </td>
+                        <td style="width: 10%; ">
+                            {{Z.T_TOTAL_AMOUNT}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>           
+
+        </div>
+    </div>
+
+</div>
+

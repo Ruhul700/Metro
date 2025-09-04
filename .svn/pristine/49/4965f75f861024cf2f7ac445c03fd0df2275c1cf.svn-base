@@ -1,0 +1,31 @@
+﻿using Metro_Rail_DAL.DAL.Payroll.Setup;
+using Metro_Rail_DAL.DAL.Payroll.Transaction;
+using Metro_Rail_DAL.Shared.Payroll.Transaction;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
+
+namespace Metro_Rail.Controllers.Payroll.Setup
+{
+    public class T19021Controller : Controller
+    {
+        T19021DAL repository = new T19021DAL();
+        
+        [HttpPost]
+        public ActionResult LoadGridData(T19021Input param)
+        {
+            try
+            {
+                var data = repository.LoadGridData(param);
+                string JSONString = string.Empty;
+                JSONString = JsonConvert.SerializeObject(data);
+                return Json(JSONString, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+    }
+}

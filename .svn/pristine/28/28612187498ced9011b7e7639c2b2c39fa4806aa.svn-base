@@ -1,0 +1,84 @@
+﻿using Metro_Rail_DAL.Shared.Payroll.Setup;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace Metro_Rail_DAL.DAL.Payroll.Setup
+{
+    public class T19020DAL:CommonDAL
+    {
+        public DataTable LoadData()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("SELECT T19010.T_EMP_CODE, T11111.T_EMP_NAME, T19010.T_TOTAL_PAYMENT, T19010.T_TOTAL_DEDUCTION, T19010.T_SALARY_PAYABLE FROM T19010 LEFT JOIN dbo.T11111 ON T19010.T_EMP_CODE = T11111.T_EMP_CODE");
+            return dt;
+        }
+        public DataTable LoadSalaryPivot()
+        {
+            DataTable dt = new DataTable();
+            dt = ExecuteSelectWithoutParam("proc_Salary_Summary_Dynamic");
+            return dt;            
+        }
+        public DataTable GetMonthList()
+        {
+            DataTable dt = new DataTable();
+            dt = Query("SELECT T_MONTH_CODE,T_MONTH_NAME FROM T11011");
+            return dt;
+        }
+        public string SaveData(T19020Data t19020, List<T19020ListData> list,string EntryUser)
+        {
+            var sms = "";
+            SqlTransaction objTrans = null;
+            using (SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlCon"].ConnectionString))
+            {
+                try
+                {
+                    objConn.Open();
+                    objTrans = objConn.BeginTransaction();
+                    var chk = Query_2($"SELECT COUNT(*) T_COUNT FROM T19020 WHERE T_MONTH_CODE='{t19020.T_SALARY_MONTH}' AND T_YEAR='{DateTime.Now.Year.ToString()}' AND T_BASE_CODE='101'", objConn, objTrans).Rows[0]["T_COUNT"].ToString();
+                    if (chk=="0")
+                    {
+                        var MaxSalaryCode = Query_2($"SELECT CASE WHEN COUNT(*)>0 THEN  MAX( cast( T_SALARY_CODE as int))+1 ELSE 1 END T_SALARY_CODE FROM T19020", objConn, objTrans).Rows[0]["T_SALARY_CODE"].ToString();
+                        var MaxSalaryId = Query_2($"SELECT CASE WHEN COUNT(*)>0 THEN  MAX(T_SALARY_ID)+1 ELSE 1 END T_SALARY_ID FROM T19020", objConn, objTrans).Rows[0]["T_SALARY_ID"].ToString();
+                        var save20 = $@" INSERT INTO T19020 (T_SALARY_ID,T_BASE_CODE,T_SALARY_CODE, T_MONTH_CODE,T_YEAR, T_ENTRY_USER, T_ENTRY_DATE) VALUES ('{MaxSalaryId}','101','{MaxSalaryCode}', '{t19020.T_SALARY_MONTH}','{DateTime.Now.Year.ToString()}', '{EntryUser}', CAST(GETDATE() AS DATE) )";
+                        command_2(save20, objConn, objTrans);
+
+                        foreach (var item in list)
+                        {
+                            var gross = string.IsNullOrEmpty(item.T_TOTAL_PAYMENT?.ToString()) ? "0" : item.T_TOTAL_PAYMENT.ToString();
+                            var payment = string.IsNullOrEmpty(item.T_TOTAL_PAYMENT?.ToString()) ? "0" : item.T_TOTAL_PAYMENT.ToString();
+                            var deduction = string.IsNullOrEmpty(item.T_TOTAL_DEDUCTION?.ToString()) ? "0" : item.T_TOTAL_DEDUCTION.ToString();
+                            var payable = string.IsNullOrEmpty(item.T_SALARY_PAYABLE?.ToString()) ? "0" : item.T_SALARY_PAYABLE.ToString();
+
+                            var MaxSalaryDetailId = Query_2($"SELECT CASE WHEN COUNT(*)>0 THEN  MAX(T_SALARY_DTL_ID)+1 ELSE 1 END T_SALARY_DTL_ID FROM T19021", objConn, objTrans).Rows[0]["T_SALARY_DTL_ID"].ToString();
+                            var save02 = $@"INSERT INTO T19021(T_SALARY_DTL_ID, T_SALARY_CODE, T_EMP_CODE, T_SALARY_GROSS, T_SALARY_PAYMENT,T_SALARY_DEDUCTION,T_SALARY_PAYABLE, T_ENTRY_USER, T_ENTRY_DATE)
+                            VALUES ('{MaxSalaryDetailId}', '{MaxSalaryCode}', '{item.T_EMP_CODE}',{gross}, {payment}, {deduction}, {payable},'{EntryUser}', CAST(GETDATE() AS DATE))";
+                            command_2(save02, objConn, objTrans);
+                        }
+                        objTrans.Commit();
+                        sms = "Save Successfully-1";
+                    }
+                    else
+                    {
+                        sms = "Already Generated-0";
+                    }
+            
+                }
+                catch (Exception ex) 
+                {
+                    var kk = ex.Message;
+                    sms = "Do not Save-0";
+                    objTrans.Rollback();
+                }
+                finally
+                {
+                    objConn.Close();
+                }
+
+            }
+                return sms;
+        }
+    }
+}

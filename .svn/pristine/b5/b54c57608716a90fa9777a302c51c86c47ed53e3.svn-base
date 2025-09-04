@@ -1,0 +1,20 @@
+﻿using Metro_Rail_DAL.Shared.Accounts.Transaction;
+using System.Data;
+
+namespace Metro_Rail_DAL.DAL.Accounts.Transaction
+{
+    public class T13006DAL:CommonDAL
+    {
+        public DataTable GetSearchValue(T13006ParamList list)
+        {
+            var condition = "";
+            if (list.T_RADIO_VALUE=="1")  { condition = $"T_MOBILE_NO='{list.T_SEARCH}'";   }
+            if (list.T_RADIO_VALUE=="2")  { condition = $"T_NID_NO='{list.T_SEARCH}'";   }
+            if (list.T_RADIO_VALUE=="3")  { condition = $"T_TIN_NO='{list.T_SEARCH}'";   }
+
+            DataTable sql = new DataTable();
+            sql = Query($"select T_SUPPLIER_ID, T_SUPPLIER_CODE, T_SUPPLIER_NAME, T_MOBILE_NO, T_TIN_NO, T_VAT_NO, T_NID_NO, T_ACCOUNT_NAME, T_ACCOUNT_NO, T_BANK_NAME, T_BRANCH, T_SUPPLIER_TYPE from T13010 where {condition} ");
+            return sql;
+        }
+    }
+}

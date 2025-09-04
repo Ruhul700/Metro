@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="T12020_Budget" targetNamespace="http://tempuri.org/T12020_Budget.xsd" xmlns:mstns="http://tempuri.org/T12020_Budget.xsd" xmlns="http://tempuri.org/T12020_Budget.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="T12020_Budget" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="T12020_Budget" msprop:Generator_UserDSName="T12020_Budget">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="T12020_Budget" msprop:Generator_TableClassName="T12020_BudgetDataTable" msprop:Generator_TableVarName="tableT12020_Budget" msprop:Generator_RowChangedName="T12020_BudgetRowChanged" msprop:Generator_TablePropName="_T12020_Budget" msprop:Generator_RowDeletingName="T12020_BudgetRowDeleting" msprop:Generator_RowChangingName="T12020_BudgetRowChanging" msprop:Generator_RowEvHandlerName="T12020_BudgetRowChangeEventHandler" msprop:Generator_RowDeletedName="T12020_BudgetRowDeleted" msprop:Generator_RowClassName="T12020_BudgetRow" msprop:Generator_UserTableName="T12020_Budget" msprop:Generator_RowEvArgName="T12020_BudgetRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="T_BUDGET_CODE" msprop:Generator_ColumnVarNameInTable="columnT_BUDGET_CODE" msprop:Generator_ColumnPropNameInRow="T_BUDGET_CODE" msprop:Generator_ColumnPropNameInTable="T_BUDGET_CODEColumn" msprop:Generator_UserColumnName="T_BUDGET_CODE" type="xs:string" minOccurs="0" />
+              <xs:element name="T_BUDGET_NAME" msprop:Generator_ColumnVarNameInTable="columnT_BUDGET_NAME" msprop:Generator_ColumnPropNameInRow="T_BUDGET_NAME" msprop:Generator_ColumnPropNameInTable="T_BUDGET_NAMEColumn" msprop:Generator_UserColumnName="T_BUDGET_NAME" type="xs:string" minOccurs="0" />
+              <xs:element name="T_ADP_GOB" msprop:Generator_ColumnVarNameInTable="columnT_ADP_GOB" msprop:Generator_ColumnPropNameInRow="T_ADP_GOB" msprop:Generator_ColumnPropNameInTable="T_ADP_GOBColumn" msprop:Generator_UserColumnName="T_ADP_GOB" type="xs:string" minOccurs="0" />
+              <xs:element name="T_ADP_PRO_HELP" msprop:Generator_ColumnVarNameInTable="columnT_ADP_PRO_HELP" msprop:Generator_ColumnPropNameInRow="T_ADP_PRO_HELP" msprop:Generator_ColumnPropNameInTable="T_ADP_PRO_HELPColumn" msprop:Generator_UserColumnName="T_ADP_PRO_HELP" type="xs:string" minOccurs="0" />
+              <xs:element name="T_TOTAL_ADP_AMOUNT" msprop:Generator_ColumnVarNameInTable="columnT_TOTAL_ADP_AMOUNT" msprop:Generator_ColumnPropNameInRow="T_TOTAL_ADP_AMOUNT" msprop:Generator_ColumnPropNameInTable="T_TOTAL_ADP_AMOUNTColumn" msprop:Generator_UserColumnName="T_TOTAL_ADP_AMOUNT" type="xs:string" minOccurs="0" />
+              <xs:element name="T_RADP_GOB" msprop:Generator_ColumnVarNameInTable="columnT_RADP_GOB" msprop:Generator_ColumnPropNameInRow="T_RADP_GOB" msprop:Generator_ColumnPropNameInTable="T_RADP_GOBColumn" msprop:Generator_UserColumnName="T_RADP_GOB" type="xs:string" minOccurs="0" />
+              <xs:element name="T_RADP_PRO_HELP" msprop:Generator_ColumnVarNameInTable="columnT_RADP_PRO_HELP" msprop:Generator_ColumnPropNameInRow="T_RADP_PRO_HELP" msprop:Generator_ColumnPropNameInTable="T_RADP_PRO_HELPColumn" msprop:Generator_UserColumnName="T_RADP_PRO_HELP" type="xs:string" minOccurs="0" />
+              <xs:element name="T_TOTAL_RADP_AMOUNT" msprop:Generator_ColumnVarNameInTable="columnT_TOTAL_RADP_AMOUNT" msprop:Generator_ColumnPropNameInRow="T_TOTAL_RADP_AMOUNT" msprop:Generator_ColumnPropNameInTable="T_TOTAL_RADP_AMOUNTColumn" msprop:Generator_UserColumnName="T_TOTAL_RADP_AMOUNT" type="xs:string" minOccurs="0" />
+              <xs:element name="ACCOUNT_HEADER_NAME" msprop:Generator_ColumnVarNameInTable="columnACCOUNT_HEADER_NAME" msprop:Generator_ColumnPropNameInRow="ACCOUNT_HEADER_NAME" msprop:Generator_ColumnPropNameInTable="ACCOUNT_HEADER_NAMEColumn" msprop:Generator_UserColumnName="ACCOUNT_HEADER_NAME" type="xs:string" minOccurs="0" />
+              <xs:element name="ACCOUNT_ECONO_CODE" msprop:Generator_ColumnVarNameInTable="columnACCOUNT_ECONO_CODE" msprop:Generator_ColumnPropNameInRow="ACCOUNT_ECONO_CODE" msprop:Generator_ColumnPropNameInTable="ACCOUNT_ECONO_CODEColumn" msprop:Generator_UserColumnName="ACCOUNT_ECONO_CODE" type="xs:string" minOccurs="0" />
+              <xs:element name="ACCOUNT_HEADER_MAIN_NAME" msprop:Generator_ColumnVarNameInTable="columnACCOUNT_HEADER_MAIN_NAME" msprop:Generator_ColumnPropNameInRow="ACCOUNT_HEADER_MAIN_NAME" msprop:Generator_ColumnPropNameInTable="ACCOUNT_HEADER_MAIN_NAMEColumn" msprop:Generator_UserColumnName="ACCOUNT_HEADER_MAIN_NAME" type="xs:string" minOccurs="0" />
+              <xs:element name="ACCOUNT_ECONO_MAIN_CODE" msprop:Generator_ColumnVarNameInTable="columnACCOUNT_ECONO_MAIN_CODE" msprop:Generator_ColumnPropNameInRow="ACCOUNT_ECONO_MAIN_CODE" msprop:Generator_ColumnPropNameInTable="ACCOUNT_ECONO_MAIN_CODEColumn" msprop:Generator_UserColumnName="ACCOUNT_ECONO_MAIN_CODE" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
