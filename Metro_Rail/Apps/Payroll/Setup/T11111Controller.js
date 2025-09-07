@@ -86,9 +86,6 @@
                 loader(false)
             });
         }
-
-
-
         // CRUD functions for dynamic fields
         $scope.addChild = function () {
             $scope.obj.childrenDataList.push({});
