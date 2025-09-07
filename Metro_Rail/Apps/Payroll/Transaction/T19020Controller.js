@@ -54,9 +54,9 @@
 
             var currentDay = new Date().getDate();
 
-            if (currentDay < 20) {
-                smsAlert("You Cannot generate salary before 20th day of the current month.");
-            } else {
+            //if (currentDay < 20) {
+            //    smsAlert("You Cannot generate salary before 20th day of the current month.");
+            //} else {
                 //smsAlert("OK");
                 var NewList = $scope.obj.griDataList.filter(x => x.T_SELECT_FLAG == '1');
                 loader(true)
@@ -68,7 +68,7 @@
                     loader(false)
                 });
                 
-            }
+           // }
 
            
         }

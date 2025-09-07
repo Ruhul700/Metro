@@ -1,7 +1,9 @@
 ﻿using Metro_Rail_DAL.Shared.Payroll.Setup;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -140,7 +142,70 @@ namespace Metro_Rail_DAL.DAL.Payroll.Setup
 
             return sms;
         }
+        public string SaveFamilyData(Family data, string entryUser)
+        {
+            string sms = "";
+            int count = 0;
+            SqlTransaction objTrans = null;
+            var date = DateTime.Now.ToString("dd-MM-yyyy");
+            using (SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlCon"].ConnectionString))
+            {
+                objConn.Open();
+                objTrans = objConn.BeginTransaction();
+                try
+                {
+                    var t11111 = data.spouseInfo;
+                    var insertSpouse = $"UPDATE T11111 SET T_SPOUSE_NAME='{t11111.T_SPOUSE_NAME}',T_SPOUSE_NATIONALITY='{t11111.T_SPOUSE_NATIONALITY}', T_SPOUSE_NID='{t11111.T_SPOUSE_NID}',T_SPOUSE_CONTACT='{t11111.T_SPOUSE_CONTACT}',T_UPDATE_DATE ='{date}' WHERE T_EMP_CODE ='{data.T_EMP_CODE}'";
+                    var insertT11Spouse = command_2(insertSpouse, objConn, objTrans);
+                    if (insertT11Spouse)
+                    {
+                        if (data.ChildList?.Count > 0)
+                        {
+                            foreach (var item in data.ChildList)
+                            {
+                                if (item.T_CHILD_ID == 0)
+                                {
+                                    var insT11112 = $"insert into T11112 (T_CHILD_CODE, T_CHILD_NAME, T_EMP_CODE, T_GENDER_CODE, T_SCHOOL_NAME, T_CLASS_NAME, T_BIRTH_DATE, T_CERTIFICATION, T_ENTRY_USER, T_ENTRY_DATE) values ('{item.T_CHILD_CODE}','{item.T_CHILD_NAME}','{data.T_EMP_CODE}','{item.T_CHILD_GENDER}','{item.T_CHILD_SCHOOL}','{item.T_CHILD_CLASS}','{item.T_CHILD_DOB}','{item.T_CHILD_CERTIFICATE}','{entryUser}','{date}')";
+                                    command_2(insT11112, objConn, objTrans); 
+                                    count++;
+                                }
+                                else
+                                {
+                                    var insT11112 = $"UPDATE T11112 SET T_CHILD_NAME = '{item.T_CHILD_NAME}', T_GENDER_CODE = '{item.T_CHILD_GENDER}', T_SCHOOL_NAME = '{item.T_CHILD_SCHOOL}', T_CLASS_NAME = '{item.T_CHILD_CLASS}', T_BIRTH_DATE = '{item.T_CHILD_DOB}', T_CERTIFICATION = '{item.T_CHILD_CERTIFICATE}', T_UPDATE_USER = '{entryUser}', T_UPDATE_DATE = '{date}' WHERE T_CHILD_ID = '{item.T_CHILD_ID}' AND T_EMP_CODE = '{data.T_EMP_CODE}'";
+                                    command_2(insT11112, objConn, objTrans);  
+                                    count++;
+                                }
+                            }
+                        }
+                        if (data.ChildList.Count()==count && insertT11Spouse)
+                        {
+                            sms = "Save Successfully-1";
+                            objTrans.Commit();
+                        }                       
+                    }
+                    else
+                    {
+                        objTrans.Rollback();
+                    }
+                   
+                }
+                catch (Exception ex)
+                {
+                    var dd = ex.Message;
+                    objTrans.Rollback();
+                    sms = "Do not Save-0 ";
+                }
+                finally
+                {
+                    objConn.Close();
+                }
+            }
+               
+           
 
+
+            return sms;
+        }
         public DataTable T11111_GetEmployeeProfileData(string empCode)
         {
             DataTable dt = new DataTable();

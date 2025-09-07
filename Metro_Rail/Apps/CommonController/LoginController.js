@@ -23,7 +23,18 @@ app.controller("LoginController", [ "$scope", "LoginService", "Data", "$window",
             };
             $scope.enter_press = function (event) {
                 if (event.keyCode === 13) {
-                    login();
+                    if ($scope.obj.T12000.User_Name == undefined || $scope.obj.T12000.User_Name == '') {
+                        document.getElementById('txtUserName').focus(); return;
+                    }
+                    else if ($scope.obj.T12000.Password == undefined || $scope.obj.T12000.Password == '') {
+                        document.getElementById('txtPassword').focus(); return;
+                    }
+                    else if ($scope.obj.T12000.CLAPS_SUM == undefined || $scope.obj.T12000.CLAPS_SUM == '') {
+                        document.getElementById('txtClapsSum').focus(); return;
+                    }
+                    else if ($scope.obj.T12000.User_Name != undefined && $scope.obj.T12000.User_Name != '' && $scope.obj.T12000.Password != undefined && $scope.obj.T12000.Password != '' && $scope.obj.T12000.CLAPS_SUM != undefined && $scope.obj.T12000.CLAPS_SUM != '') {
+                        login();
+                    }                  
                 }
             }
             function login() {

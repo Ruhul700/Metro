@@ -18,6 +18,7 @@
         $scope.obj.academicDataList = [];
         $scope.obj.professionalDataListv = [];
         $scope.obj.trainingDataListv = [];
+        $scope.obj.ChildList = [];
       
         // Initialize with one empty row for each list
        // $scope.obj.childrenDataList.push({});
@@ -117,10 +118,13 @@
                 });                
             }
             else if ($scope.obj.activeTab === 'Family') {
-                // Save family info logic
-                // Service.SaveData(obj.T11111, obj.childrenDataList).then(function(response) { ... });
                 
-                var save = Service.saveData_Model_List('/T11111/SaveData', $scope.obj.T11111, $scope.obj.childrenDataList);
+                $scope.Family = {};
+                $scope.Family.T_EMP_CODE = $scope.obj.T11111.T_EMP_CODE;
+                $scope.Family.spouseInfo = $scope.obj.T11111;
+                $scope.Family.ChildList = $scope.obj.ChildList;
+
+                var save = Service.saveData('/T11111/SaveFamilyData', $scope.Family);
                 save.then(function (returnData) {
                     smsAlert(returnData);
                     //loadGridData();
@@ -152,30 +156,34 @@
             }
             $scope.loading = false;
         };
+        //--------------tab faminly start---------------------
+        $scope.Add_Child_Click = function () {
+            if (isEmpty('txtChildBOD', 'lblChildBOD')) { return; };
+            $scope.obj.newList = [];
+            let Z = {
+                T_CHILD_ID: $scope.obj.T_CHILD_ID,
+                T_CHILD_CODE: $scope.obj.T_CHILD_CODE,
+                T_CHILD_NAME: $scope.obj.T_CHILD_NAME,
+                T_CHILD_GENDER: $scope.obj.ddlChildGnd.T_GENDER_CODE,
+                T_GENDER_NAME: $scope.obj.ddlChildGnd.T_GENDER_NAME,
+                T_CHILD_DOB: $filter('date')($scope.obj.T_CHILD_DOB, 'dd-MM-yyyy'),
+                T_CHILD_SCHOOL: $scope.obj.T_CHILD_SCHOOL,
+                T_CHILD_CLASS: $scope.obj.T_CHILD_CLASS,
+                T_CHILD_CERTIFICATE: $scope.obj.T_CHILD_CERTIFICATE
+            };
+            
+            let exist = $scope.obj.ChildList.some(x => x.T_CHILD_NAME === Z.T_CHILD_NAME);
+            if (exist) {
+                smsAlert("Already Exist!-0");
+                return;
+            }
+            $scope.obj.ChildList.push(Z);
+           // $scope.obj.newList.push(Z);
+            childClear();
+        };
 
-        //$scope.Save_Click = function () {            
-        //    if (isEmpty('txtName','lblName')) { return; };
-        //    if (isEmpty('txtMobile','lblMobile') ) { return; };
-        //    if (isEmpty('ddlGender','lblGender') ) { return; };
-        //    if (isEmpty('ddlReligion','lblReligion') ) { return; };
-        //    if (isEmpty('ddlDesig','lblDesig')) { return; };
-        //    if (isEmpty('txtAddress','lblAddress') ) { return; };
-        //    if (!checkMobileNumber($scope.obj.T11111.T_EMP_MOBILE)) { showSMS('Mobile is not valide', 'warning'); return; }
-
-        //    loader(true)
-        //    $scope.obj.T11111.T_GENDER_CODE = $scope.obj.ddlGender.T_GENDER_CODE;
-        //    $scope.obj.T11111.T_RELIGION_CODE = $scope.obj.ddlReligion.T_RELIGION_CODE;
-        //    $scope.obj.T11111.T_DESIGNATION_CODE = $scope.obj.ddlDesig.T_DESIGNATION_CODE;
-        //    var save = Service.saveData('/T11111/SaveData',$scope.obj.T11111);
-        //    save.then(function (returnData) {
-        //        smsAlert(returnData);
-        //        loadGridData();
-        //        clear();
-        //        loader(false)
-        //    });
-        //}
-
-        //--------------tab Education---------------------
+        //--------------tab faminly end---------------------
+        //--------------tab Education start---------------------
         $scope.Add_Academic = function () {
             if (isEmpty('txtAdmIsntName', 'lblAdmIsntName')) { return; };
             if (isEmpty('txtAdmGroup', 'lblAdmGroup')) { return; };
@@ -244,7 +252,7 @@
             $scope.obj.ProfedataList = Newdatalist;
             document.getElementById('txtAdmIsntName').focus();
         }
-
+        //---------------tab Education end------------------------------
 
         $scope.selectedtRow = function (ind, data) {
             $scope.selectedRow = ind;

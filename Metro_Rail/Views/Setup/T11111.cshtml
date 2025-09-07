@@ -77,7 +77,7 @@
         <div id="Basic" class="tabcontent" ng-show="obj.activeTab === 'Basic'">
             <div class="">
                 <fieldset class="border rounded-3 p-3">
-                    <legend style="border-bottom:none;">Personal Information</legend>
+                    <legend style="border-bottom: none; margin-bottom: 0px">Personal Information</legend>
                     <table class="inputTable center" style="width: 90%;">
                         <tr>
                             <td style="width: 10%;">
@@ -168,7 +168,7 @@
             </div>
             <div class="">
                 <fieldset class="border rounded-3 p-3">
-                    <legend style="border-bottom:none;">Job Information</legend>
+                    <legend style="border-bottom: none; margin-bottom: 0px">Job Information</legend>
                     <table class="inputTable center" style="width: 90%;">
                         <tr>
                             <td style="width: 10%;">
@@ -245,7 +245,7 @@
             </div>
             <div class="">
                 <fieldset class="border rounded-3 p-3">
-                    <legend style="border-bottom:none;">Emergency Contact</legend>
+                    <legend style="border-bottom: none; margin-bottom: 0px">Emergency Contact</legend>
                     <table class="inputTable center" style="width: 90%;">
                         <tr>
                             <td style="width: 10%;">
@@ -274,7 +274,7 @@
 
         <div id="Family" class="tabcontent" ng-show="obj.activeTab === 'Family'">
             <fieldset class="border rounded-3 p-3">
-                <legend style="border-bottom:none;">Spouse Information</legend>
+                <legend style="border-bottom:none;margin-bottom:0px">Spouse Information</legend>
                 <table class="inputTable center" style="width: 96%">
                     <tr>
                         <td style="width: 10%;">
@@ -305,19 +305,19 @@
                 </table>
             </fieldset>
             <fieldset class="border rounded-3 p-3">
-                <legend style="border-bottom:none;">Children Information</legend>
+                <legend style="border-bottom: none; margin-bottom: 0px">Children Information</legend>
                 <table class="inputTable center" style="width: 96%">
                     <tr>
-                        <td style="width: 30%;">
+                        <td style="width: 20%;">
                             <label style="text-align:center" class="textlevel">Name</label>
                         </td>
-                        <td style="width: 15%;">
+                        <td style="width: 5%;">
                             <label style="text-align:center" class="textlevel">Gender</label>
                         </td>
-                        <td style="width: 15%;">
-                            <label style="text-align:center" class="textlevel">Birth Date</label>
+                        <td style="width: 10%;">
+                            <label id="lblChildBOD" style="text-align:center" class="textlevel">Birth Date</label>
                         </td>
-                        <td style="width: 15%;">
+                        <td style="width: 25%;">
                             <label style="text-align:center" class="textlevel">School</label>
                         </td>
                         <td style="width: 10%;">
@@ -328,36 +328,67 @@
                         </td>
                         <td style="width: 5%;"></td>
                     </tr>
-                    <tr ng-repeat="child in obj.childrenDataList track by $index">
-                        <td style="width: 30%;">
-                            <input style="width: 98%;" type="text" ng-model="child.T_CHILD_NAME" class="form-control" />
-                        </td>
-                        <td style="width: 15%;">
-                            <input style="width: 98%;" type="text" ng-model="child.T_CHILD_GENDER" class="form-control" />
-                        </td>
-                        <td style="width: 15%;">
-                            <input style="width: 98%;" type="text" ng-model="child.T_CHILD_DOB" class="form-control" />
-                        </td>
-                        <td style="width: 15%;">
-                            <input style="width: 98%;" type="text" ng-model="child.T_CHILD_SCHOOL" class="form-control" />
-                        </td>
-                        <td style="width: 10%;">
-                            <input style="width: 98%;" type="text" ng-model="child.T_CHILD_CLASS" class="form-control" />
-                        </td>
-                        <td style="width: 10%;">
-                            <input style="width: 98%;" type="text" ng-model="child.T_CHILD_CERTIFICATE" class="form-control" />
-                        </td>
-                        <td style="width: 5%;">
-                            <input type="button" ng-click="removeChild($index)" value="-" style="background: red; border: 1px solid red; color: white; font-weight: bold;" />
-                        </td>
-                    </tr>
                     <tr>
-                        <td colspan="6"></td>
-                        <td style="width: 5%;">
-                            <input type="button" style="background: white; border: 1px solid #337ab7; color: black; font-weight: bold;" ng-click="addChild()" value="Add" />
+
+                        <td style="width: 20%;">
+                            <input style="max-width: 98%;" type="text" ng-model="obj.T_CHILD_NAME" class="form-control" />
+                        </td>
+                        <td style="width: 10%;">
+                            <select id="ddlGender" class="form-control" placeholder="Select one"
+                                    ng-model="obj.ddlChildGnd"
+                                    ng-options="G.T_GENDER_NAME for G in obj.genderDataList track by G.T_GENDER_CODE">
+                                <option value="">Select One</option>
+                            </select>
+                            @*<input style="width: 98%;" type="text" ng-model="obj.T_CHILD_GENDER" class="form-control" maxlength="5" />*@
+                        </td>
+                        <td style="width: 10%;">
+                            <input id="txtChildBOD" style="width: 98%;" type="date" ng-model="obj.T_CHILD_DOB" class="form-control" />
+                        </td>
+                        <td style="width: 20%;">
+                            <input style="max-width: 98%;" type="text" ng-model="obj.T_CHILD_SCHOOL" class="form-control" />
+                        </td>
+                        <td style="width: 10%;">
+                            <input style="width: 98%;" type="text" ng-model="obj.T_CHILD_CLASS" class="form-control" maxlength="10" />
+                        </td>
+                        <td style="width: 10%;">
+                            <input style="width: 98%;" type="text" ng-model="obj.T_CHILD_CERTIFICATE" class="form-control" maxlength="20" />
+                        </td>
+                        <td style=" width: 5%;">
+                            <input id="btnAdd" class="form-control" type="button" style="background: white; border: 1px solid #337ab7; color: black; font-weight: bold; " ng-click="Add_Child_Click()" value="Add" tabindex="8">
                         </td>
                     </tr>
+
                 </table>
+                <div class="table-scroll-header-fix" style="margin-top:10px">
+                    <table id="mytable1" class="tTable center" style="width:96%">
+                        <thead>
+                            <tr>
+                                <th style="width:5%" scope="col"><span style="color: white; font-size: 20px; font-weight:600;cursor:pointer;">-</span></th>
+                                <th style="width:5%" scope="col"><span style="color: white; font-size: 20px; font-weight:600;cursor:pointer;">-</span></th>  
+                                <th style="width:30%" scope="col">Name</th>
+                                <th style="width:10%" scope="col">Gender</th>
+                                <th style="width:10%" scope="col">Date Of Birth</th>
+                                <th style="width:20%" scope="col">School</th>
+                                <th style="width:10%" scope="col"> Class</th>
+                                <th style="width:20%" scope="col"> Certificate</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            <tr ng-repeat="Z in obj.ChildList">
+                                <td style="width:5%"><span style="color: red; font-size: 20px;cursor:pointer;" ng-click="removeRow($index,Z)" class="glyphicon glyphicon-trash"></span> </td>
+                                <td style="width:5%">
+                                    <span style="color: blue; font-size: 20px;cursor:pointer;" ng-click="selectGridRow($index,Z)" class="glyphicon glyphicon-pencil"></span>
+                                </td>                              
+                                <td>{{Z.T_CHILD_NAME}}</td>
+                                <td>{{Z.T_GENDER_NAME}}</td>
+                                <td>{{Z.T_CHILD_DOB}}</td>
+                                <td>{{Z.T_CHILD_SCHOOL}}</td>
+                                <td>{{Z.T_CHILD_CLASS}}</td>
+                                <td>{{Z.T_CHILD_CERTIFICATE}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </fieldset>
         </div>
         <div id="Education" class="tabcontent" ng-show="obj.activeTab ==='Education'">

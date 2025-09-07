@@ -104,6 +104,19 @@ namespace Metro_Rail.Controllers.Payroll.Setup
             }
         }
         [HttpPost]
+        public ActionResult SaveFamilyData(Family model)
+        {
+            try
+            {
+                var data = repository.SaveFamilyData(model, Session["T_EMP_ID"].ToString());
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
         public ActionResult SaveEducationData(EduData model)
         {
             try

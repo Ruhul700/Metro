@@ -35,19 +35,29 @@ namespace Metro_Rail_DAL.Shared.Payroll.Setup
         public string T_ER_CONTACT_RELATION { get; set; }
         public string T_ER_CONTACT_PHONE { get; set; }
         //FAMILY INFORMATION
-        public string T_SPOUSE_NAME { get; set; }
-        public string T_SPOUSE_NATIONALITY { get; set; }
-        public string T_SPOUSE_NID { get; set; }
-        public string T_SPOUSE_CONTACT { get; set; }
+        
         public string T_ENTRY_USER { get; set; }
         public string T_ENTRY_DATE { get; set; }
         public string T_UPDATE_USER { get; set; }
         public string T_UPDATE_DATE { get; set; }
     }
-
-
+    public class Family
+    {
+        public string T_EMP_CODE { get; set; }
+        public Spouse spouseInfo { get; set; }
+        public List<ChildData> ChildList { get; set; }
+    }
+    public class Spouse
+    {
+        public string T_SPOUSE_NAME { get; set; }
+        public string T_SPOUSE_NATIONALITY { get; set; }
+        public string T_SPOUSE_NID { get; set; }
+        public string T_SPOUSE_CONTACT { get; set; }
+    }
     public class ChildData
     {
+        public int T_CHILD_ID { get; set; }
+        public string T_CHILD_CODE { get; set; }
         public string T_CHILD_NAME { get; set; }
         public string T_CHILD_GENDER { get; set; }
         public string T_CHILD_DOB { get; set; }
@@ -70,4 +80,5 @@ namespace Metro_Rail_DAL.Shared.Payroll.Setup
         public string T_DISTINCTION { get; set; }
         public string T_EDU_TYPE { get; set; }
     }
+    
 }

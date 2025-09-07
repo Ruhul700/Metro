@@ -149,7 +149,7 @@
                     <div class="p-3 mt-3">
                         <div class="form-field d-flex align-items-center">
                             <span class="far fa-user"></span>
-                            <input id="txtUserName" type="text" class="form-control rounded-left txtBg" ng-model="obj.T12000.User_Name" placeholder="Username" required>
+                            <input id="txtUserName" type="text" class="form-control rounded-left txtBg" ng-model="obj.T12000.User_Name" ng-keypress="enter_press($event)" placeholder="Username" required>
                         </div>
                         <div class="form-field d-flex align-items-center">
                             <span class="fas fa-key"></span>
@@ -159,7 +159,7 @@
                             <span class="fas fa-key"></span>
                             <div style="display:inline-flex">
                                 <input id="txtVal" type="text" style="width:50%;text-align:center;margin-right:5px" class="form-control rounded-left txtBg" ng-model="obj.T12000.Value" readonly>
-                                <input id="txtClapsSum" type="text" style="width: 50%; text-align: center; margin-left:5px" class="form-control rounded-left txtBg" ng-model="obj.T12000.CLAPS_SUM" required>
+                                <input id="txtClapsSum" type="text" style="width: 50%; text-align: center; margin-left:5px" class="form-control rounded-left txtBg" ng-model="obj.T12000.CLAPS_SUM" ng-keypress="enter_press($event)" required>
                             </div>
                          
                         </div>
