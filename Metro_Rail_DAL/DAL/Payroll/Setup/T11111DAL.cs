@@ -5,8 +5,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Metro_Rail_DAL.DAL.Payroll.Setup
 {
@@ -24,6 +22,13 @@ namespace Metro_Rail_DAL.DAL.Payroll.Setup
             dt = Query("select T_GENDER_CODE, T_GENDER_NAME  from T11101 ");
             return dt;
         }
+        public DataTable ChildsData(string empCode)
+        {
+            DataTable dt = new DataTable();
+            dt = Query($"select T_CHILD_ID,T_CHILD_CODE,T_GENDER_CODE,(select T_GENDER_NAME FROM T11101 WHERE T11101.T_GENDER_CODE=T11112.T_GENDER_CODE) T_GENDER_NAME, T_CHILD_NAME,T_SCHOOL_NAME T_CHILD_SCHOOL,T_BIRTH_DATE T_CHILD_DOB,T_CLASS_NAME T_CHILD_CLASS,T_CERTIFICATION T_CHILD_CERTIFICATE from t11112 where T_EMP_CODE = '{empCode}'");
+            return dt;
+        }
+
         public DataTable ReligionData()
         {
             DataTable dt = new DataTable();

@@ -44,6 +44,22 @@ namespace Metro_Rail.Controllers.Payroll.Setup
             }
         }
         [HttpPost]
+        public ActionResult ChildsData(string param)
+        {
+            try
+            {
+                var data = repository.ChildsData(param);
+                string JSONString = string.Empty;
+                JSONString = JsonConvert.SerializeObject(data);
+                return Json(JSONString, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
         public ActionResult ReligionData()
         {
             try
