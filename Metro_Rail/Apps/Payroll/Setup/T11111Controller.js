@@ -86,6 +86,19 @@
                 loader(false)
             });
         }
+
+        function loadChilds() {
+            loader(true)
+            var childsList = Service.loadDataSingleParm('/T11111/ChildsData', $scope.obj.T11111.T_EMP_CODE);
+            childsList.then(function (returnData) {
+                $scope.dbList = JSON.parse(returnData);
+                $scope.obj.ChildList = angular.copy($scope.dbList); // grid এ দেখাবেন
+                loader(false)
+            });
+        }
+
+
+
         // CRUD functions for dynamic fields
         $scope.addChild = function () {
             $scope.obj.childrenDataList.push({});
@@ -290,6 +303,7 @@
             $scope.obj.T11111 = data;
             //$scope.obj.T11111.T_EMP_CODE = data.T_EMP_CODE;
             //$scope.obj.T11111.T_EMP_NAME = data.T_EMP_NAME;
+            loadChilds();
             $scope.obj.basicInfoSaved = true;
             //$scope.obj.ddlItem = { T_GRADE_NAME: data.T_GRADE_NAME, T_GRADE_CODE: data.T_GRADE_CODE };
             //$scope.obj.ddlItemDesignation = { T_DESIGNATION_NAME: data.T_DESIGNATION_NAME, T_DESIGNATION_CODE: data.T_DESIGNATION_CODE };
@@ -303,6 +317,36 @@
                 $scope.obj.ClientList = JSON.parse(redata);
             });
         }
+
+        $scope.selectGridRow = function (idx, data) {
+            debugger;
+            loader(true);
+            $scope.obj.T_CHILD_ID = data.T_CHILD_ID;
+            $scope.obj.T_CHILD_CODE = data.T_CHILD_CODE;
+            $scope.obj.T_CHILD_NAME = data.T_CHILD_NAME;
+            //$scope.obj.T_CHILD_GENDER = data.T_CHILD_GENDER;
+            $scope.obj.ddlChildGnd = { T_GENDER_CODE: data.T_GENDER_CODE, T_GENDER_NAME: data.T_GENDER_NAME };
+            var dbDate = data.T_CHILD_DOB;
+            $scope.obj.T_CHILD_DOB = convertToDateObject(dbDate);
+            $scope.obj.T_CHILD_SCHOOL = data.T_CHILD_SCHOOL;
+            $scope.obj.T_CHILD_CLASS = data.T_CHILD_CLASS;
+            $scope.obj.T_CHILD_CERTIFICATE = data.T_CHILD_CERTIFICATE;
+            $scope.obj.ChildList.splice(idx, 1);
+            //$scope.obj.newList.splice(idx, 1);
+            //debit_Credit_Calculate()
+            loader(false)
+        }
+
+        function convertToDateObject(dateStr) {
+            if (!dateStr) return null;
+            var parts = dateStr.split('/'); // ["25", "05", "2025"]
+            // month index 0 থেকে শুরু হয়, তাই -1 করতে হবে
+            return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+
+        // Database থেকে আসা value
+        //var dbDate = "25/05/2025";
+        //$scope.obj.T_CHILD_DOB = convertToDateFormat(dbDate);
         
     }
 ]);
