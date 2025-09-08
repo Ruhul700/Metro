@@ -455,7 +455,7 @@
                             <tr ng-repeat="Z in obj.AcdmcdataList">
                                 <td style="width:5%"><span style="color: red; font-size: 20px;cursor:pointer;" ng-click="removeRow($index,Z)" class="glyphicon glyphicon-trash"></span> </td>
                                 <td style="width:5%">
-                                    <span style="color: blue; font-size: 20px;cursor:pointer;" ng-click="selectGridRow($index,Z)" class="glyphicon glyphicon-pencil"></span>
+                                    <span style="color: blue; font-size: 20px;cursor:pointer;" ng-click="selectAcademicGridRow($index,Z)" class="glyphicon glyphicon-pencil"></span>
                                     @*{{Z.sl}}*@
                                 </td>
                                 <td style="width:30%"> {{Z.T_INSTITUTION_NAME}} </td>
@@ -530,7 +530,7 @@
                             <tr ng-repeat="Z in obj.ProfedataList">
                                 <td style="width:5%"><span style="color: red; font-size: 20px;cursor:pointer;" ng-click="removeRow($index,Z)" class="glyphicon glyphicon-trash"></span> </td>
                                 <td style="width:5%">
-                                    <span style="color: blue; font-size: 20px;cursor:pointer;" ng-click="selectGridRow($index,Z)" class="glyphicon glyphicon-pencil"></span>
+                                    <span style="color: blue; font-size: 20px;cursor:pointer;" ng-click="selectProfGridRow($index,Z)" class="glyphicon glyphicon-pencil"></span>
                                     @*{{Z.sl}}*@
                                 </td>
                                 <td style="width:30%"> {{Z.T_INSTITUTION_NAME}} </td>
@@ -613,7 +613,7 @@
                             <tr ng-repeat="Z in obj.TrainingdataList">
                                 <td style="width:5%"><span style="color: red; font-size: 20px;cursor:pointer;" ng-click="removeRow($index,Z)" class="glyphicon glyphicon-trash"></span> </td>
                                 <td style="width:5%">
-                                    <span style="color: blue; font-size: 20px;cursor:pointer;" ng-click="selectGridRow($index,Z)" class="glyphicon glyphicon-pencil"></span>
+                                    <span style="color: blue; font-size: 20px;cursor:pointer;" ng-click="selectTrainingGridRow($index,Z)" class="glyphicon glyphicon-pencil"></span>
                                     @*{{Z.sl}}*@
                                 </td>
                                 <td style="width:30%"> {{Z.T_COURSE_TITLE}} </td>
