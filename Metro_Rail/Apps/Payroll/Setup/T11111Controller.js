@@ -75,6 +75,36 @@
                 loader(false)
             });
         }
+
+        function loadAcademicData() {
+            loader(true)
+            var childsList = Service.loadDataSingleParm('/T11111/AcademicData', $scope.obj.T11111.T_EMP_CODE);
+            childsList.then(function (returnData) {
+                $scope.obj.AcdmcdataList = JSON.parse(returnData);
+                //$scope.obj.AcdmcdataList = angular.copy($scope.dbAcadList); // grid এ দেখাবেন
+                loader(false)
+            });
+        }
+        function loadProfessionalData() {
+            loader(true)
+            var childsList = Service.loadDataSingleParm('/T11111/ProfessionalData', $scope.obj.T11111.T_EMP_CODE);
+            childsList.then(function (returnData) {
+                $scope.obj.ProfedataList = JSON.parse(returnData);
+                //$scope.obj.ProfedataList = angular.copy($scope.dbProList); // grid এ দেখাবেন
+                loader(false)
+            });
+        }
+        function loadTrainingData() {
+            loader(true)
+            var childsList = Service.loadDataSingleParm('/T11111/TrainingData', $scope.obj.T11111.T_EMP_CODE);
+            childsList.then(function (returnData) {
+                $scope.obj.TrainingdataList = JSON.parse(returnData);
+                /*$scope.obj.TrainingdataList = angular.copy($scope.dbProList);*/ // grid এ দেখাবেন
+                loader(false)
+            });
+        }
+
+
         // CRUD functions for dynamic fields
         $scope.addChild = function () {
             $scope.obj.childrenDataList.push({});
@@ -193,6 +223,7 @@
             var Newdatalist = [];
             var list = {};
             list.sl = 1;
+            list.T_EDUCATION_CODE = $scope.obj.T_EDUCATION_CODE;
             list.T_INSTITUTION_NAME = $scope.obj.T_INSTITUTION_NAME;
             list.T_GROUP_SUBJECT = $scope.obj.T_GROUP_SUBJECT;
             list.T_PASSING_YEAR = $scope.obj.T_PASSING_YEAR;
@@ -204,6 +235,7 @@
             for (var i = 0; i < ln; i++) {
                 var list = {};
                 list.sl = (i + 2);
+                list.T_EDUCATION_CODE = $scope.obj.AcdmcdataList[i].T_EDUCATION_CODE;
                 list.T_INSTITUTION_NAME = $scope.obj.AcdmcdataList[i].T_INSTITUTION_NAME;
                 list.T_GROUP_SUBJECT = $scope.obj.AcdmcdataList[i].T_GROUP_SUBJECT;
                 list.ACCOUNT_HEADER_CODE = $scope.obj.AcdmcdataList[i].ACCOUNT_HEADER_CODE;
@@ -227,6 +259,7 @@
             var Newdatalist = [];
             var list = {};
             list.sl = 1;
+            list.T_EDUCATION_CODE = $scope.obj.T_PRF_T_EDUCATION_CODE;
             list.T_INSTITUTION_NAME = $scope.obj.T_PRF_INSTITUTION_NAME;
             list.T_GROUP_SUBJECT = $scope.obj.T_PRF_GROUP_SUBJECT;
             list.T_PASSING_YEAR = $scope.obj.T_PRF_PASSING_YEAR;
@@ -238,6 +271,7 @@
             for (var i = 0; i < ln; i++) {
                 var list = {};
                 list.sl = (i + 2);
+                list.T_EDUCATION_CODE = $scope.obj.ProfedataList[i].T_PRF_T_EDUCATION_CODE;
                 list.T_INSTITUTION_NAME = $scope.obj.ProfedataList[i].T_INSTITUTION_NAME;
                 list.T_GROUP_SUBJECT = $scope.obj.ProfedataList[i].T_GROUP_SUBJECT;
                 list.ACCOUNT_HEADER_CODE = $scope.obj.ProfedataList[i].ACCOUNT_HEADER_CODE;
@@ -373,6 +407,9 @@
             //$scope.obj.T11111.T_EMP_CODE = data.T_EMP_CODE;
             //$scope.obj.T11111.T_EMP_NAME = data.T_EMP_NAME;
             loadChilds();
+            loadAcademicData();
+            loadProfessionalData();
+            loadTrainingData();
             $scope.obj.basicInfoSaved = true;
             //$scope.obj.ddlItem = { T_GRADE_NAME: data.T_GRADE_NAME, T_GRADE_CODE: data.T_GRADE_CODE };
             //$scope.obj.ddlItemDesignation = { T_DESIGNATION_NAME: data.T_DESIGNATION_NAME, T_DESIGNATION_CODE: data.T_DESIGNATION_CODE };
@@ -386,6 +423,49 @@
                 $scope.obj.ClientList = JSON.parse(redata);
             });
         }
+
+        $scope.selectAcademicGridRow = function (idx, data) {
+            debugger;
+            loader(true);
+            $scope.obj.T_EDUCATION_CODE = data.T_EDUCATION_CODE;
+            $scope.obj.T_INSTITUTION_NAME = data.T_INSTITUTION_NAME;
+            $scope.obj.T_GROUP_SUBJECT = data.T_GROUP_SUBJECT;
+            $scope.obj.T_PASSING_YEAR = data.T_PASSING_YEAR;
+            $scope.obj.T_RESULT = data.T_RESULT;
+            $scope.obj.T_DISTINCTION = data.T_DISTINCTION;
+            $scope.obj.AcdmcdataList.splice(idx, 1);
+            loader(false)
+        }
+        $scope.selectProfGridRow = function (idx, data) {
+            debugger;
+            loader(true);
+            $scope.obj.T_PRF_T_EDUCATION_CODE = data.T_EDUCATION_CODE;
+            $scope.obj.T_PRF_INSTITUTION_NAME = data.T_INSTITUTION_NAME;
+            $scope.obj.T_PRF_GROUP_SUBJECT = data.T_GROUP_SUBJECT;
+            $scope.obj.T_PRF_PASSING_YEAR = data.T_PASSING_YEAR;
+            $scope.obj.T_PRF_RESULT = data.T_RESULT;
+            $scope.obj.T_PRF_DISTINCTION = data.T_DISTINCTION;
+            $scope.obj.ProfedataList.splice(idx, 1);
+            loader(false)
+        }
+        $scope.selectTrainingGridRow = function (idx, data) {
+            debugger;
+            loader(true);
+            $scope.obj.T_TRAINING_CODE = data.T_TRAINING_CODE;
+            $scope.obj.T_COURSE_TITLE = data.T_COURSE_TITLE;
+            $scope.obj.T_TRAINING_TYPE_CODE = data.T_TRAINING_TYPE_CODE;
+            $scope.obj.T_FROM_DATE = $filter('date')(data.T_FROM_DATE, 'dd-MM-yyyy');
+            $scope.obj.T_TO_DATE = data.T_TO_DATE;
+            $scope.obj.T_POSITION = data.T_POSITION;
+            $scope.obj.T_INSTITUTION_NAME = data.T_INSTITUTION_NAME;
+            $scope.obj.TrainingdataList.splice(idx, 1);
+            loader(false)
+        }
+
+
+
+
+
 
         $scope.selectGridRow = function (idx, data) {
             debugger;
