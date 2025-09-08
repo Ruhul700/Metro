@@ -28,6 +28,26 @@ namespace Metro_Rail_DAL.DAL.Payroll.Setup
             dt = Query($"select T_CHILD_ID,T_CHILD_CODE,T_GENDER_CODE,(select T_GENDER_NAME FROM T11101 WHERE T11101.T_GENDER_CODE=T11112.T_GENDER_CODE) T_GENDER_NAME, T_CHILD_NAME,T_SCHOOL_NAME T_CHILD_SCHOOL,T_BIRTH_DATE T_CHILD_DOB,T_CLASS_NAME T_CHILD_CLASS,T_CERTIFICATION T_CHILD_CERTIFICATE from t11112 where T_EMP_CODE = '{empCode}'");
             return dt;
         }
+        public DataTable AcademicData(string empCode)
+        {
+            DataTable dt = new DataTable();
+            dt = Query($"select * from t11113 where T_EMP_CODE = '{empCode}' and T_EDU_TYPE = '1'");
+            return dt;
+        }
+        public DataTable ProfessionalData(string empCode)
+        {
+            DataTable dt = new DataTable();
+            dt = Query($"select * from t11113 where T_EMP_CODE = '{empCode}' and T_EDU_TYPE = '2'");
+            return dt;
+        }
+         public DataTable TrainingData(string empCode)
+        {
+            DataTable dt = new DataTable();
+            dt = Query($"select * from T11114 where T_EMP_CODE = '{empCode}'");
+            return dt;
+        }
+
+
 
         public DataTable ReligionData()
         {
@@ -107,17 +127,34 @@ namespace Metro_Rail_DAL.DAL.Payroll.Setup
             {
                 foreach (var i in data.AcademicList)
                 {
-                    var maxCode = Query($"select case when count(T_EDUCATION_CODE)>0 then  MAX( CAST(T_EDUCATION_CODE  AS INT))+1 else '101' end T_EDUCATION_CODE from T11113").Rows[0]["T_EDUCATION_CODE"].ToString();
-
-                    var sa = Command($"INSERT INTO DBO.T11113 (T_EDUCATION_CODE,T_EMP_CODE,T_INSTITUTION_NAME,T_GROUP_SUBJECT,T_PASSING_YEAR,T_RESULT,T_DISTINCTION, T_EDU_TYPE,T_ENTRY_USER,T_ENTRY_DATE) values ('{maxCode}','{data.T_EMP_CODE}','{i.T_INSTITUTION_NAME}','{i.T_GROUP_SUBJECT}','{i.T_PASSING_YEAR}', '{i.T_RESULT}','{i.T_DISTINCTION}','1','{entryUser}','{date}')");
-                    if (sa == true)
+                    if (String.IsNullOrEmpty(i.T_EDUCATION_CODE))
                     {
-                        sms = "Save Successfully.-1";
+                        var maxCode = Query($"select case when count(T_EDUCATION_CODE)>0 then  MAX( CAST(T_EDUCATION_CODE  AS INT))+1 else '101' end T_EDUCATION_CODE from T11113").Rows[0]["T_EDUCATION_CODE"].ToString();
+
+                        var sa = Command($"INSERT INTO DBO.T11113 (T_EDUCATION_CODE,T_EMP_CODE,T_INSTITUTION_NAME,T_GROUP_SUBJECT,T_PASSING_YEAR,T_RESULT,T_DISTINCTION, T_EDU_TYPE,T_ENTRY_USER,T_ENTRY_DATE) values ('{maxCode}','{data.T_EMP_CODE}','{i.T_INSTITUTION_NAME}','{i.T_GROUP_SUBJECT}','{i.T_PASSING_YEAR}', '{i.T_RESULT}','{i.T_DISTINCTION}','1','{entryUser}','{date}')");
+                        if (sa == true)
+                        {
+                            sms = "Save Successfully.-1";
+                        }
+                        else
+                        {
+                            sms = "Do not Save-0";
+                        }
                     }
                     else
                     {
-                        sms = "Do not Save-0";
+                        //update
+                        var da = Command($"update T11113 set T_INSTITUTION_NAME = '{i.T_INSTITUTION_NAME}', T_GROUP_SUBJECT='{i.T_GROUP_SUBJECT}' , T_PASSING_YEAR='{i.T_PASSING_YEAR}',T_RESULT='{i.T_RESULT}',T_DISTINCTION='{i.T_DISTINCTION}' where T_EDUCATION_CODE ='{i.T_EDUCATION_CODE}'");
+                        if (da == true)
+                        {
+                            sms = "update Successfully.-1";
+                        }
+                        else
+                        {
+                            sms = "Do not update-0";
+                        }
                     }
+                    
                 }
                 
             }
@@ -125,17 +162,34 @@ namespace Metro_Rail_DAL.DAL.Payroll.Setup
             {
                 foreach (var i in data.ProfesList)
                 {
-                    var maxCode = Query($"select case when count(T_EDUCATION_CODE)>0 then  MAX( CAST(T_EDUCATION_CODE  AS INT))+1 else '101' end T_EDUCATION_CODE from T11113").Rows[0]["T_EDUCATION_CODE"].ToString();
-
-                    var sa = Command($"INSERT INTO DBO.T11113 (T_EDUCATION_CODE,T_EMP_CODE,T_INSTITUTION_NAME,T_GROUP_SUBJECT,T_PASSING_YEAR,T_RESULT,T_DISTINCTION, T_EDU_TYPE,T_ENTRY_USER,T_ENTRY_DATE) values ('{maxCode}','{data.T_EMP_CODE}','{i.T_INSTITUTION_NAME}','{i.T_GROUP_SUBJECT}','{i.T_PASSING_YEAR}','{i.T_RESULT}','{i.T_DISTINCTION}','2','{entryUser}','{date}')");
-                    if (sa == true)
+                    if (String.IsNullOrEmpty(i.T_EDUCATION_CODE))
                     {
-                        sms = "Save Successfully.-1";
+                        var maxCode = Query($"select case when count(T_EDUCATION_CODE)>0 then  MAX( CAST(T_EDUCATION_CODE  AS INT))+1 else '101' end T_EDUCATION_CODE from T11113").Rows[0]["T_EDUCATION_CODE"].ToString();
+
+                        var sa = Command($"INSERT INTO DBO.T11113 (T_EDUCATION_CODE,T_EMP_CODE,T_INSTITUTION_NAME,T_GROUP_SUBJECT,T_PASSING_YEAR,T_RESULT,T_DISTINCTION, T_EDU_TYPE,T_ENTRY_USER,T_ENTRY_DATE) values ('{maxCode}','{data.T_EMP_CODE}','{i.T_INSTITUTION_NAME}','{i.T_GROUP_SUBJECT}','{i.T_PASSING_YEAR}','{i.T_RESULT}','{i.T_DISTINCTION}','2','{entryUser}','{date}')");
+                        if (sa == true)
+                        {
+                            sms = "Save Successfully.-1";
+                        }
+                        else
+                        {
+                            sms = "Do not Save-0";
+                        }
                     }
                     else
                     {
-                        sms = "Do not Save-0";
+                        //update
+                        var da = Command($"update T11113 set T_INSTITUTION_NAME = '{i.T_INSTITUTION_NAME}', T_GROUP_SUBJECT='{i.T_GROUP_SUBJECT}' , T_PASSING_YEAR='{i.T_PASSING_YEAR}',T_RESULT='{i.T_RESULT}',T_DISTINCTION='{i.T_DISTINCTION}' where T_EDUCATION_CODE ='{i.T_EDUCATION_CODE}'");
+                        if (da == true)
+                        {
+                            sms = "update Successfully.-1";
+                        }
+                        else
+                        {
+                            sms = "Do not update-0";
+                        }
                     }
+                        
                 }
 
 
@@ -219,17 +273,34 @@ namespace Metro_Rail_DAL.DAL.Payroll.Setup
             {
                 foreach (var i in data.TrnigList)
                 {
-                    var maxCode = Query($"select case when count(T_TRAINING_CODE)>0 then  MAX( CAST(T_TRAINING_CODE  AS INT))+1 else '101' end T_TRAINING_CODE from T11114").Rows[0]["T_TRAINING_CODE"].ToString();                 
-
-                    var sa = Command($"INSERT INTO DBO.T11114 (T_TRAINING_CODE,T_COURSE_TITLE,T_TRAINING_TYPE_CODE,T_FROM_DATE,T_TO_DATE,T_POSITION,T_INSTITUTION_NAME, T_ENTRY_USER,T_ENTRY_DATE) values ('{maxCode}','{i.T_COURSE_TITLE}','{i.T_TRAINING_TYPE_CODE}','{i.T_FROM_DATE}','{i.T_TO_DATE}', '{i.T_POSITION}','{i.T_INSTITUTION_NAME}','{entryUser}','{date}')");
-                    if (sa == true)
+                    if (String.IsNullOrEmpty(i.T_TRAINING_CODE))
                     {
-                        sms = "Save Successfully.-1";
+                        var maxCode = Query($"select case when count(T_TRAINING_CODE)>0 then  MAX( CAST(T_TRAINING_CODE  AS INT))+1 else '101' end T_TRAINING_CODE from T11114").Rows[0]["T_TRAINING_CODE"].ToString();
+
+                        var sa = Command($"INSERT INTO DBO.T11114 (T_TRAINING_CODE,T_COURSE_TITLE,T_TRAINING_TYPE_CODE,T_FROM_DATE,T_TO_DATE,T_POSITION,T_INSTITUTION_NAME, T_ENTRY_USER,T_ENTRY_DATE) values ('{maxCode}','{i.T_COURSE_TITLE}','{i.T_TRAINING_TYPE_CODE}','{i.T_FROM_DATE}','{i.T_TO_DATE}', '{i.T_POSITION}','{i.T_INSTITUTION_NAME}','{entryUser}','{date}')");
+                        if (sa == true)
+                        {
+                            sms = "Save Successfully.-1";
+                        }
+                        else
+                        {
+                            sms = "Do not Save-0";
+                        }
                     }
                     else
                     {
-                        sms = "Do not Save-0";
+                        //update
+                        var da = Command($"update T11114 set T_COURSE_TITLE = '{i.T_COURSE_TITLE}', T_INSTITUTION_NAME='{i.T_INSTITUTION_NAME}' , T_TRAINING_TYPE_CODE='{i.T_TRAINING_TYPE_CODE}',T_FROM_DATE='{i.T_FROM_DATE}',T_TO_DATE='{i.T_TO_DATE}',T_POSITION='{i.T_POSITION}' where T_TRAINING_CODE ='{i.T_TRAINING_CODE}'");
+                        if (da == true)
+                        {
+                            sms = "update Successfully.-1";
+                        }
+                        else
+                        {
+                            sms = "Do not update-0";
+                        }
                     }
+                    
                 }
 
             }           
