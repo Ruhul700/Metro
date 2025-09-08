@@ -62,6 +62,55 @@ namespace Metro_Rail.Controllers.Payroll.Setup
         }
 
         [HttpPost]
+        public ActionResult AcademicData(string param)
+        {
+            try
+            {
+                var data = repository.AcademicData(param);
+                string JSONString = string.Empty;
+                JSONString = JsonConvert.SerializeObject(data);
+                return Json(JSONString, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ProfessionalData(string param)
+        {
+            try
+            {
+                var data = repository.ProfessionalData(param);
+                string JSONString = string.Empty;
+                JSONString = JsonConvert.SerializeObject(data);
+                return Json(JSONString, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult TrainingData(string param)
+        {
+            try
+            {
+                var data = repository.TrainingData(param);
+                string JSONString = string.Empty;
+                JSONString = JsonConvert.SerializeObject(data);
+                return Json(JSONString, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpPost]
         public ActionResult ReligionData()
         {
             try
