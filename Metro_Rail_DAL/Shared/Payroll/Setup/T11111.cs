@@ -73,6 +73,7 @@ namespace Metro_Rail_DAL.Shared.Payroll.Setup
     }
     public class Education
     {
+        public string T_EDUCATION_CODE { get; set; }
         public string T_INSTITUTION_NAME { get; set; }
         public string T_GROUP_SUBJECT { get; set; }
         public string T_PASSING_YEAR { get; set; }
@@ -87,6 +88,7 @@ namespace Metro_Rail_DAL.Shared.Payroll.Setup
     }
     public class TrainingList
     {  
+        public string T_TRAINING_CODE { get; set; }
         public string T_EDUCATION_CODE { get; set; }
         public string T_COURSE_TITLE { get; set; }
         public string T_TRAINING_TYPE_CODE { get; set; }
