@@ -211,10 +211,77 @@ namespace Metro_Rail_DAL.DAL.Payroll.Setup
 
             return sms;
         }
+        public string SaveTrainingData(TrainingData data, string entryUser)
+        {
+            string sms = "";
+            var date = DateTime.Now.ToString("dd-MM-yyyy");
+            if (data.TrnigList.Count() > 0)
+            {
+                foreach (var i in data.TrnigList)
+                {
+                    var maxCode = Query($"select case when count(T_TRAINING_CODE)>0 then  MAX( CAST(T_TRAINING_CODE  AS INT))+1 else '101' end T_TRAINING_CODE from T11114").Rows[0]["T_TRAINING_CODE"].ToString();                 
+
+                    var sa = Command($"INSERT INTO DBO.T11114 (T_TRAINING_CODE,T_COURSE_TITLE,T_TRAINING_TYPE_CODE,T_FROM_DATE,T_TO_DATE,T_POSITION,T_INSTITUTION_NAME, T_ENTRY_USER,T_ENTRY_DATE) values ('{maxCode}','{i.T_COURSE_TITLE}','{i.T_TRAINING_TYPE_CODE}','{i.T_FROM_DATE}','{i.T_TO_DATE}', '{i.T_POSITION}','{i.T_INSTITUTION_NAME}','{entryUser}','{date}')");
+                    if (sa == true)
+                    {
+                        sms = "Save Successfully.-1";
+                    }
+                    else
+                    {
+                        sms = "Do not Save-0";
+                    }
+                }
+
+            }           
+            else
+            {
+                sms = "Do not Save-0";
+            }
+
+            return sms;
+        }
+        public string SaveImage(T11111_Img_Ins t11111, string user)
+        {
+            string sms = "";
+            SqlTransaction objTrans = null;
+            var date = DateTime.Now.ToString("dd-MM-yyyy");
+            using (SqlConnection objConn = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlCon"].ConnectionString))
+            {
+                objConn.Open();
+                objTrans = objConn.BeginTransaction();
+                try
+                {
+                    var insertSpouse = $"UPDATE T11111 SET T_PROFILE_IMAGE='{t11111.T_PROFILE_IMAGE}' WHERE T_EMP_CODE ='{t11111.T_EMP_CODE}'";
+                    var insertT11Spouse = command_2(insertSpouse, objConn, objTrans);
+                    sms = "Save Successfully-1";
+                    objTrans.Commit();
+                }
+                catch (Exception ex)
+                {
+                    var dd = ex.Message;
+                    objTrans.Rollback();
+                    sms = "Do not Save-0 ";
+                }
+                finally
+                {
+                    objConn.Close();
+                }
+            }
+               
+            return sms;
+        }
+
+
         public DataTable T11111_GetEmployeeProfileData(string empCode)
         {
             DataTable dt = new DataTable();
-            dt = Query($@"select t11.T_EMP_NAME,t11.T_DESIGNATION_CODE, t11.T_EMP_CODE, t11.T_CADRE, t11.T_JOINING_DATE, t11.T_PRL_DATE, t11.T_DATE_OF_CONFIRMATION,t11.T_EMP_MOBILE,t11.T_EMAIL_ADDRESS,t11.T_NID,t11.T_JOB_ADDRESS,t11.T_FATHER_NAME,t11.T_MOTHER_NAME,t11.T_DATE_OF_BIRTH,t11.T_DEPARTMENT_CODE,t11.T_JOB_PHONE,t11.T_RELIGION_CODE,t11.T_GENDER_CODE,t11.T_ER_CONTACT_NAME,t11.T_ER_CONTACT_RELATION,t11.T_ER_CONTACT_PHONE,t11.T_SPOUSE_NAME,t11.T_SPOUSE_NATIONALITY,t11.T_SPOUSE_NID,t11.T_SPOUSE_CONTACT from T11111 t11 where t11.T_EMP_CODE = '9632'");
+            dt = Query($@"select t11.T_EMP_NAME,t11.T_DESIGNATION_CODE, t11.T_EMP_CODE, t11.T_CADRE, t11.T_JOINING_DATE, t11.T_PRL_DATE, t11.T_DATE_OF_CONFIRMATION,t11.T_EMP_MOBILE,t11.T_EMAIL_ADDRESS,t11.T_NID,t11.T_JOB_ADDRESS,t11.T_FATHER_NAME,t11.T_MOTHER_NAME,t11.T_DATE_OF_BIRTH,t11.T_DEPARTMENT_CODE,t11.T_JOB_PHONE,t11.T_RELIGION_CODE,t11.T_GENDER_CODE,t11.T_ER_CONTACT_NAME,t11.T_ER_CONTACT_RELATION,t11.T_ER_CONTACT_PHONE,t11.T_SPOUSE_NAME,t11.T_SPOUSE_NATIONALITY,t11.T_SPOUSE_NID,t11.T_SPOUSE_CONTACT from T11111 t11 where t11.T_EMP_CODE = '{empCode}'");
+            return dt;
+        }
+        public DataTable T11111_GetEmployeeChildData(string empCode)
+        {
+            DataTable dt = new DataTable();
+            dt = Query($@"select * from t11112 where T_EMP_CODE = '{empCode}'");
             return dt;
         }
 

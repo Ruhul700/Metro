@@ -4,6 +4,8 @@ using Microsoft.Reporting.WebForms;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
 
 
@@ -145,10 +147,58 @@ namespace Metro_Rail.Controllers.Payroll.Setup
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
-
+        [HttpPost]
+        public ActionResult SaveTrainingData(TrainingData model)
+        {
+            try
+            {
+                var data = repository.SaveTrainingData(model, Session["T_EMP_ID"].ToString());
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult Insert(T11111_Img_Ins t11111, HttpPostedFileBase attachment)
+        {
+            string base64String = "";
+            string mesg = "";
+            string fname = "";
+            var path = "";
+            var user = Session["T_EMP_ID"].ToString();
+           // var per = repository.permission(Session["T_ROLE"].ToString(), "T14003", t11111.T_EMP_ID == 0 ? "INS" : "UPD");
+           // if (!per) { return Json("Have no permission-0", JsonRequestBehavior.AllowGet); }
+            try
+            {
+                foreach (string file in Request.Files)
+                {
+                    var fileContent = Request.Files[file];
+                    if (fileContent != null && fileContent.ContentLength > 0)
+                    {
+                        var inputStream = fileContent.InputStream;
+                        var fileName = Path.GetFileName(fileContent.FileName);
+                        t11111.T_PROFILE_IMAGE = fileName;
+                        path = Path.Combine(Server.MapPath("~/Images/"), fileName);
+                        using (var fileStream = System.IO.File.Create(path))
+                        {
+                            inputStream.CopyTo(fileStream);
+                        }
+                    }
+                }
+                mesg = repository.SaveImage(t11111, user);
+            }
+            catch (Exception ex)
+            {
+                mesg = ex.Message;
+            }
+            return Json(mesg, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult T11111_GetEmployeeProfileData(string empCode)
         {
             var empDetails = repository.T11111_GetEmployeeProfileData(empCode);
+            var empChildDetails = repository.T11111_GetEmployeeChildData(empCode);
 
             //// দ্বিতীয় dataset (ধরি Salary History)
             //var salaryPayableDetails = repository.T19010_GetSalaryPayment(empCode);
@@ -164,6 +214,7 @@ namespace Metro_Rail.Controllers.Payroll.Setup
 
             // Employee Info dataset
             ReportDataSource rddetails = new ReportDataSource("EmployeeProfile", empDetails);
+            ReportDataSource rddetails1 = new ReportDataSource("EmployeeChild", empChildDetails);
 
             // Salary Payable dataset
             //ReportDataSource rdSalaryPayable = new ReportDataSource("T19010_GetEmpPayable", salaryPayableDetails);
@@ -173,6 +224,7 @@ namespace Metro_Rail.Controllers.Payroll.Setup
 
             // Add them to report
             rv.LocalReport.DataSources.Add(rddetails);
+            rv.LocalReport.DataSources.Add(rddetails1);
             //rv.LocalReport.DataSources.Add(rdSalaryPayable);
             //rv.LocalReport.DataSources.Add(rdSalaryDeduction);
 

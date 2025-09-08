@@ -80,5 +80,30 @@ namespace Metro_Rail_DAL.Shared.Payroll.Setup
         public string T_DISTINCTION { get; set; }
         public string T_EDU_TYPE { get; set; }
     }
-    
+    public class TrainingData
+    {
+        public string T_EMP_CODE { get; set; }   
+        public List<TrainingList> TrnigList { get; set; }
+    }
+    public class TrainingList
+    {  
+        public string T_EDUCATION_CODE { get; set; }
+        public string T_COURSE_TITLE { get; set; }
+        public string T_TRAINING_TYPE_CODE { get; set; }
+        public string T_FROM_DATE { get; set; }
+        public string T_TO_DATE { get; set; }
+        public string T_POSITION { get; set; }
+        public string T_INSTITUTION_NAME { get; set; }
+        public string T_ENTRY_USER { get; set; }
+        public string T_ENTRY_DATE { get; set; }
+    }
+    public class T11111_Img_Ins
+    {
+        public int T_EMP_ID { get; set; }      
+        public string T_EMP_CODE { get; set; }      
+        public string T_PROFILE_IMAGE { get; set; }       
+        public string T_ENTRY_USER { get; set; }
+               
+
+    }
 }

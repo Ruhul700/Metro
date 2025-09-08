@@ -4,6 +4,7 @@
 
 <script src="~/Apps/Payroll/Setup/T11111Controller.js"></script>
 <script src="~/Apps/Service/Service.js"></script>
+<script src="~/Apps/Service/ImageService.js"></script>
 <style>
     .selected {
         background-color: #80c8e4ba;
@@ -364,7 +365,7 @@
                         <thead>
                             <tr>
                                 <th style="width:5%" scope="col"><span style="color: white; font-size: 20px; font-weight:600;cursor:pointer;">-</span></th>
-                                <th style="width:5%" scope="col"><span style="color: white; font-size: 20px; font-weight:600;cursor:pointer;">-</span></th>  
+                                <th style="width:5%" scope="col"><span style="color: white; font-size: 20px; font-weight:600;cursor:pointer;">-</span></th>
                                 <th style="width:30%" scope="col">Name</th>
                                 <th style="width:10%" scope="col">Gender</th>
                                 <th style="width:10%" scope="col">Date Of Birth</th>
@@ -378,7 +379,7 @@
                                 <td style="width:5%"><span style="color: red; font-size: 20px;cursor:pointer;" ng-click="removeRow($index,Z)" class="glyphicon glyphicon-trash"></span> </td>
                                 <td style="width:5%">
                                     <span style="color: blue; font-size: 20px;cursor:pointer;" ng-click="selectGridRow($index,Z)" class="glyphicon glyphicon-pencil"></span>
-                                </td>                              
+                                </td>
                                 <td>{{Z.T_CHILD_NAME}}</td>
                                 <td>{{Z.T_GENDER_NAME}}</td>
                                 <td>{{Z.T_CHILD_DOB}}</td>
@@ -447,7 +448,7 @@
                                 <th style="width:15%" scope="col">Group/Subject</th>
                                 <th style="width:15%" scope="col">Passing Year</th>
                                 <th style="width:10%" scope="col">Result</th>
-                                <th style="width:20%" scope="col">Distinction</th>                                                       
+                                <th style="width:20%" scope="col">Distinction</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -461,8 +462,8 @@
                                 <td style="width:15%">  {{Z.T_GROUP_SUBJECT}}  </td>
                                 <td style="width:15%"> {{Z.T_PASSING_YEAR}}  </td>
                                 <td style="width:10%">  {{Z.T_RESULT}} </td>
-                                <td style="width:20%"> {{Z.T_DISTINCTION}}    </td>                               
-                            </tr>                            
+                                <td style="width:20%"> {{Z.T_DISTINCTION}}    </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -481,10 +482,10 @@
                             <label id="lblProfePasYear" style="text-align:center" class="textlevel">Passing Year</label>
                         </td>
                         <td style=" width: 15%;">
-                            <label  id="lblProfeResult" style="text-align:center" class="textlevel">Result</label>
+                            <label id="lblProfeResult" style="text-align:center" class="textlevel">Result</label>
                         </td>
                         <td style=" width: 20%;">
-                            <label  id="lblProfeDistnc"  style="text-align:center" class="textlevel">Distinction</label>
+                            <label id="lblProfeDistnc" style="text-align:center" class="textlevel">Distinction</label>
                         </td>
 
                         <td style=" width: 5%;"></td>
@@ -543,8 +544,108 @@
                 </div>
             </fieldset>
         </div>
+        <div id="Training" class="tabcontent" ng-show="obj.activeTab ==='Training'">
+            <fieldset class="border rounded-3 p-3">
+                <legend style="border-bottom: none; margin-bottom: 0px">Training</legend>
+                <table class="inputTable center" style="width: 96%">
+                    <tr>
+                        <td style=" width: 30%;">
+                            <label id="lblCourseTitle" style="text-align:center" class="textlevel">Course Title</label>
+                        </td>
+                        <td style=" width: 15%;">
+                            <label id="lblTrainingType" style="text-align:center" class="textlevel">Training Type</label>
+                        </td>
+                        <td style=" width: 15%;">
+                            <label id="lblFromDate" style="text-align:center" class="textlevel">From Date</label>
+                        </td>
+                        <td style=" width: 15%;">
+                            <label id="lblToDate" style="text-align:center" class="textlevel">To Date</label>
+                        </td>
+                        <td style=" width: 10%;">
+                            <label id="lblPosition" style="text-align:center" class="textlevel">Position</label>
+                        </td>
+                        <td style=" width: 10%;">
+                            <label id="lblInstitution" style="text-align:center" class="textlevel">Institution</label>
+                        </td>
+                        <td style=" width: 5%;"></td>
+                    </tr>
+                    <tr>
+                        <td style=" width: 30%;">
+                            <input style=" max-width: 98%;" id="txtCourseTitle" type="text" ng-model="obj.T_COURSE_TITLE" class="form-control" />
+                        </td>
+                        <td style=" width: 15%;">
+                            <input id="txtTrainingType" style=" width: 98%;" type="text" ng-model="obj.T_TRAINING_TYPE_CODE" class="form-control" />
 
+                        </td>
+                        <td style=" width: 15%;">
+                            <input id="txtFromDate" style=" width: 98%;" type="date" ng-model="obj.T_FROM_DATE" class="form-control" />
+                        </td>
+                        <td style=" width: 15%;">
+                            <input id="txtToDate" style=" width: 98%;" type="date" ng-model="obj.T_TO_DATE" class="form-control" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <input id="txtPosition" style=" width: 98%;" type="text" ng-model="obj.T_POSITION" class="form-control" />
+                        </td>
+                        <td style=" width: 10%;">
+                            <input id="txtInstitution" style=" width: 98%;" type="text" ng-model="obj.T_INSTITUTION_NAME" class="form-control" />
 
+                        </td>
+                        <td style=" width: 5%;">
+                            <input type="button" style="background: white; border: 1px solid #337ab7; color: black; font-weight: bold; " ng-click="Add_Training()" value="Add" tabindex="8">
+                        </td>
+                    </tr>
+                </table>
+                <div class="table-scroll-header-fix" style="margin-top:10px">
+                    <table id="mytable1" class="tTable center" style="width:96%">
+                        <thead>
+                            <tr>
+                                <th style="width:5%" scope="col"><span style="color: white; font-size: 20px; font-weight:600;cursor:pointer;">-</span></th>
+                                <th style="width:5%" scope="col"><span style="color: white; font-size: 20px; font-weight:600;cursor:pointer;">-</span></th>
+                                <th style="width:30%" scope="col">Course Title</th>
+                                <th style="width:15%" scope="col">Training Type</th>
+                                <th style="width:15%" scope="col">From Date</th>
+                                <th style="width:10%" scope="col">To Date</th>
+                                <th style="width:10%" scope="col">Position</th>
+                                <th style="width:10%" scope="col">Institution</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            <tr ng-repeat="Z in obj.TrainingdataList">
+                                <td style="width:5%"><span style="color: red; font-size: 20px;cursor:pointer;" ng-click="removeRow($index,Z)" class="glyphicon glyphicon-trash"></span> </td>
+                                <td style="width:5%">
+                                    <span style="color: blue; font-size: 20px;cursor:pointer;" ng-click="selectGridRow($index,Z)" class="glyphicon glyphicon-pencil"></span>
+                                    @*{{Z.sl}}*@
+                                </td>
+                                <td style="width:30%"> {{Z.T_COURSE_TITLE}} </td>
+                                <td style="width:15%">  {{Z.T_TRAINING_TYPE_CODE}}  </td>
+                                <td style="width:15%"> {{Z.T_FROM_DATE}}  </td>
+                                <td style="width:10%">  {{Z.T_TO_DATE}} </td>
+                                <td style="width:10%"> {{Z.T_POSITION}}    </td>
+                                <td style="width:10%"> {{Z.T_INSTITUTION_NAME}}    </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </div>
+        <div id="Picture" class="tabcontent" ng-show="obj.activeTab ==='Picture'">
+            <fieldset class="border rounded-3 p-3">
+                <legend style="border-bottom: none; margin-bottom: 0px">Picture</legend>
+                <div style="background:#ffffff;height: 120px;border-radius: 15px;padding: 15px">
+                    <input type='file' name="attachment" onchange="angular.element(this).scope().imageUpload(event)" data-ak-file-model="obj.T11111.attachment" />
+
+                    <div ng-repeat="step in stepsModel">
+                        <img class="thumb" style="width: 150px; height: 130px;" ng-src="{{step}}" ng-model="imgDiv" />
+                    </div>
+                    <div ng-show="imgDiv">
+                        <img class="thumb" src="~/Images/{{obj.T11111.T_PROFILE_IMAGE}}" style="width: 150px; height: 130px;" />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div id="Profile" class="tabcontent" ng-show="obj.activeTab ==='Profile'">
+
+        </div>
 
 
 

@@ -1,5 +1,5 @@
-﻿app.controller("T11111Controller", ["$scope", "Service", "Data", "$window", "$filter",
-    function ($scope, Service, Data, $window, $filter) { //$location,
+﻿app.controller("T11111Controller", ["$scope", "Service", "ImageService", "Data", "$window", "$filter",
+    function ($scope, Service, ImageService, Data, $window, $filter) { //$location,
         $scope.obj = {};
         $scope.obj = Data;
         $scope.obj.T11111 = {};
@@ -19,31 +19,10 @@
         $scope.obj.professionalDataListv = [];
         $scope.obj.trainingDataListv = [];
         $scope.obj.ChildList = [];
-      
-        // Initialize with one empty row for each list
-       // $scope.obj.childrenDataList.push({});
-       // $scope.obj.academicDataList.push({});
-      //  $scope.obj.professionalDataList.push({});
-      //  $scope.obj.trainingDataList.push({});
+        $scope.obj.TrainingdataList = [];
 
         // Function to change tabs
-        $scope.setActiveTab = function (tabName) {
-            // Prevent changing tabs unless the previous one is saved
-            //if (tabName === 'Family' && !$scope.obj.basicInfoSaved) {
-            //    return;
-            //}
-            //if (tabName === 'Education') {
-            //    return;
-            //}
-            //if (tabName === 'Training' && !$scope.obj.educationInfoSaved) {
-            //    return;
-            //}
-            //if (tabName === 'Picture' && !$scope.obj.trainingInfoSaved) {
-            //    return;
-            //}
-            //if (tabName === 'Profile' && !$scope.obj.pictureInfoSaved) {
-            //    return;
-            //}
+        $scope.setActiveTab = function (tabName) {            
             $scope.obj.activeTab = tabName;
             $scope.obj.T11111.T_ACTIVE_TAB = tabName;
         };
@@ -96,9 +75,6 @@
                 loader(false)
             });
         }
-
-
-
         // CRUD functions for dynamic fields
         $scope.addChild = function () {
             $scope.obj.childrenDataList.push({});
@@ -109,15 +85,13 @@
 
         // Save Logic for all tabs
         $scope.Save_Click = function () {
-            $scope.loading = true;
-            // Logic to save data for the active tab
-            if ($scope.obj.activeTab === 'Basic') {
-                // Validate basic info
+            $scope.loading = true;          
+            if ($scope.obj.activeTab === 'Basic') {                
                 if (!$scope.obj.T11111.T_EMP_CODE || !$scope.obj.T11111.T_EMP_NAME) {
                     alert("Please fill out all required fields in Basic Information.");
                     $scope.loading = false;
                     return;
-                }                
+                }
                 var save = Service.saveData('/T11111/SaveData', $scope.obj.T11111);
                 save.then(function (returnData) {
                     smsAlert(returnData);
@@ -127,13 +101,11 @@
                     loader(false)
                 });                
             }
-            else if ($scope.obj.activeTab === 'Family') {
-                
+            else if ($scope.obj.activeTab === 'Family') {                
                 $scope.Family = {};
                 $scope.Family.T_EMP_CODE = $scope.obj.T11111.T_EMP_CODE;
                 $scope.Family.spouseInfo = $scope.obj.T11111;
                 $scope.Family.ChildList = $scope.obj.ChildList;
-
                 var save = Service.saveData('/T11111/SaveFamilyData', $scope.Family);
                 save.then(function (returnData) {
                     smsAlert(returnData);
@@ -159,10 +131,25 @@
               
             }
             else if ($scope.obj.activeTab === 'Training') {
-                
+                $scope.TrainingData = {};
+                $scope.TrainingData.T_EMP_CODE = $scope.obj.T11111.T_EMP_CODE;
+                if ($scope.obj.TrainingdataList.length > 0) { $scope.TrainingData.TrnigList = $scope.obj.TrainingdataList; } else { smsAlert("Add data in list!-0"); return; }
+              
+                var save = Service.saveData('/T11111/SaveTrainingData', $scope.TrainingData);
+                save.then(function (returnData) {
+                    smsAlert(returnData);
+                    //loadGridData();                 
+                    //clear();
+                    loader(false)
+                });
             }
             else if ($scope.obj.activeTab === 'Picture') {
-                
+                var save = ImageService.saveData($scope.obj.T11111);
+                save.then(function (mesg) {
+                    smsAlert(mesg);
+                    loader(false)
+                    $window.location.reload();
+                });
             }
             $scope.loading = false;
         };
@@ -263,6 +250,88 @@
             document.getElementById('txtAdmIsntName').focus();
         }
         //---------------tab Education end------------------------------
+        //---------------tab Trarnign start------------------------------
+        $scope.Add_Training = function () {
+            if (isEmpty('txtCourseTitle', 'lblCourseTitle')) { return; };
+            if (isEmpty('txtTrainingType', 'lblTrainingType')) { return; };
+            if (isEmpty('txtFromDate', 'lblFromDate')) { return; };
+            if (isEmpty('txtToDate', 'lblToDate')) { return; };
+            if (isEmpty('txtPosition', 'lblPosition')) { return; };
+            if (isEmpty('txtInstitution', 'lblInstitution')) { return; };
+
+            let Z = {
+                T_TRAINING_ID: $scope.obj.T_TRAINING_ID,
+                T_TRAINING_CODE: $scope.obj.T_TRAINING_CODE,
+                T_COURSE_TITLE: $scope.obj.T_COURSE_TITLE,
+                T_TRAINING_TYPE_CODE: $scope.obj.T_TRAINING_TYPE_CODE,                
+                T_FROM_DATE: $filter('date')($scope.obj.T_FROM_DATE, 'dd-MM-yyyy'),
+                T_TO_DATE: $filter('date')($scope.obj.T_TO_DATE, 'dd-MM-yyyy'),               
+                T_POSITION: $scope.obj.T_POSITION,
+                T_INSTITUTION_NAME: $scope.obj.T_INSTITUTION_NAME
+            };
+
+            let exist = $scope.obj.TrainingdataList.some(x => x.T_COURSE_TITLE === Z.T_COURSE_TITLE);
+            if (exist) {
+                smsAlert("Already Exist!-0");
+                return;
+            }
+            $scope.obj.TrainingdataList.push(Z);
+            // $scope.obj.newList.push(Z);
+           // childClear();
+            document.getElementById('txtCourseTitle').focus();
+
+
+            //var ckList = $scope.obj.TrainingdataList == undefined ? 0 : $scope.obj.TrainingdataList.filter(x => x.T_INSTITUTION_NAME == $scope.obj.T_INSTITUTION_NAME);
+            //if (ckList.length > 0) { showSMS('Already Exist !!', 'warning'); return; }
+            //var Newdatalist = [];
+            //var list = {};
+            //list.sl = 1;
+            //list.T_INSTITUTION_NAME = $scope.obj.T_INSTITUTION_NAME;
+            //list.T_GROUP_SUBJECT = $scope.obj.T_GROUP_SUBJECT;
+            //list.T_PASSING_YEAR = $scope.obj.T_PASSING_YEAR;
+            //list.T_RESULT = $scope.obj.T_RESULT;
+            //list.T_DISTINCTION = $scope.obj.T_DISTINCTION;
+            //Newdatalist.push(list);
+
+            //var ln = $scope.obj.AcdmcdataList == undefined ? 0 : $scope.obj.AcdmcdataList.length;
+            //for (var i = 0; i < ln; i++) {
+            //    var list = {};
+            //    list.sl = (i + 2);
+            //    list.T_INSTITUTION_NAME = $scope.obj.AcdmcdataList[i].T_INSTITUTION_NAME;
+            //    list.T_GROUP_SUBJECT = $scope.obj.AcdmcdataList[i].T_GROUP_SUBJECT;
+            //    list.ACCOUNT_HEADER_CODE = $scope.obj.AcdmcdataList[i].ACCOUNT_HEADER_CODE;
+            //    list.T_PASSING_YEAR = $scope.obj.AcdmcdataList[i].T_PASSING_YEAR;
+            //    list.T_RESULT = $scope.obj.AcdmcdataList[i].T_RESULT;
+            //    list.T_DISTINCTION = $scope.obj.AcdmcdataList[i].T_DISTINCTION;
+            //    Newdatalist.push(list);
+            //}
+            //$scope.obj.AcdmcdataList = Newdatalist;
+           
+        }
+        //---------------tab Training end------------------------------
+        //---------------tab Picture start------------------------------
+        //Image Upload Function Start
+        $scope.stepsModel = [];
+        $scope.imageUpload = function (event) {
+            $scope.obj.T11111.T_PROFILE_IMAGE = '';
+            $scope.imgDiv = false;
+            var files = event.target.files; //FileList object         
+            for (var i = 0; i < files.length; i++) {
+                var file = files[0];
+                var reader = new FileReader();
+                reader.onload = $scope.imageIsLoaded;
+                reader.readAsDataURL(file);
+            }
+
+        }
+        $scope.imageIsLoaded = function (e) {
+            $scope.$apply(function () {
+                $scope.stepsModel.push(e.target.result);
+            });
+        }
+        //Image Upload Function End
+
+        //---------------tab Pictrue end------------------------------
 
         $scope.selectedtRow = function (ind, data) {
             $scope.selectedRow = ind;
